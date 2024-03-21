@@ -9,6 +9,7 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <modules>
+        <module>WT-auth</module>
     </modules>
 
     <parent>
@@ -31,7 +32,7 @@
     <!-- 对依赖包进行管理 -->
     <dependencyManagement>
         <dependencies>
-            <!--spring cloud-->
+            <!-- spring cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -39,7 +40,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--spring cloud alibaba-->
+            <!-- spring cloud alibaba -->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -67,7 +68,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <!--单元测试-->
+        <!-- 单元测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
