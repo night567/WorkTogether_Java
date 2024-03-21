@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://47.120.13.87:3306/wt-user?useSSL=false
+    url: jdbc:mysql://47.120.13.87:3306/wt_user?useSSL=false
     username: root
     password: 2484101884
     driver-class-name: com.mysql.cj.jdbc.Driver
