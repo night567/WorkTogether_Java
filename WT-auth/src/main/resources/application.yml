@@ -2,10 +2,10 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://47.120.13.87:3306/hmdp?useSSL=false
-    username: root
-    password: zhu2363816094
-    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.120.13.87:3306/?useSSL=false
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: auth-service
   cloud:
