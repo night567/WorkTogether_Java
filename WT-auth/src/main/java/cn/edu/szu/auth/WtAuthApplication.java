@@ -1,4 +1,4 @@
-package cn.edu.szu.wtauth;
+package cn.edu.szu.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
