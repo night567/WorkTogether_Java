@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>WT-auth</module>
+        <module>WT-gateway</module>
     </modules>
 
     <parent>
