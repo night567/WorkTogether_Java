@@ -12,6 +12,7 @@
         <module>WT-auth</module>
         <module>WT-gateway</module>
         <module>WT-common</module>
+        <module>WT-feign-api</module>
     </modules>
 
     <parent>
