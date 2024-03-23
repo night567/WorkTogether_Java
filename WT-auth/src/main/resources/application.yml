@@ -11,6 +11,16 @@ spring:
     username: root
     password: 2484101884
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 47.120.13.87
+    port: 6379
+    password: 123321
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: 100
   application:
     name: auth-service
   cloud:
