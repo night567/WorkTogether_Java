@@ -9,10 +9,11 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>WT-auth</module>
+        <module>WT-auth-service</module>
         <module>WT-gateway</module>
         <module>WT-common</module>
         <module>WT-feign-api</module>
+        <module>WT-user-service</module>
     </modules>
 
     <parent>
