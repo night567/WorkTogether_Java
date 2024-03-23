@@ -14,8 +14,8 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/createUser")
-    public Result createUser(@RequestBody LoginFormDTO loginFormDTO) {
-        String token = loginService.createUser(loginFormDTO);
+    public Result createAccount(@RequestBody LoginFormDTO loginFormDTO) {
+        String token = loginService.createAccount(loginFormDTO);
         if (token != null && !token.isEmpty()) {
             return new Result(Code.UPDATE_OK, token, "登录成功");
         } else {
@@ -25,6 +25,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public Result login(@RequestBody LoginFormDTO loginFormDTO) {
+
         return new Result(Code.GET_OK, 1, "登录成功");
     }
 }

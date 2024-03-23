@@ -13,7 +13,7 @@ public class LoginServiceImpl implements LoginService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public String createUser(LoginFormDTO loginForm) {
+    public String createAccount(LoginFormDTO loginForm) {
         // 校验邮箱
         String email = loginForm.getEmail();
         if (!RegexUtils.isEmail(email)) {
@@ -35,5 +35,13 @@ public class LoginServiceImpl implements LoginService {
 
         //返回token
         return "666";
+    }
+
+    @Override
+    public String login(LoginFormDTO loginFormDTO) {
+        String jwt = "";
+
+
+        return jwt;
     }
 }
