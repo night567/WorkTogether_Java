@@ -1,24 +1,30 @@
 package cn.edu.szu.auth.controller;
 
 import cn.edu.szu.auth.domain.LoginFormDTO;
+import cn.edu.szu.auth.service.LoginService;
+import cn.edu.szu.common.controller.Code;
 import cn.edu.szu.common.controller.Result;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/account")
 public class LoginController {
+    @Autowired
+    private LoginService loginService;
+
     @PostMapping("/createUser")
     public Result createUser(@RequestBody LoginFormDTO loginFormDTO) {
-
-        return null;
+        String token = loginService.createUser(loginFormDTO);
+        if (token != null && !token.isEmpty()) {
+            return new Result(Code.UPDATE_OK, token, "登录成功");
+        } else {
+            return new Result(Code.UPDATE_ERR, "", "登录失败");
+        }
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public Result login(@RequestBody LoginFormDTO loginFormDTO) {
-
-        return null;
+        return new Result(Code.GET_OK, 1, "登录成功");
     }
 }

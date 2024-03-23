@@ -46,9 +46,16 @@
 <!--            <groupId>com.alibaba.cloud</groupId>-->
 <!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
 <!--        </dependency>-->
+        <!-- 引用公共包 -->
         <dependency>
             <groupId>cn.edu.szu</groupId>
             <artifactId>WT-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- 引用feign依赖 -->
+        <dependency>
+            <groupId>cn.edu.szu</groupId>
+            <artifactId>WT-feign-api</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

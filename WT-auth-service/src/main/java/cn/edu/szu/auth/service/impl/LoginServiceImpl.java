@@ -34,6 +34,6 @@ public class LoginServiceImpl implements LoginService {
 
 
         //返回token
-        return "";
+        return "666";
     }
 }
