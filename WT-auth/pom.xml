@@ -11,7 +11,7 @@
     <artifactId>WT-auth</artifactId>
 
     <dependencies>
-        <!--  -->
+        <!-- spring boot web依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -26,6 +26,10 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
         <!-- nacos客户端依赖包 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -36,6 +40,11 @@
 <!--            <groupId>com.alibaba.cloud</groupId>-->
 <!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
 <!--        </dependency>-->
+        <dependency>
+            <groupId>cn.edu.szu</groupId>
+            <artifactId>WT-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>app</finalName>
