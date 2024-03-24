@@ -9,7 +9,13 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>WT-user-service</artifactId>
+    <artifactId>WT-service</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>WT-user-service</module>
+        <module>WT-auth-service</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,6 +24,18 @@
     </properties>
 
     <dependencies>
+        <!-- 引用公共包 -->
+        <dependency>
+            <groupId>cn.edu.szu</groupId>
+            <artifactId>WT-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- 引用feign依赖 -->
+        <dependency>
+            <groupId>cn.edu.szu</groupId>
+            <artifactId>WT-feign-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- spring boot web依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -33,17 +51,7 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
-        <!-- redis依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!-- hutool工具包 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
-        <!-- nacos客户端依赖包 -->
+        <!-- nacos客户端发现依赖 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
@@ -53,19 +61,5 @@
         <!--            <groupId>com.alibaba.cloud</groupId>-->
         <!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
         <!--        </dependency>-->
-        <dependency>
-            <groupId>cn.edu.szu</groupId>
-            <artifactId>WT-common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
-    <build>
-        <finalName>app</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
