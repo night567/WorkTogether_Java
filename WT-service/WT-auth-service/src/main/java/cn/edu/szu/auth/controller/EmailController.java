@@ -2,8 +2,8 @@ package cn.edu.szu.auth.controller;
 
 import cn.edu.szu.auth.domain.LoginFormDTO;
 import cn.edu.szu.auth.service.EmailService;
-import cn.edu.szu.common.controller.Code;
-import cn.edu.szu.common.controller.Result;
+import cn.edu.szu.common.domain.Code;
+import cn.edu.szu.common.domain.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

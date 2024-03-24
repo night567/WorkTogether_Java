@@ -1,4 +1,4 @@
-package cn.edu.szu.common.controller;
+package cn.edu.szu.common.domain;
 
 //状态码
 public class Code {

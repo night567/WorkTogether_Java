@@ -11,6 +11,7 @@ spring:
     username: root
     password: 2484101884
     driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
   redis:
     host: 47.120.13.87
     port: 6379
