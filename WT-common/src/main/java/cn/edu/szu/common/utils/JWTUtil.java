@@ -16,7 +16,7 @@ public class JWTUtil {
     public static String getToken(User user){
         Map<String, Object> claims = new HashMap<>();
         claims.put("id",user.getId());
-        claims.put("username",user.getUserName());
+        claims.put("username",user.getName());
         String token = JWT.create()
                 .withClaim("user",claims)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 ))

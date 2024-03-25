@@ -17,9 +17,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <!-- 引用公共包 -->
+        <dependency>
+            <groupId>cn.edu.szu</groupId>
+            <artifactId>WT-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- OpenFeign依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <!-- 负载均衡依赖(新版OpenFeign需要) -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
     </dependencies>
 
