@@ -9,15 +9,15 @@
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="url" column="url" jdbcType="VARCHAR"/>
         <result property="describe" column="describe" jdbcType="VARCHAR"/>
-        <result property="menu_id" column="menu_id" jdbcType="BIGINT"/>
+        <result property="menuId" column="menu_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,url,describe,menu_id
+        id,name,url,'describe',menu_id
     </sql>
 
     <!--查询所有的资源-->
-    <select id="selectAllResources" resultMap="BaseResultMap" parameterType="map">
+    <select id="selectAllResources" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from wt_auth_resource

@@ -21,5 +21,5 @@ public class AuthResource {
     //资源描述
     private String describe;
     //对应菜单的ID
-    private Integer menu_id;
+    private Integer menuId;
 }
