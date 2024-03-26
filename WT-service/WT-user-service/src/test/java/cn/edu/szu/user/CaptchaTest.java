@@ -1,4 +1,4 @@
-package user;
+package cn.edu.szu.user;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;

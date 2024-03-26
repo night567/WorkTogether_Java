@@ -2,7 +2,7 @@ package cn.edu.szu.user.controller;
 
 import cn.edu.szu.common.domain.Code;
 import cn.edu.szu.common.domain.Result;
-import cn.edu.szu.user.pojo.LoginForm;
+import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
 import cn.edu.szu.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/createUser")
-    public Result createAccount(@RequestBody LoginForm loginForm) {
-        String token = userService.createAccount(loginForm);
+    public Result createAccount(@RequestBody LoginDTO loginDTO) {
+        String token = userService.createAccount(loginDTO);
         if (token != null && !token.isEmpty()) {
             return new Result(Code.UPDATE_OK, token, "登录成功");
         } else {
@@ -24,9 +24,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/login")
-    public Result login(@RequestBody LoginForm loginForm) {
-        String jwt = userService.login(loginForm);
+    @PostMapping("/login")
+    public Result login(@RequestBody LoginDTO loginDTO) {
+        String jwt = userService.login(loginDTO);
         if (jwt == null || jwt.isEmpty()) {
             return new Result(Code.GET_ERR, null, "登录失败");
         }

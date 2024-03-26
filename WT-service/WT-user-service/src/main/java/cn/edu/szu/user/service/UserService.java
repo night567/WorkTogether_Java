@@ -1,12 +1,12 @@
 package cn.edu.szu.user.service;
 
-import cn.edu.szu.user.pojo.LoginForm;
+import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
 
 public interface UserService {
-    String createAccount(LoginForm loginForm);
+    String createAccount(LoginDTO loginDTO);
 
-    String login(LoginForm loginForm);
+    String login(LoginDTO loginDTO);
 
     User getUserByEmail(String email);
 
