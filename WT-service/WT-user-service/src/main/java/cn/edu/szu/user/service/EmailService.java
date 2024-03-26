@@ -1,4 +1,4 @@
-package cn.edu.szu.auth.service;
+package cn.edu.szu.user.service;
 
 public interface EmailService {
     boolean sendVerificationCode(String email);

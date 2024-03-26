@@ -1,17 +1,73 @@
 package cn.edu.szu.user.service.impl;
 
+import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.common.utils.RegexUtils;
 import cn.edu.szu.user.dao.UserDao;
+import cn.edu.szu.user.pojo.LoginForm;
 import cn.edu.szu.user.pojo.User;
 import cn.edu.szu.user.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Override
+    public String createAccount(LoginForm loginForm) {
+        // 校验邮箱
+        String email = loginForm.getEmail();
+        if (!RegexUtils.isEmail(email)) {
+            return "";
+        }
+
+        //校验验证码
+        String cacheCode = stringRedisTemplate.opsForValue().get("login:code:" + email);
+        String code = loginForm.getVerificationCode();
+        if (cacheCode == null || !cacheCode.equals(code)) {
+            return "";
+        }
+
+        //生成用户
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(loginForm.getPassword());
+
+
+        //生成token
+
+
+        //返回token
+        return "666";
+    }
+
+    @Override
+    public String login(LoginForm loginForm) {
+        // 检查账户是否存在
+        String email = loginForm.getEmail();
+        User user = getUserByEmail(email);
+        if (user == null) {
+            return "1";
+        }
+
+        // 比对密码
+        String salt = user.getSalt();
+        String password = loginForm.getPassword();
+        String pwd = DigestUtils.md5DigestAsHex((password + salt).getBytes());
+        if (!pwd.equals(user.getPassword())) {
+            return "2";
+        }
+
+        // 生成jwt
+        return JwtUtil.getToken(user.getId());
+    }
 
     @Override
     public User getUserByEmail(String email) {

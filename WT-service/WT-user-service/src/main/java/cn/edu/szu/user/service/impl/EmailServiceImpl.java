@@ -1,7 +1,7 @@
-package cn.edu.szu.auth.service.impl;
+package cn.edu.szu.user.service.impl;
 
-import cn.edu.szu.auth.service.EmailService;
 import cn.edu.szu.common.utils.RegexUtils;
+import cn.edu.szu.user.service.EmailService;
 import cn.hutool.core.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

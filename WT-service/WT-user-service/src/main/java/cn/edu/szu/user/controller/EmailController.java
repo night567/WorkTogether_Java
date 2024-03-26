@@ -1,9 +1,9 @@
-package cn.edu.szu.auth.controller;
+package cn.edu.szu.user.controller;
 
-import cn.edu.szu.auth.domain.LoginFormDTO;
-import cn.edu.szu.auth.service.EmailService;
 import cn.edu.szu.common.domain.Code;
 import cn.edu.szu.common.domain.Result;
+import cn.edu.szu.user.pojo.LoginForm;
+import cn.edu.szu.user.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +16,8 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/sendEmail")
-    public Result sendEmail(@RequestBody LoginFormDTO email) {
+    @PostMapping("/sendVerificationCode")
+    public Result sendEmail(@RequestBody LoginForm email) {
         boolean b = emailService.sendVerificationCode(email.getEmail());
         if (b) {
             return new Result(Code.SAVE_OK, true, "发送成功");
