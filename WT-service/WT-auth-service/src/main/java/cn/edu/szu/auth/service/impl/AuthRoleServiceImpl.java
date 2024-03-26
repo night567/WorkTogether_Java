@@ -31,9 +31,6 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
     @Override
     public void addRole(AuthRole role) {
         role.setCreateTime(new Date());
-        UUID uuid = UUID.randomUUID();
-        long uniqueId = Math.abs(uuid.getMostSignificantBits());
-        role.setId(uniqueId);
         roleMapper.insert(role);
     }
 

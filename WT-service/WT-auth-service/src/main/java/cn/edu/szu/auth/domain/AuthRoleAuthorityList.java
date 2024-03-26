@@ -20,10 +20,6 @@ public class AuthRoleAuthorityList {
      */
     private Long roleId;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 
     /**
      * 创建人
