@@ -2,6 +2,7 @@ package cn.edu.szu.user;
 
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.service.UserService;
+import cn.hutool.core.util.RandomUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,5 +23,11 @@ public class LoginTest {
         loginDTO.setPassword("passw0rd");
         String token = userService.login(loginDTO);
         System.out.println(token);
+    }
+
+    @Test
+    void testRandomSalt() {
+        byte[] bytes = RandomUtil.randomBytes(16);
+        System.out.println(bytes);
     }
 }
