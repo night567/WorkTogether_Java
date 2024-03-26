@@ -18,9 +18,8 @@ public class AuthRoleAuthority implements Serializable {
     /**
      * 主键
      */
-    @TableId(value = "id")
-    private Long id;
-
+    @TableField(value = "id")
+    Long id;
     /**
      * 权限id
 #c_auth_resource
@@ -29,9 +28,9 @@ public class AuthRoleAuthority implements Serializable {
     @TableField(value = "authority_id")
     private Long authorityId;
 
-    /**
-     * 权限类型
-#AuthorizeType{MENU:菜单;RESOURCE:资源;}
+    /**     * 权限类型
+     #AuthorizeType{MENU:菜单;RESOURCE:资源;}
+
      */
     @TableField(value = "authority_type")
     private String authorityType;
@@ -55,6 +54,5 @@ public class AuthRoleAuthority implements Serializable {
     @TableField(value = "create_user")
     private Long createUser;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+
 }

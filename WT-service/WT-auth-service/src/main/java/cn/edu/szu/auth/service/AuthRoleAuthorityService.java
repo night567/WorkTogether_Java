@@ -1,6 +1,8 @@
 package cn.edu.szu.auth.service;
 
+import cn.edu.szu.auth.domain.AuthAuthority;
 import cn.edu.szu.auth.domain.AuthRoleAuthority;
+import cn.edu.szu.auth.domain.AuthRoleAuthorityList;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,5 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-03-26 01:02:00
 */
 public interface AuthRoleAuthorityService extends IService<AuthRoleAuthority> {
-
+    void addRoleAuthority(AuthRoleAuthorityList authorityList);
 }

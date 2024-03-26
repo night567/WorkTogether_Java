@@ -1,9 +1,12 @@
 package cn.edu.szu.auth.service.impl;
 
+import cn.edu.szu.auth.domain.AuthRoleAuthorityList;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import cn.edu.szu.auth.service.AuthRoleAuthorityService;
 import cn.edu.szu.auth.mapper.AuthRoleAuthorityMapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,7 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthRoleAuthorityServiceImpl extends ServiceImpl<AuthRoleAuthorityMapper, AuthRoleAuthority>
     implements AuthRoleAuthorityService{
+    @Mapper
+    AuthRoleAuthorityMapper roleAuthorityMapper;
+    @Override
+    public void addRoleAuthority(AuthRoleAuthorityList authorityList) {
 
+    }
 }
 
 
