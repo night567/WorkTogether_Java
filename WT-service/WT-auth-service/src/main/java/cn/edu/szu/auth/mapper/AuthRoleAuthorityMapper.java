@@ -3,6 +3,9 @@ package cn.edu.szu.auth.mapper;
 import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author 86199
@@ -12,6 +15,9 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface AuthRoleAuthorityMapper extends BaseMapper<AuthRoleAuthority> {
+
+    @Select("select id from wt_auth_role_authority where authority_id = #{authorityId}")
+    List<Long> selectIdsByRoleId(Long authorityId);
 
 }
 

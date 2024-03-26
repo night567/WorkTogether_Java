@@ -18,7 +18,7 @@ public class AuthRole implements Serializable {
     /**
      * 
      */
-    @TableId(value = "id")
+    @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -36,7 +36,7 @@ public class AuthRole implements Serializable {
     /**
      * 功能描述
      */
-    @TableField(value = "describe")
+    @TableField(value = "`describe`")
     private String describe;
 
     /**
