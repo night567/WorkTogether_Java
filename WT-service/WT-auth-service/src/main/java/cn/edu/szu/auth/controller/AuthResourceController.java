@@ -30,6 +30,8 @@ public class AuthResourceController {
         int offset = page * size;
         // 调用服务层方法进行分页查询
         List<AuthResource> resources = authResourceService.selectAllResources(offset, size);
+        if(resources==null||resources.isEmpty())
+            return new Result(Code.GET_ERR,null,"查询失败");
         return new Result(Code.GET_OK, resources, "查询成功！");
     }
 
