@@ -66,7 +66,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/status}")
+    @PostMapping("/status")
     public Result updateStatus(@RequestBody UserDTO user) {
         boolean b = userService.updateById(user);
         if (b) {
