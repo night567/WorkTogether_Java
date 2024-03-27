@@ -1,10 +1,15 @@
 package cn.edu.szu.auth.service.impl;
 
+import cn.edu.szu.auth.expection.NameConflictException;
+import cn.edu.szu.auth.expection.RoleNotFoundException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.auth.domain.AuthRole;
 import cn.edu.szu.auth.service.AuthRoleService;
 import cn.edu.szu.auth.mapper.AuthRoleMapper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +23,7 @@ import java.util.UUID;
 * @createDate 2024-03-26 00:42:02
 */
 @Service
+@Slf4j
 public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
     implements AuthRoleService{
 
@@ -30,6 +36,11 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
      */
     @Override
     public void addRole(AuthRole role) {
+        // 检查是否存在名称冲突
+        boolean nameConflict = checkNameConflict(role.getName());
+        if (nameConflict) {
+            throw new NameConflictException("Role name already exists: " + role.getName());
+        }
         role.setCreateTime(new Date());
         role.setStatus(true);
         role.setReadonly(false);
@@ -37,12 +48,30 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
     }
 
     /**
+     * 检查是否有重复名字
+     * @param roleName
+     * @return
+     */
+    public boolean checkNameConflict(String roleName) {
+        QueryWrapper<AuthRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name", roleName);
+        int count = roleMapper.selectCount(queryWrapper);
+        return count > 0;
+    }
+
+
+    /**
      * 删除角色
      * @param id
      */
     @Override
     public void delRole(Long id) {
-        roleMapper.deleteById(id);
+
+        int cnt = roleMapper.deleteById(id);
+        if(cnt == 0){
+            throw new RoleNotFoundException("Role not found with id: " + id);
+        }
+
     }
 
     /**
@@ -51,7 +80,12 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
      */
     @Override
     public void updateRole(AuthRole role) {
-        roleMapper.updateById(role);
+        int cnt = roleMapper.updateById(role);
+//        log.info("ttttttttt");
+//        System.out.println(cnt+" -------------------------------  ");
+        if (cnt == 0){
+            throw new RoleNotFoundException("Role not found with id: " + role.getId());
+        }
     }
 
     /**
@@ -68,7 +102,13 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
      */
     @Override
     public AuthRole selectById(Long id) {
-        return roleMapper.selectById(id);
+
+        AuthRole role = roleMapper.selectById(id);
+        if (role == null){
+            throw new RoleNotFoundException("Role not found with id: " + id);
+        }
+        return role;
+
     }
 
 

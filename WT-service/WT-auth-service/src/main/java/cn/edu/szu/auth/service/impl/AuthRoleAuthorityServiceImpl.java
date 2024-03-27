@@ -3,6 +3,7 @@ package cn.edu.szu.auth.service.impl;
 import cn.edu.szu.auth.domain.AuthAuthority;
 import cn.edu.szu.auth.domain.AuthRoleAuthorityList;
 
+import cn.edu.szu.auth.expection.RoleNotFoundException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import cn.edu.szu.auth.service.AuthRoleAuthorityService;
@@ -53,7 +54,12 @@ public class AuthRoleAuthorityServiceImpl extends ServiceImpl<AuthRoleAuthorityM
                 authList.add(authorityTemp);
             }
         }
-        saveBatch(authList);
+        try {
+            saveBatch(authList);
+        }catch (Exception e){
+            throw new RoleNotFoundException("Role not found with Role id: " + authorityList.getRoleId());
+        }
+
     }
 
     /**
@@ -62,7 +68,10 @@ public class AuthRoleAuthorityServiceImpl extends ServiceImpl<AuthRoleAuthorityM
      */
     @Override
     public void delRoleAuthorityById(Long id) {
-        roleAuthorityMapper.deleteById(id);
+        int cnt = roleAuthorityMapper.deleteById(id);
+        if (cnt == 0){
+            throw new RoleNotFoundException("Role not found with Role id: " + id);
+        }
     }
 
     /**
