@@ -1,7 +1,11 @@
 package cn.edu.szu.auth.mapper;
 
+import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import cn.edu.szu.auth.domain.WtAuthMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author 86199
@@ -10,7 +14,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity cn.edu.szu.auth.domain.WtAuthMenu
 */
 public interface WtAuthMenuMapper extends BaseMapper<WtAuthMenu> {
-
+    List<WtAuthMenu> selectAll();
+    WtAuthMenu selectByMenuId(Long menuId);
 }
 
 

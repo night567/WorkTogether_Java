@@ -74,7 +74,4 @@ public class WtAuthMenu implements Serializable {
      */
     @TableField(value = "parent_id")
     private Long parentId;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }
