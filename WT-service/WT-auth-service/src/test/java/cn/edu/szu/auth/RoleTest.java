@@ -50,5 +50,4 @@ public class RoleTest {
         System.out.println(roleService.selectById(1772607179489046529l));
     }
 
-
 }

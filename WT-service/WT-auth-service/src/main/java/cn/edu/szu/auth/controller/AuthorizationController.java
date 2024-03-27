@@ -7,6 +7,7 @@ import cn.edu.szu.common.domain.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RunAs;
 import java.util.List;
 
 /**
@@ -72,7 +73,4 @@ public class AuthorizationController {
         authRoleService.updateById(role);
         return new Result(Code.UPDATE_OK,null,"更新角色成功");
     }
-
-
-
 }
