@@ -5,6 +5,7 @@ import cn.edu.szu.common.utils.RegexUtils;
 import cn.edu.szu.user.dao.UserDao;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
+import cn.edu.szu.user.pojo.UserDTO;
 import cn.edu.szu.user.service.UserService;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -15,6 +16,8 @@ import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -104,5 +107,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDao.selectById(id);
+    }
+
+    @Override
+    public List<UserDTO> getUserByCompany(Long id) {
+        List<User> users = userDao.selectList(null);
+        return users.stream().map(User::parseToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean updateById(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setStatus(userDTO.getStatus());
+        return userDao.updateById(user) > 0;
     }
 }
