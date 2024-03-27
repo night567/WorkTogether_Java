@@ -31,6 +31,8 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
     @Override
     public void addRole(AuthRole role) {
         role.setCreateTime(new Date());
+        role.setStatus(true);
+        role.setReadonly(false);
         roleMapper.insert(role);
     }
 
