@@ -1,5 +1,6 @@
 package cn.edu.szu.auth.controller;
 
+import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import cn.edu.szu.auth.domain.AuthRoleAuthorityList;
 import cn.edu.szu.auth.service.AuthRoleAuthorityService;
 import cn.edu.szu.common.domain.Code;
@@ -24,7 +25,7 @@ public class AuthRoleAuthorityController {
      * @return
      */
     @PostMapping
-    public Result addRoleAuthority(AuthRoleAuthorityList authorityList){
+    public Result addRoleAuthority(@RequestBody AuthRoleAuthorityList authorityList){
         authorityService.addRoleAuthority(authorityList);
         return new Result(Code.SAVE_OK,null,"添加角色权限成功");
     }
@@ -63,4 +64,12 @@ public class AuthRoleAuthorityController {
         return new Result(Code.DELETE_OK,null,"删除该角色的权限成功");
     }
 
+/**
+ * 查询角色所有权限
+ */
+    @GetMapping("/{id}")
+    public Result selectByRoleId(@PathVariable Long id){
+        List<AuthRoleAuthority> list = authorityService.getByRoleId(id);
+        return new Result(Code.GET_OK,list,"查询该角色的权限成功");
+    }
 }

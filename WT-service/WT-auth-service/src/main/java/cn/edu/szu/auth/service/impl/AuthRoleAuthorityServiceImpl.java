@@ -84,6 +84,11 @@ public class AuthRoleAuthorityServiceImpl extends ServiceImpl<AuthRoleAuthorityM
         delRoleAuthorityByIds(ids);
     }
 
+    @Override
+    public List<AuthRoleAuthority> getByRoleId(Long id) {
+        return roleAuthorityMapper.selectByRoleId(id);
+    }
+
     /**
      * 根据角色id查询所有的id
      * @param id

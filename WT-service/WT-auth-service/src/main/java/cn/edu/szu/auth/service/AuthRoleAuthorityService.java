@@ -31,4 +31,6 @@ public interface AuthRoleAuthorityService extends IService<AuthRoleAuthority> {
 
     void deleteByRoleId(Long id);
 
+    List<AuthRoleAuthority> getByRoleId(Long id);
+
 }

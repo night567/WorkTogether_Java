@@ -63,5 +63,10 @@ public class AuthRole implements Serializable {
     @TableField(value = "create_time")
     private Date createTime;
 
+    /**
+     * 用户数
+     */
+    @TableField(value = "user_num")
+    private Integer userNum;
 
 }
