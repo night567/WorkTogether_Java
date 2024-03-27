@@ -18,7 +18,7 @@ public class AuthRoleAuthority implements Serializable {
     /**
      * 主键
      */
-    @TableField(value = "id")
+
     Long id;
     /**
      * 权限id
