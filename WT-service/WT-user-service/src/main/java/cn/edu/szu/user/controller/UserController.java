@@ -4,9 +4,12 @@ import cn.edu.szu.common.domain.Code;
 import cn.edu.szu.common.domain.Result;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
+import cn.edu.szu.user.pojo.UserDTO;
 import cn.edu.szu.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -50,6 +53,26 @@ public class UserController {
             return new Result(Code.GET_OK, user, "获取成功");
         } else {
             return new Result(Code.GET_ERR, null, "获取失败");
+        }
+    }
+
+    @GetMapping("/company/{id}")
+    public Result getUserByCompany(@PathVariable Long id) {
+        List<UserDTO> users = userService.getUserByCompany(id);
+        if (users != null) {
+            return new Result(Code.GET_OK, users, "获取成功");
+        } else {
+            return new Result(Code.GET_ERR, null, "获取失败");
+        }
+    }
+
+    @PostMapping("/status}")
+    public Result updateStatus(@RequestBody UserDTO user) {
+        boolean b = userService.updateById(user);
+        if (b) {
+            return new Result(Code.UPDATE_OK, true, "修改成功");
+        } else {
+            return new Result(Code.UPDATE_ERR, false, "修改失败");
         }
     }
 }

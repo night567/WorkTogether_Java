@@ -29,4 +29,16 @@ public class User implements Serializable {
 
     @TableField(value = "create_time")
     private LocalDateTime createTime;  //创建时间
+
+    public UserDTO parseToDTO() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(this.id);
+        userDTO.setEmail(this.email);
+        userDTO.setName(this.name);
+        userDTO.setPhone(this.phone);
+        userDTO.setStatus(this.status);
+        userDTO.setLastLoginTime(this.lastLoginTime);
+        userDTO.setCreateTime(this.createTime);
+        return userDTO;
+    }
 }
