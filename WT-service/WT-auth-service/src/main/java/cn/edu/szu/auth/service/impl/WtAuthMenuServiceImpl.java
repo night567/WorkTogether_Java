@@ -23,7 +23,7 @@ import java.util.List;
 public class WtAuthMenuServiceImpl extends ServiceImpl<WtAuthMenuMapper, WtAuthMenu>
     implements WtAuthMenuService{
 
-   @Autowired
+    @Autowired
     private WtAuthMenuMapper menuMapper;
 
     /**
@@ -31,12 +31,12 @@ public class WtAuthMenuServiceImpl extends ServiceImpl<WtAuthMenuMapper, WtAuthM
      */
     @Override
     public List<WtAuthMenu> selectAllMenu() {
-        return menuMapper.selectAll();
+        return menuMapper.selectList(null);
     }
 
     @Override
     public WtAuthMenu selectByMenuId(Long id) {
-        WtAuthMenu menu = menuMapper.selectByMenuId(id);
+        WtAuthMenu menu = menuMapper.selectById(id);
         if (menu == null){
             throw new RoleNotFoundException("Role not found with id: " + id);
         }

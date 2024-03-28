@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>资源列表</title>
+  <link rel="stylesheet" href="../css/source.css">
+  <script src="https://kit.fontawesome.com/d9129f72c7.js" crossorigin="anonymous"></script>
+</head>
+<!--<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  // Select the submenu parent link
+  var submenuParent = document.querySelector('.submenu > a');
+  submenuParent.addEventListener('click', function() {
+    // Find the nested submenu
+    var submenu = this.nextElementSibling;
+    // Toggle the 'active' class on the parent li
+    this.parentElement.classList.toggle('active');
+
+    // Rotate the arrow icon
+    var arrow = this.querySelector('.arrow');
+    if (this.parentElement.classList.contains('active')) {
+      arrow.classList.remove('fa-chevron-right');
+      arrow.classList.add('fa-chevron-down');
+    } else {
+      arrow.classList.remove('fa-chevron-down');
+      arrow.classList.add('fa-chevron-right');
+    }
+  });
+});
+
+</script>-->
+
+<body>
+<div class="sidebar">
+  <!-- Sidebar content as previous with icons using Font Awesome -->
+  <ul>
+    <li class="submenu">
+      <a href="#"><i class="fas fa-shield-alt"></i> 权限 <i class="fas fa-chevron-right arrow"></i></a>
+      <ul class="nested">
+        <li><a href="userList.html"><i class="fas fa-users"></i> 用户列表</a></li>
+        <li><a href="role.html"><i class="fas fa-user-tag"></i> 角色列表</a></li>
+        <li><a href="list.html"><i class="fas fa-list"></i> 菜单列表</a></li>
+        <li class="source"><a href="#"><i class="fas fa-server"></i> 资源列表</a></li>
+      </ul>
+    </li>
+    <!-- Add other submenu items here -->
+  </ul>
+</div>
+<div class="top-bar">
+  <div class="breadcrumbs">首页 / 权限 / 资源列表</div>
+  <div class="teamwork-icon"><i class="fas fa-users-cog"></i></div>
+</div>
+<div class="content">
+  <div class="search-container">
+    <div class="search-item0"><i class="fas fa-search"> 筛选搜索</i></div>
+    <div class="search-item">
+      <label for="search-query">资源名称:</label>
+      <input type="text" id="search-query" placeholder="资源名称">
+    </div>
+    <div class="search-item">
+      <label for="search-type">资源路径:</label>
+      <input type="text" id="search-type" placeholder="资源路径">
+    </div>
+    <div class="search-item">
+      <label for="search-category">资源分类:</label>
+      <div class="custom-select-wrapper">
+        <select id="search-category" class="category-dropdown">
+          <option value="all">全部</option>
+          <!-- Add more options as needed -->
+        </select>
+        <i class="fa fa-chevron-down select-arrow"></i>
+      </div>
+    </div>
+    <div class="search-butt">
+      <button type="submit" class="search-btn">查询</button>
+      <button type="button" class="clear-btn">重置</button>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+  <div class="data-list-box">
+    <div class="data-list-title"><i class="fas fa-list"></i> 数据列表</div>
+    <button class="btn-type">资源分类</button>
+    <!--<button id="addButton" class="btn-secondary">添加</button>-->
+    <!-- Modal -->
+    <!--<div id="myModal" class="modal">-->
+      <!-- Modal content -->
+      <!--<div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>添加记录</h2>
+        <label for="itemName">搜索标签:</label>
+        <input type="text" id="itemName" name="itemName" placeholder="请输入内容">
+
+        <label for="itemCategory">搜索标签:</label>
+        <input type="text" id="itemCategory" name="itemCategory" placeholder="请输入内容">
+
+        <label for="itemType">搜索分类:</label>
+        <select id="itemType" name="itemType">
+          <option value="type1">角色管理</option>-->
+          <!-- More options here -->
+       <!--</select>
+
+        <label for="itemDescription">描述:</label>
+        <textarea id="itemDescription" name="itemDescription" placeholder="请输入内容"></textarea>
+
+        <button id="saveButton">保存</button>
+      </div>
+    </div>-->
+  </div>
+<!--
+  <div class="modal" id="checkModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>查看资源</h2>-->
+      <!-- 查看资源的表单内容 -->
+      <!--<label for="resourceName">资源名称:</label>
+      <input type="text" id="resourceName" name="resourceName" placeholder="请输入资源名称">
+      <label for="resourcePath">资源路径:</label>
+      <input type="text" id="resourcePath" name="resourcePath" placeholder="请输入资源路径">
+      <label for="resourceCategory">资源分类:</label>
+      <select id="resourceCategory" name="resourceCategory">
+        <option value="role-management">角色管理</option>-->
+        <!-- 其他选项 -->
+      <!--</select>
+      <label for="resourceDescription">描述:</label>
+      <textarea id="resourceDescription" name="resourceDescription" placeholder="请输入内容"></textarea>
+      <button id="saveEdit">保存</button>
+    </div>
+  </div>
+  <div class="modal" id="deleteModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>提示</h2>
+      <h3>是否要删除该资源？</h3>
+      <button id="quitDelet">取消</button>
+      <button id="saveDelete">确定</button>
+
+    </div>
+  </div>-->
+  <div class="separator"></div><table>
+    <!-- Table structure and data -->
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th>资源名称</th>
+      <th>资源路径</th>
+      <th class="description-cell">描述</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <!-- 行数据通过js添加 -->
+    <!-- Repeat rows as needed -->
+    </tbody>
+  </table>
+</div>
+<!-- 查看详情模态框 -->
+<div class="modal" id="checkModal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>查看资源</h2>
+    <div class="modal-body">
+      <!-- 这里可以根据需要添加其他内容 -->
+      <p><strong>资源名称:</strong> <span id="modalResourceName"></span></p>
+      <p><strong>资源路径:</strong> <span id="modalResourcePath"></span></p>
+      <p><strong>描述:</strong> <span id="modalResourceDescription"></span></p>
+    </div>
+  </div>
+</div>
+<!-- Rest of the content and possibly scripts -->
+<script src="../js/source.js"></script>
+</body>
+</html>

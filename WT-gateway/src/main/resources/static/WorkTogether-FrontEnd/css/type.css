@@ -1,0 +1,442 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body, html {
+  height: 100%;
+  background: #f8f9fa;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  background-color: #333f50; /* Darker shade for sidebar */
+  color: white;
+  width: 200px; /* Adjusted width */
+  height: 100vh;
+  position: fixed;
+  overflow-y: auto;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 20px;
+}
+
+.sidebar ul li {
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  width:130px;
+  font-size:13px;
+}
+
+.sidebar ul li a i {
+  margin-right: 10px;
+}
+
+.sidebar ul li .arrow {
+  position: absolute;
+  right: 20px;
+  margin-top:4px;
+}
+
+.sidebar ul li.submenu ul {
+  display: none;
+  padding-left: 10px;
+}
+
+.sidebar ul li.submenu ul li a {
+  color: #9fc6e0b3;
+  padding-left: 15px;
+  font-weight: normal;
+}
+
+.sidebar ul li.submenu ul li.source a {
+  padding-left: 10px;
+  color:#3498db;
+}
+
+.sidebar ul li.submenu.active > a {
+  color: #3498db;
+}
+
+.sidebar ul li.submenu.active ul {
+  display: block;
+}
+
+.sidebar ul li.submenu ul li a:hover,
+.sidebar ul li.submenu ul li a.active {
+  color: #3498db;
+}
+
+/* Top Bar Styles */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ccc;
+  margin-left: 200px; /* Same width as sidebar */
+}
+
+.breadcrumbs {
+  font-size: 13px;
+  color: #333;
+  font-weight:600;
+}
+
+.teamwork-icon i {
+  font-size: 24px;
+  color: #2c3e50;
+}
+
+/* Content Styles */
+.content {
+  margin-left: 200px; /* Same width as sidebar */
+  padding: 20px;
+}
+
+/* Search and Filter Box */
+.search-filter-box,
+.data-list-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.search-container {
+    display: flex;
+    //align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #fff; /* Adjust if needed */
+    border: 1px solid #ccc; /* Adjust if needed */
+    margin-bottom: 20px;
+}
+
+.search-item {
+    margin-top:50px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 90px; /* Adjust spacing between items */
+}
+
+.search-item0 .fa-search {
+    margin-top:0px;
+}
+
+.search-item0 {
+    display: flex;
+    flex-direction: column;
+    margin-top:5px;
+    font-size: 15px;
+}
+
+.search-item label {
+    margin-bottom: 5px;
+}
+
+.search-item input[type="text"],
+.custom-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height:30px;
+}
+
+.search-item select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  width: 130px;
+  border-radius: 4px;
+  -webkit-appearance: none; /* For Safari */
+  -moz-appearance: none;    /* For Firefox */
+  appearance: none;         /* Remove default arrow */
+  padding-right: 30px;      /* Make space for the icon */
+  margin-top: 25px;
+}
+
+.select-arrow {
+  margin-top:8px;
+  position: absolute;
+  right: 10px; /* Adjust the value as needed */
+  pointer-events: none; /* This ensures clicks are passed through to the select element */
+}
+
+/* Style adjustments for different browsers */
+@-moz-document url-prefix() {
+  .search-item select {
+    text-indent: 4px;
+  }
+}
+
+.search-btn {
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.clear-btn {
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+
+}
+.separator {
+}
+.btn-primary {
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+/* Data List Box */
+.data-list-box {
+  display: flex;
+  height:50px;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+.data-list-title {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+
+.data-list-title .fa-list {
+  margin-right:12px;
+}
+
+.btn-secondary {
+  padding: 5px 10px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right:15px;
+}
+
+/* Separator Style */
+.separator {
+  height: 1px;
+  background-color: #ccc;
+  margin-top: 10px; /* Spacing above the separator */
+  margin-bottom: 10px; /* Spacing below the separator */
+}
+.content h1{
+  font-size:18px;
+  font-weight: 600;
+}
+/* Table Styles */
+table {
+  height: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px; /* Spacing above the table */
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+  font-size:13px
+}
+
+th {
+  background-color: #0f6096ed;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Button Styles */
+.button-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.btn-type {
+    padding: 5px 10px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left:770px;
+  }
+
+.button-container .checkBtn {
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+/*Modal/
+/* The Modal (background) */
+.description-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px; /* 或者根据你的设计来设置 */
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 600px; /* Maximum width */
+}
+.modal-body p {
+  margin: 0;
+  padding: 5px 0;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  }
+
+  /* Style the input fields and textarea */
+  input[type="text"],
+  select,
+  textarea {
+    width: 100%; /* Full width */
+    padding: 12px; /* Some padding */
+    border: 1px solid #ccc; /* Gray border */
+    margin-top: 6px; /* Add a bit of margin on top */
+    margin-bottom: 16px; /* Bottom margin */
+    resize: vertical; /* Allow vertical resize */
+  }
+
+  /* Style the label */
+  label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+  }
+
+  /* Style the submit button */
+  button#saveButton {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+  }
+
+  button#saveButton:hover {
+    opacity: 0.8;
+  }
+
+  /* Style the header */
+  .modal-content h2 {
+    color: #333;
+  }
+
+  /* Add more styles if you want to adjust the look and feel */
+
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+  .sidebar,
+  .top-bar,
+  .content {
+    width: 100%;
+    position: relative;
+  }
+
+  .sidebar {
+    height: auto;
+  }
+
+  .top-bar {
+    margin-left: 0;
+  }
+
+  .content {
+    margin-left: 0;
+  }
+
+  .search-filter-box,
+  .data-list-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* FontAwesome Icon Adjustment */
+[class^="fas"], [class*=" fas"] {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}

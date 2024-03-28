@@ -14,6 +14,4 @@ import java.util.List;
 */
 public interface UserRoleService extends IService<UserRole> {
     boolean saveRoleToUser(UserRoleListDTO userRoleList);
-
-    List<WtAuthMenu> selectAllMenu();
 }

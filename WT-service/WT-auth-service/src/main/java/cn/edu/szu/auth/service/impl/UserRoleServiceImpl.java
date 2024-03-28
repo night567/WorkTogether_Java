@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
     @Autowired
     private UserRoleMapper userRoleMapper;
-    private WtAuthMenuMapper menuMapper;
 
     @Override
     public boolean saveRoleToUser(UserRoleListDTO userRoleList) {
@@ -46,13 +45,6 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
                 .forEach(userRoleMapper::insert);
         return true;
     }
-    @Override
-    public List<WtAuthMenu> selectAllMenu() {
-        // 实现逻辑
-        // 返回所有菜单列表
-        return menuMapper.selectAll();
-    }
-
 }
 
 
