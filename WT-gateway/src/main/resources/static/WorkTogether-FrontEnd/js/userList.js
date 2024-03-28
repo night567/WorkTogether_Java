@@ -54,15 +54,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log(data);
             const tableBody = document.querySelector('table tbody');
-            data.forEach(user => {
+            data.data.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${data.id}</td>
-                    <td>${data.name}</td>
-                    <td>${data.email}</td>
-                    <td>${data.createTime}</td>
-                    <td>${data.lastLoginTime}</td>
-                    <td><input class="ios-switch" type="checkbox" ${data.status ? 'checked' : ''}></td>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.createTime}</td>
+                    <td>${user.lastLoginTime}</td>
+                    <td><input class="ios-switch" type="checkbox" ${user.status ? 'checked' : ''}></td>
                     <td class="button-container">
                         <button class="assign_roles">分配角色</button>
                         <button class="edit_button">编辑</button>
