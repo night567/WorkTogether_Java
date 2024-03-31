@@ -14,8 +14,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +57,7 @@ public class UserServiceImpl implements UserService {
         user.setSalt(salt);
         user.setPassword(pwd);
         user.setStatus(true);
-        user.setCreateTime(LocalDateTime.now());
+        user.setCreateTime(new Date());
         userDao.insert(user);
 
         //生成token

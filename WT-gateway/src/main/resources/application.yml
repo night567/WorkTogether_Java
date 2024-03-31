@@ -11,10 +11,21 @@ spring:
         - id: auth-service # 路由标示，必须唯一
           uri: lb://auth-service # 路由的目标地址
           predicates: # 路由断言，判断请求是否符合规则
-            - Path=/api/authAndRole/**,/api/auth/**,/api/UserAndRole/**,/api/menu/** # 路径断言，判断路径是否是以/user开头，如果是则符合
+            - Path=/api/authAndRole/**,/api/auth/**,/api/UserAndRole/**,/api/menu/**,/api/resource/** # 路径断言，判断路径是否是以/user开头，如果是则符合
         - id: user-service # 路由标示，必须唯一
           uri: lb://user-service # 路由的目标地址
           predicates: # 路由断言，判断请求是否符合规则
             - Path=/api/user/**,/api/email/** # 路径断言，判断路径是否是以/user开头，如果是则符合
-  mvc:
-    static-path-pattern: /static/**
+      globalcors: # 跨域设置
+        corsConfigurations:
+          '[/**]':
+            allowedHeaders: "*"
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+                POST
+                DELETE
+                PUT
+                OPTION
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss

@@ -27,6 +27,8 @@ spring:
   cloud:
     nacos:
       server-addr: localhost:8848
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 feign:
   okhttp:
     enabled: true

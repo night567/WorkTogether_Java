@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @TableName(value = "wt_user")
@@ -25,10 +25,10 @@ public class User implements Serializable {
     private Boolean status;  // 启用状态 1启用 0禁用
 
     @TableField(value = "last_login_time")
-    private LocalDateTime lastLoginTime;  // 最后登录时间
+    private Date lastLoginTime;  // 最后登录时间
 
     @TableField(value = "create_time")
-    private LocalDateTime createTime;  //创建时间
+    private Date createTime;  //创建时间
 
     public UserDTO parseToDTO() {
         UserDTO userDTO = new UserDTO();
