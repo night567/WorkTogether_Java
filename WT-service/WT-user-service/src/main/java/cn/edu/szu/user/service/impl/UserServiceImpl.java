@@ -7,6 +7,7 @@ import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
 import cn.edu.szu.user.pojo.UserDTO;
 import cn.edu.szu.user.service.UserService;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,12 @@ import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static cn.edu.szu.common.utils.RedisConstants.LOGIN_USER_KEY;
+import static cn.edu.szu.common.utils.RedisConstants.LOGIN_USER_TTL;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,7 +58,6 @@ public class UserServiceImpl implements UserService {
         user.setName(email);
         // 密码加盐
         String salt = RandomUtil.randomBytes(16).toString();
-        System.out.println(salt + ", " + salt.length());
         String pwd = DigestUtils.md5DigestAsHex((loginDTO.getPassword() + salt).getBytes());
         user.setSalt(salt);
         user.setPassword(pwd);
@@ -83,7 +88,14 @@ public class UserServiceImpl implements UserService {
         }
 
         // 生成jwt
-        return JwtUtil.getToken(user.getId());
+        String token = JwtUtil.getToken(user.getId());
+
+        // 储存user
+        Map<String, Object> userMap = BeanUtil.beanToMap(user);
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + user.getId(), userMap);
+        stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
+
+        return token;
     }
 
     @Override

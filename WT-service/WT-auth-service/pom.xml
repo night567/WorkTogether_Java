@@ -11,16 +11,6 @@
     <artifactId>WT-auth-service</artifactId>
 
     <dependencies>
-        <!-- redis依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!-- hutool工具包 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
         <!-- feign的okhttp连接池依赖 -->
         <dependency>
             <groupId>io.github.openfeign</groupId>
