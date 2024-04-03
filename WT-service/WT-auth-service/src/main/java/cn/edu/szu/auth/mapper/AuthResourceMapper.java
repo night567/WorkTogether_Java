@@ -20,4 +20,10 @@ public interface AuthResourceMapper {
      */
     public List<AuthResource> selectAllResources(@Param("offset") int offset, @Param("limit") int limit);
 
+    /**
+     * 根据资源名称模糊查询资源
+     * @param name 资源名称
+     * @return 资源列表
+     */
+    public List<AuthResource> selectResourcesByNames(String name);
 }

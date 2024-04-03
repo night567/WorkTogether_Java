@@ -27,4 +27,15 @@ public class AuthResourceServiceImpl implements AuthResourceService {
     public List<AuthResource> selectAllResources(int offset, int limit) {
          return authResourceMapper.selectAllResources(offset,limit);
     }
+
+    /**
+     * 根据资源名称模糊查询资源
+     * @param name 资源名称
+     * @return 资源列表
+     */
+    @Override
+    public List<AuthResource> selectResourcesByNames(String name) {
+        return authResourceMapper.selectResourcesByNames(name);
+    }
+
 }

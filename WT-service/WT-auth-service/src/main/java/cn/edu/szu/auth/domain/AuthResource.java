@@ -16,8 +16,6 @@ public class AuthResource {
     private Integer id;
     //资源名称
     private String name;
-    //资源路径
-    private String url;
     //资源描述
     private String describe;
     //对应菜单的ID
