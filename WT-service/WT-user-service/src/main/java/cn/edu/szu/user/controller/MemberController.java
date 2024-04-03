@@ -40,9 +40,6 @@ public class MemberController {
         }
         return new Result(Code.GET_OK,users,"查询成功！");
     }
-    @GetMapping("/s")
-    public Object select(){
-       return "成功";
-    }
+
 
 }
