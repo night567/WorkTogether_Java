@@ -18,4 +18,5 @@ public interface UserService {
     List<UserDTO> getUserByCompany(Long id);
 
     boolean updateById(UserDTO userDTO);
+
 }

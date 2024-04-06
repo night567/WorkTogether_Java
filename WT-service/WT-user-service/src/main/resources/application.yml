@@ -29,3 +29,15 @@ spring:
       server-addr: localhost:8848
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 2839468956@qq.com
+    password: srlcxjtwbbfwddjd
+    properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+    protocol: smtp

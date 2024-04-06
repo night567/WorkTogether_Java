@@ -90,6 +90,5 @@ public class UserController {
             return  new Result(Code.DELETE_OK,null,"移除成功");
         }
         return  new Result(Code.DELETE_ERR,null,"移除失败");
-
     }
 }
