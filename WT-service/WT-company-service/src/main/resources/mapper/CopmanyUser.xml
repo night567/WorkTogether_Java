@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.szu.company.dao.CompanyUserDao">
+
+    <resultMap id="BaseResultMap" type="cn.edu.szu.company.pojo.CompanyUser">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="companyId" column="company_id" jdbcType="BIGINT"/>
+        <result property="joinTime" column="join_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,company_id,join_time
+    </sql>
+    <sql id="BL">
+        user_id
+    </sql>
+
+    <!--根据公司ID查询用户ID集合-->
+    <select id="selectUserIdsByCompanyId"  resultType="java.lang.Long" parameterType="java.lang.Long">
+        select
+        user_id
+        from wt_company.wt_company_user
+        where company_id =#{companyId}
+    </select>
+
+</mapper>

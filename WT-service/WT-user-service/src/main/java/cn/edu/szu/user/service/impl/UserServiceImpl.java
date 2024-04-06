@@ -2,6 +2,7 @@ package cn.edu.szu.user.service.impl;
 
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.common.utils.RegexUtils;
+import cn.edu.szu.company.controller.CompanyUserController;
 import cn.edu.szu.user.dao.UserDao;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
@@ -10,7 +11,9 @@ import cn.edu.szu.user.service.UserService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -25,13 +28,15 @@ import static cn.edu.szu.common.utils.RedisConstants.LOGIN_USER_KEY;
 import static cn.edu.szu.common.utils.RedisConstants.LOGIN_USER_TTL;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService {
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
+    @Autowired
+    @Qualifier("companyUserController")
+    private CompanyUserController companyUserController;
     @Override
     public String createAccount(LoginDTO loginDTO) {
         // 校验邮箱
@@ -122,7 +127,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getUserByCompany(Long id) {
-        List<User> users = userDao.selectList(null);
+        List<Long> user_ids = companyUserController.selectUserIdsByCID(id);
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(User::getId, user_ids);
+        List<User> users = userDao.selectList(queryWrapper);
         return users.stream().map(User::parseToDTO).collect(Collectors.toList());
     }
 

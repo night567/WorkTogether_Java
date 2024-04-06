@@ -2,10 +2,12 @@ package cn.edu.szu.user.controller;
 
 import cn.edu.szu.common.domain.Code;
 import cn.edu.szu.common.domain.Result;
+import cn.edu.szu.company.controller.CompanyUserController;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
 import cn.edu.szu.user.pojo.UserDTO;
 import cn.edu.szu.user.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
 
     @PostMapping("/createUser")
     public Result createAccount(@RequestBody LoginDTO loginDTO) {
@@ -57,7 +60,7 @@ public class UserController {
     }
 
     @GetMapping("/company/{id}")
-    public Result getUserByCompany(@PathVariable Long id) {
+    public Result getUserByCompany(@PathVariable Long id){
         List<UserDTO> users = userService.getUserByCompany(id);
         if (users != null) {
             return new Result(Code.GET_OK, users, "获取成功");
