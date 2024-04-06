@@ -17,4 +17,9 @@ public class CompanyUserServiceImpl implements CompanyUserService {
     public List<Long> selectUserIdsByCompanyId(Long companyId) {
         return companyUserDao.selectUserIdsByCompanyId(companyId);
     }
+
+    @Override
+    public boolean deleteMember(Long memberId) {
+        return companyUserDao.deleteMember(memberId);
+    }
 }

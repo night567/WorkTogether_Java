@@ -25,5 +25,9 @@
         from wt_company.wt_company_user
         where company_id =#{companyId}
     </select>
+    <delete id="deleteMember" parameterType="java.lang.Long">
+        delete from wt_company.wt_company_user
+        where user_id=#{memberId}
+    </delete>
 
 </mapper>
