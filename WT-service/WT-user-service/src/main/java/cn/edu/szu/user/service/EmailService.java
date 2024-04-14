@@ -1,6 +1,7 @@
 package cn.edu.szu.user.service;
 
 public interface EmailService {
-    boolean sendVerificationCode(String email,Integer i,Long companyId);
-    void sendVerificationCodeEmail(String email, String code);
+    boolean sendVerificationCode(String email);
+    void sendCodeEmail(String email, String code);
+    boolean sendInviteCode(String email,Long companyId);
 }

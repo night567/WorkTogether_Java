@@ -15,8 +15,18 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/sendVerificationCode")
-    public Result sendEmail(@RequestBody InviteDTO request) {
-        boolean b = emailService.sendVerificationCode(request.getEmail(),request.getType(),request.getCompanyId());
+    public Result sendVerificationEmail(@RequestBody LoginDTO request) {
+        boolean b = emailService.sendVerificationCode(request.getEmail());
+        if (b) {
+            return new Result(Code.SAVE_OK, true, "发送成功");
+        } else {
+            return new Result(Code.SAVE_ERR, false, "发送失败");
+        }
+    }
+
+    @PostMapping("/sendInviteCode")
+    public Result sendInviteEmail(@RequestBody InviteDTO request) {
+        boolean b = emailService.sendInviteCode(request.getEmail(),request.getCompanyId());
         if (b) {
             return new Result(Code.SAVE_OK, true, "发送成功");
         } else {
@@ -24,3 +34,4 @@ public class EmailController {
         }
     }
 }
+
