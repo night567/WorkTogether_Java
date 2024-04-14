@@ -1,103 +1,126 @@
 package cn.edu.szu.user.service.impl;
 
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.common.utils.RegexUtils;
 import cn.edu.szu.feign.client.CompanyClient;
-import cn.edu.szu.user.dao.UserDao;
+import cn.edu.szu.user.mapper.UserLoginMapper;
+import cn.edu.szu.user.mapper.UserMapper;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
-import cn.edu.szu.user.pojo.UserDTO;
+import cn.edu.szu.user.pojo.UserLogin;
 import cn.edu.szu.user.service.UserService;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
-import static cn.edu.szu.common.utils.RedisConstants.LOGIN_USER_KEY;
-import static cn.edu.szu.common.utils.RedisConstants.LOGIN_USER_TTL;
+import static cn.edu.szu.common.utils.RedisConstants.*;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService {
+public class UserServiceImpl implements UserService {
     @Autowired
-    private UserDao userDao;
+    private UserMapper userMapper;
+    @Autowired
+    private UserLoginMapper userLoginMapper;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private CompanyClient companyClient;
+
     @Override
-    public String createAccount(LoginDTO loginDTO) {
+    public Result createAccount(LoginDTO loginDTO) {
         // 校验邮箱
         String email = loginDTO.getEmail();
         if (!RegexUtils.isEmail(email)) {
-            return "";
+            return new Result(Code.SAVE_ERR, null, "邮箱格式错误/不支持该类邮箱");
         }
 
         // 检验用户是否存在
         if (getUserByEmail(email) != null) {
-            return "";
+            return new Result(Code.SAVE_ERR, null, "账户已经存在");
         }
 
         // 校验验证码
-        String cacheCode = stringRedisTemplate.opsForValue().get("login:code:" + email);
+        String cacheCode = stringRedisTemplate.opsForValue().getAndDelete(LOGIN_CODE_KEY + email);
         String code = loginDTO.getVerificationCode();
         if (cacheCode == null || !cacheCode.equals(code)) {
-            return "";
+            return new Result(Code.SAVE_ERR, null, "验证码错误");
         }
 
-        // 生成用户
-        User user = new User();
-        user.setEmail(email);
-        user.setName(email);
+        // 生成用户账户
+        UserLogin userLogin = new UserLogin();
+        userLogin.setEmail(email);
         // 密码加盐
         String salt = RandomUtil.randomBytes(16).toString();
         String pwd = DigestUtils.md5DigestAsHex((loginDTO.getPassword() + salt).getBytes());
-        user.setSalt(salt);
-        user.setPassword(pwd);
-        user.setStatus(true);
+        userLogin.setSalt(salt);
+        userLogin.setPassword(pwd);
+        userLoginMapper.insert(userLogin);
+        // 生成用户信息
+        User user = new User();
+        user.setId(userLogin.getId());
+        user.setEmail(email);
+        user.setName(email);
         user.setCreateTime(new Date());
-        userDao.insert(user);
+        user.setSex(3);
+        userMapper.insert(user);
 
         //生成token
-        System.out.println(user.getId());
-        return JwtUtil.getToken(user.getId());
+        String token = JwtUtil.getToken(userLogin.getId());
+        System.out.println(user + " " + token);
+        return new Result(Code.SAVE_OK, token, "登录成功");
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
+    public Result login(LoginDTO loginDTO) {
         // 检查账户是否存在
         String email = loginDTO.getEmail();
-        User user = getUserByEmail(email);
-        if (user == null) {
-            return "";
+        if (!RegexUtils.isEmail(email)) {
+            return new Result(Code.SAVE_ERR, null, "邮箱格式错误/不支持该类邮箱");
+        }
+
+        LambdaQueryWrapper<UserLogin> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(UserLogin::getEmail, email);
+        UserLogin userLogin = userLoginMapper.selectOne(lqw);
+        if (userLogin == null) {
+            return new Result(Code.SAVE_ERR, null, "账户不存在");
         }
 
         // 比对密码
-        String salt = user.getSalt();
+        String salt = userLogin.getSalt();
         String password = loginDTO.getPassword();
         String pwd = DigestUtils.md5DigestAsHex((password + salt).getBytes());
-        if (!pwd.equals(user.getPassword())) {
-            return "";
+        if (!pwd.equals(userLogin.getPassword())) {
+            return new Result(Code.SAVE_ERR, null, "密码错误");
         }
 
-        // 生成jwt
-        String token = JwtUtil.getToken(user.getId());
-
         // 储存user
-        Map<String, Object> userMap = BeanUtil.beanToMap(user);
-        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + user.getId(), userMap);
-        stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        User user = userMapper.selectById(userLogin.getId());
+        user.setLastLoginTime(new Date());
+        userMapper.updateById(user);
+        Map<String, Object> userMap = BeanUtil.beanToMap(user, new HashMap<>(),
+                CopyOptions.create()
+                        .setIgnoreNullValue(true)
+                        .setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
+        String key = LOGIN_USER_KEY + userLogin.getId().toString();
+        stringRedisTemplate.opsForHash().putAll(key, userMap);
+        stringRedisTemplate.expire(key, LOGIN_USER_TTL, TimeUnit.MINUTES);
 
-        return token;
+        // 生成jwt
+        String token = JwtUtil.getToken(userLogin.getId());
+        return new Result(Code.SAVE_OK, token, "登录成功");
     }
 
     @Override
@@ -110,7 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         // 查询条件
         LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
         lqw.eq(User::getEmail, email);
-        return userDao.selectOne(lqw);
+        return userMapper.selectOne(lqw);
     }
 
     @Override
@@ -119,25 +142,20 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             return null;
         }
 
-        return userDao.selectById(id);
+        return userMapper.selectById(id);
     }
 
     @Override
-    public List<UserDTO> getUserByCompany(Long id) {
+    public List<User> getUserByCompany(Long id) {
         List<Long> user_ids = companyClient.selectUserIdsByCID(id);
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(User::getId, user_ids);
-        List<User> users = userDao.selectList(queryWrapper);
-        return users.stream().map(User::parseToDTO).collect(Collectors.toList());
+        return userMapper.selectBatchIds(user_ids);
     }
 
     @Override
-    public boolean updateById(UserDTO userDTO) {
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setStatus(userDTO.getStatus());
-        return userDao.updateById(user) > 0;
+    public boolean updateById(User user) {
+        if (user.getId() == null) {
+            return false;
+        }
+        return userMapper.updateById(user) > 0;
     }
-
-
 }

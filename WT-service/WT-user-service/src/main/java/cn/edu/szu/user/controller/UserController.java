@@ -1,11 +1,10 @@
 package cn.edu.szu.user.controller;
 
-import cn.edu.szu.common.domain.Code;
-import cn.edu.szu.common.domain.Result;
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
-import cn.edu.szu.user.pojo.UserDTO;
 import cn.edu.szu.user.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +21,14 @@ public class UserController {
     private CompanyClient companyClient;
 
 
-
     @PostMapping("/createUser")
     public Result createAccount(@RequestBody LoginDTO loginDTO) {
-        String token = userService.createAccount(loginDTO);
-        if (token != null && !token.isEmpty()) {
-            return new Result(Code.UPDATE_OK, token, "登录成功");
-        } else {
-            return new Result(Code.UPDATE_ERR, "", "登录失败");
-        }
+        return userService.createAccount(loginDTO);
     }
 
     @PostMapping("/login")
     public Result login(@RequestBody LoginDTO loginDTO) {
-        String jwt = userService.login(loginDTO);
-        if (jwt == null || jwt.isEmpty()) {
-            return new Result(Code.GET_ERR, null, "登录失败");
-        }
-        return new Result(Code.GET_OK, jwt, "登录成功");
+        return userService.login(loginDTO);
     }
 
     @GetMapping("/findByEmail/{email}")
@@ -63,8 +52,8 @@ public class UserController {
     }
 
     @GetMapping("/company/{id}")
-    public Result getUserByCompany(@PathVariable Long id){
-        List<UserDTO> users = userService.getUserByCompany(id);
+    public Result getUserByCompany(@PathVariable Long id) {
+        List<User> users = userService.getUserByCompany(id);
         if (users != null) {
             return new Result(Code.GET_OK, users, "获取成功");
         } else {
@@ -73,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/status")
-    public Result updateStatus(@RequestBody UserDTO user) {
+    public Result updateStatus(@RequestBody User user) {
         boolean b = userService.updateById(user);
         if (b) {
             return new Result(Code.UPDATE_OK, true, "修改成功");
@@ -83,12 +72,12 @@ public class UserController {
     }
 
     @DeleteMapping("/delete_member")
-    public Result deleteMember(@Param(value = "email") String email){
+    public Result deleteMember(@Param(value = "email") String email) {
         User user = userService.getUserByEmail(email);
         boolean flag = companyClient.deleteMember(user.getId());
-        if(flag){
-            return  new Result(Code.DELETE_OK,null,"移除成功");
+        if (flag) {
+            return new Result(Code.DELETE_OK, null, "移除成功");
         }
-        return  new Result(Code.DELETE_ERR,null,"移除失败");
+        return new Result(Code.DELETE_ERR, null, "移除失败");
     }
 }
