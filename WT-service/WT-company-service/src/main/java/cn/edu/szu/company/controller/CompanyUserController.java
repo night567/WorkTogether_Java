@@ -3,8 +3,7 @@ package cn.edu.szu.company.controller;
 
 import cn.edu.szu.company.service.CompanyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,9 +17,16 @@ public class CompanyUserController {
      * @param companyId 公司ID
      * @return 用户ID集合
      */
-    public List<Long> selectUserIdsByCID(Long companyId){
+    @GetMapping("/selectUserIdsByCID")
+    public List<Long> selectUserIdsByCID(@RequestParam Long companyId){
         List<Long> userIds= companyUserService.selectUserIdsByCompanyId(companyId);
         return userIds;
+    }
+
+    @GetMapping("/deleteMember")
+    public boolean deleteMember(@RequestParam Long memberId){
+        boolean b = companyUserService.deleteMember(memberId);
+        return b;
     }
 
 

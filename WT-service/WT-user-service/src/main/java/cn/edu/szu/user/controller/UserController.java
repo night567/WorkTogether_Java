@@ -2,12 +2,11 @@ package cn.edu.szu.user.controller;
 
 import cn.edu.szu.common.domain.Code;
 import cn.edu.szu.common.domain.Result;
-import cn.edu.szu.company.service.CompanyUserService;
+import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
 import cn.edu.szu.user.pojo.UserDTO;
 import cn.edu.szu.user.service.UserService;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,8 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private CompanyUserService companyUserService;
+    private CompanyClient companyClient;
+
 
 
     @PostMapping("/createUser")
@@ -85,7 +85,7 @@ public class UserController {
     @DeleteMapping("/delete_member")
     public Result deleteMember(@Param(value = "email") String email){
         User user = userService.getUserByEmail(email);
-        boolean flag = companyUserService.deleteMember(user.getId());
+        boolean flag = companyClient.deleteMember(user.getId());
         if(flag){
             return  new Result(Code.DELETE_OK,null,"移除成功");
         }
