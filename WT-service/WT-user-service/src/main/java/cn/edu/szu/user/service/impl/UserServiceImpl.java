@@ -2,7 +2,7 @@ package cn.edu.szu.user.service.impl;
 
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.common.utils.RegexUtils;
-import cn.edu.szu.company.controller.CompanyUserController;
+import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.user.dao.UserDao;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
@@ -30,11 +30,10 @@ import static cn.edu.szu.common.utils.RedisConstants.LOGIN_USER_TTL;
 public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService {
     @Autowired
     private UserDao userDao;
-
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
-    private CompanyUserController companyUserController;
+    private CompanyClient companyClient;
     @Override
     public String createAccount(LoginDTO loginDTO) {
         // 校验邮箱
@@ -125,7 +124,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
     @Override
     public List<UserDTO> getUserByCompany(Long id) {
-        List<Long> user_ids = companyUserController.selectUserIdsByCID(id);
+        List<Long> user_ids = companyClient.selectUserIdsByCID(id);
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(User::getId, user_ids);
         List<User> users = userDao.selectList(queryWrapper);

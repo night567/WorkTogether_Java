@@ -17,12 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>cn.edu.szu</groupId>
-            <artifactId>WT-company-service</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>

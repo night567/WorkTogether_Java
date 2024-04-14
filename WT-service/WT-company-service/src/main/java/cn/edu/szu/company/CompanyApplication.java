@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"cn.edu.szu.company.dao"})
+
 public class CompanyApplication {
     public static void main(String[] args) {
         SpringApplication.run(CompanyApplication.class, args);

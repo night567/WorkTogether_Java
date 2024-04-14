@@ -19,7 +19,7 @@ spring:
         - id: company-service
           uri: lb://company-service
           predicates:
-            - Path=
+            - Path=/api/company_user/**
       globalcors: # 跨域设置
         corsConfigurations:
           '[/**]':

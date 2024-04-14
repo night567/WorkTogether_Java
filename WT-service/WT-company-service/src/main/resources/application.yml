@@ -6,7 +6,7 @@ logging:
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
 spring:
-  otherDataSource:
+  dataSource:
     url: jdbc:mysql://47.120.13.87:3306/wt_company?useSSL=false
     username: root
     password: 2484101884
