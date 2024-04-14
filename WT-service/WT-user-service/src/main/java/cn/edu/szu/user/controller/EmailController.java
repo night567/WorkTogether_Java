@@ -1,7 +1,7 @@
 package cn.edu.szu.user.controller;
 
-import cn.edu.szu.common.domain.Code;
-import cn.edu.szu.common.domain.Result;
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.user.pojo.InviteDTO;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.service.EmailService;

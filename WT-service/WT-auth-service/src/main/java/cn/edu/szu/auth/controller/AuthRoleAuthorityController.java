@@ -3,8 +3,8 @@ package cn.edu.szu.auth.controller;
 import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import cn.edu.szu.auth.domain.AuthRoleAuthorityList;
 import cn.edu.szu.auth.service.AuthRoleAuthorityService;
-import cn.edu.szu.common.domain.Code;
-import cn.edu.szu.common.domain.Result;
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

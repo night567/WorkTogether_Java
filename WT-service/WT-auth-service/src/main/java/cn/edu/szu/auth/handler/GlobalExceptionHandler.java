@@ -1,11 +1,9 @@
 package cn.edu.szu.auth.handler;
 
-import cn.edu.szu.auth.expection.NameConflictException;
-import cn.edu.szu.auth.expection.RoleNotFoundException;
-import cn.edu.szu.common.domain.Code;
-import cn.edu.szu.common.domain.Result;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import cn.edu.szu.auth.exception.NameConflictException;
+import cn.edu.szu.auth.exception.RoleNotFoundException;
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

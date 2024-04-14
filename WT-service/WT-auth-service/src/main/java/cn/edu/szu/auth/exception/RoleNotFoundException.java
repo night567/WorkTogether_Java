@@ -1,4 +1,4 @@
-package cn.edu.szu.auth.expection;
+package cn.edu.szu.auth.exception;
 
 public class RoleNotFoundException extends RuntimeException {
 

@@ -2,12 +2,11 @@ package cn.edu.szu.auth.controller;
 
 import cn.edu.szu.auth.domain.AuthRole;
 import cn.edu.szu.auth.service.AuthRoleService;
-import cn.edu.szu.common.domain.Code;
-import cn.edu.szu.common.domain.Result;
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RunAs;
 import java.util.List;
 
 /**

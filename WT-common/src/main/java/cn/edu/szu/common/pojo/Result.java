@@ -1,4 +1,4 @@
-package cn.edu.szu.common.domain;
+package cn.edu.szu.common.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

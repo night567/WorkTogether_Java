@@ -64,12 +64,6 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <!--邮件-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-mail</artifactId>
-            </dependency>
-
             <!--hutool工具包-->
             <dependency>
                 <groupId>cn.hutool</groupId>

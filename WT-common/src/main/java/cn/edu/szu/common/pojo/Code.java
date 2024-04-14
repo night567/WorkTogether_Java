@@ -1,4 +1,4 @@
-package cn.edu.szu.common.domain;
+package cn.edu.szu.common.pojo;
 
 //状态码
 public class Code {

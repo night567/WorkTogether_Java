@@ -2,8 +2,8 @@ package cn.edu.szu.auth.controller;
 
 import cn.edu.szu.auth.domain.WtAuthMenu;
 import cn.edu.szu.auth.service.WtAuthMenuService;
-import cn.edu.szu.common.domain.Code;
-import cn.edu.szu.common.domain.Result;
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

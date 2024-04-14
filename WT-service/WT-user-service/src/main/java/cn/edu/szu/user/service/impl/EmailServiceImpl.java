@@ -8,8 +8,9 @@ import cn.hutool.core.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Service;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+
 import java.util.concurrent.TimeUnit;
 
 import static cn.edu.szu.common.utils.RedisConstants.*;
@@ -22,8 +23,8 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSender javaMailSender;
     @Autowired
     private UserService userService;
+
     /**
-     *
      * @param email
      * @param
      * @return
@@ -35,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
             return false;
         }
 
-        String code=null;
+        String code;
         //生成验证码
         code = RandomUtil.randomNumbers(6);
 
@@ -43,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + email, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         //TODO:发送验证码
-        sendCodeEmail(email,code);
+        sendCodeEmail(email, code);
         return true;
     }
 
@@ -54,21 +55,22 @@ public class EmailServiceImpl implements EmailService {
             return false;
         }
 
-        String code=null;
+        String code = null;
         //生成验证码
         code = RandomUtil.randomNumbers(6);
         //获取用户ID
         User user = userService.getUserByEmail(email);
 
         //保存验证码到redis(10分钟有效期)
-        stringRedisTemplate.opsForHash().put(INVITE_CODE_KEY+code,"email",email);
-        stringRedisTemplate.opsForHash().put(INVITE_CODE_KEY+code,"companyId",companyId);
-        stringRedisTemplate.expire(INVITE_CODE_KEY+code,LOGIN_USER_TTL,TimeUnit.MINUTES);
+        stringRedisTemplate.opsForHash().put(INVITE_CODE_KEY + code, "email", email);
+        stringRedisTemplate.opsForHash().put(INVITE_CODE_KEY + code, "companyId", companyId);
+        stringRedisTemplate.expire(INVITE_CODE_KEY + code, LOGIN_USER_TTL, TimeUnit.MINUTES);
 
         //TODO:发送验证码
-        sendCodeEmail(email,code);
+        sendCodeEmail(email, code);
         return true;
     }
+
     public void sendCodeEmail(String email, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("2839468956@qq.com");
