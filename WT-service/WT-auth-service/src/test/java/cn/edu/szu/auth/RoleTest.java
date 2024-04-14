@@ -46,8 +46,8 @@ public class RoleTest {
 
     @Test
     public void testGetAll(){
-        System.out.println(roleService.selectAllRole());
-        System.out.println(roleService.selectById(1772607179489046529l));
+        System.out.println(roleService.selectAllRole(2l));
+        System.out.println(roleService.selectById(1773012865463279617l));
     }
 
 }

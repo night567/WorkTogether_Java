@@ -32,12 +32,12 @@ public class AuthorizationController {
     }
 
     /**
-     * 查询所有角色
+     * 查询公司所有角色
      * @return
      */
-    @GetMapping
-    public Result selectAll(){
-        List<AuthRole> list = authRoleService.selectAllRole();
+    @GetMapping("/cid/{id}")
+    public Result selectAll(@PathVariable Long id){
+        List<AuthRole> list = authRoleService.selectAllRole(id);
         return new Result(Code.GET_OK,list,"查询成功");
     }
 

@@ -18,7 +18,6 @@ public class EmailServiceImpl implements EmailService {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private JavaMailSender javaMailSender;
-
     /**
      *
      * @param email
@@ -48,7 +47,6 @@ public class EmailServiceImpl implements EmailService {
         else
             return false;
         //TODO:发送验证码
-        sendVerificationCodeEmail(email,code);
         System.out.println(email + "的验证码：" + code);
         return true;
     }

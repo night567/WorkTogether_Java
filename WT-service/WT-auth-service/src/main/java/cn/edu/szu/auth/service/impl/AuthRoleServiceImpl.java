@@ -13,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
 * @author 86199
@@ -92,8 +90,10 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
      * 返回所有角色
      */
     @Override
-    public List<AuthRole> selectAllRole() {
-        return roleMapper.selectList(null);
+    public List<AuthRole> selectAllRole(Long id) {
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("company_id", id);
+        return roleMapper.selectByMap(conditionMap);
     }
 
     /**

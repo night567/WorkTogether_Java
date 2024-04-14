@@ -30,9 +30,9 @@ public interface AuthRoleService extends IService<AuthRole> {
     void updateRole(AuthRole role);
 
     /**
-     * 查询所有角色
+     * 查询公司所有角色
      */
-    List<AuthRole> selectAllRole();
+    List<AuthRole> selectAllRole(Long id);
 
     /**
      * 根据id查询角色
