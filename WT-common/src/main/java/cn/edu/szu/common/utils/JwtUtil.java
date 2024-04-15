@@ -1,8 +1,5 @@
 package cn.edu.szu.common.utils;
 
-
-
-
 import io.jsonwebtoken.*;
 
 import javax.crypto.SecretKey;
@@ -10,9 +7,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
 
 public class JwtUtil {
-
-    // TOKEN的有效期一天（S）
-    private static final int TOKEN_TIME_OUT = 3_600;
     // 加密KEY
     private static final String TOKEN_ENCRY_KEY = "MDk4ZjZiY2Q0NjIzGRM3M2NhZGU0ZTgzMjYyN2I0ZjY";
     // 最小刷新间隔(S)
@@ -31,7 +25,6 @@ public class JwtUtil {
                 .setAudience("app")  //接收用户
                 .compressWith(CompressionCodecs.GZIP)  //数据压缩方式
                 .signWith(SignatureAlgorithm.HS512, generalKey()) //加密方式
-                .setExpiration(new Date(currentTime + TOKEN_TIME_OUT * 1000))  //过期时间戳
                 .addClaims(claimMaps) //cla信息
                 .compact();
     }
@@ -113,7 +106,7 @@ public class JwtUtil {
        /* Map map = new HashMap();
         map.put("id","11");*/
         System.out.println(JwtUtil.getToken(1102L));
-        Jws<Claims> jws = JwtUtil.getJws("eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAAADWLQQqEMAwA_5KzhURNt_qb1KZYQSi0wi6Lf9942NsMw3zh6AVW2DYmDGl2WabkZgreCaM6VXzhFBfJMcMARTqsxIG9Z888QLui3e3Tup5Pb81013KKmVzJTGo11nf9n8v4nMUaEY73DzTabjmDAAAA.4SuqQ42IGqCgBai6qd4RaVpVxTlZIWC826QA9kLvt9d-yVUw82gU47HDaSfOzgAcloZedYNNpUcd18Ne8vvjQA");
+        Jws<Claims> jws = JwtUtil.getJws("eyJhbGciOiJIUzUxMiIsInppcCI6IcdvSVAifQ.H4sIAAAAAAAAADWLQQqEMAwA_5KzhURNt_qb1KZYQSi0wi6Lf9942NsMw3zh6AVW2DYmDGl2WabkZgreCaM6VXzhFBfJMcMARTqsxIG9Z888QLui3e3Tup5Pb81013KKmVzJTGo11nf9n8v4nMUaEY73DzTabjmDAAAA.4SuqQ42IGqCgBai6qd4RaVpVxTlZIWC826QA9kLvt9d-yVUw82gU47HDaSfOzgAcloZedYNNpUcd18Ne8vvjQA");
         Claims claims = jws.getBody();
         System.out.println(claims.get("id"));
     }
