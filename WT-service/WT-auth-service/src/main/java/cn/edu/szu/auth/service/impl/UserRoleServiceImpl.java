@@ -1,11 +1,10 @@
 package cn.edu.szu.auth.service.impl;
 
-import cn.edu.szu.auth.domain.UserRoleListDTO;
-import cn.edu.szu.auth.domain.WtAuthMenu;
-import cn.edu.szu.auth.mapper.WtAuthMenuMapper;
+import cn.edu.szu.auth.domain.*;
+import cn.edu.szu.auth.mapper.AuthResourceMapper;
+import cn.edu.szu.feign.pojo.CheckAuthDTO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.edu.szu.auth.domain.UserRole;
 import cn.edu.szu.auth.service.UserRoleService;
 import cn.edu.szu.auth.mapper.UserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
 * @author zgr24
@@ -26,6 +23,9 @@ import java.util.stream.Collectors;
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
     @Autowired
     private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private AuthResourceMapper authResourceMapper;
 
     @Override
     public boolean saveRoleToUser(UserRoleListDTO userRoleList) {
@@ -44,6 +44,11 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
                         .build())
                 .forEach(userRoleMapper::insert);
         return true;
+    }
+
+    @Override
+    public boolean checkAuth(CheckAuthDTO checkAuthDTO) {
+        return false;
     }
 }
 

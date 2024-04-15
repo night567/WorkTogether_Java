@@ -14,6 +14,12 @@
     </properties>
 
     <dependencies>
+        <!-- 引用feign依赖 -->
+        <dependency>
+            <groupId>cn.edu.szu</groupId>
+            <artifactId>WT-feign-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!--nacos服务注册发现依赖-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -28,6 +34,16 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <!-- redis依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- hutool工具包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
     </dependencies>
     <build>
