@@ -20,6 +20,11 @@
             <artifactId>WT-feign-api</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!-- feign的okhttp连接池依赖 -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+        </dependency>
         <!--nacos服务注册发现依赖-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

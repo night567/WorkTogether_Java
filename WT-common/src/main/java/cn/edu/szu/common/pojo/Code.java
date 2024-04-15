@@ -15,4 +15,5 @@ public class Code {
     public static final Integer GET_ERR = 20040;
 
     public static final Integer ID_NOT_FOUND_ERR = 10010;
+    public static final Integer AUTH_ERR = 10020;
 }

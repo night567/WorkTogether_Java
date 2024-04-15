@@ -43,3 +43,6 @@ spring:
                 OPTION
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+feign:
+  okhttp:
+    enabled: true

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
 * @author zgr24
@@ -48,7 +49,9 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
     @Override
     public boolean checkAuth(CheckAuthDTO checkAuthDTO) {
-        return false;
+        List<String> resources = userRoleMapper.getAllResourceIdsByUserId(checkAuthDTO.getUserId(), checkAuthDTO.getCompanyId());
+//        resources.forEach(System.out::println);
+        return resources.stream().anyMatch(checkAuthDTO.getResource()::startsWith);
     }
 }
 
