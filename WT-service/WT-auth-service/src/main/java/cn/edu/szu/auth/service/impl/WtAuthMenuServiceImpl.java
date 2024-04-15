@@ -1,9 +1,7 @@
 package cn.edu.szu.auth.service.impl;
 
-import cn.edu.szu.auth.domain.AuthRole;
-import cn.edu.szu.auth.domain.AuthRoleAuthority;
-import cn.edu.szu.auth.expection.RoleNotFoundException;
-import cn.edu.szu.auth.mapper.AuthRoleMapper;
+
+import cn.edu.szu.auth.exception.RoleNotFoundException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.auth.domain.WtAuthMenu;
 import cn.edu.szu.auth.service.WtAuthMenuService;
