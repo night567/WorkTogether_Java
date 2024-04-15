@@ -14,13 +14,45 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/sendVerificationCode")
-    public Result sendVerificationEmail(@RequestBody LoginDTO request) {
-        boolean b = emailService.sendVerificationCode(request.getEmail());
-        if (b) {
+    @PostMapping("/sendRegistrationCode")
+    public Result sendRegistrationCode(@RequestBody LoginDTO request) {
+        String code = emailService.generateRegistrationCode(request.getEmail());
+        if (code != null) {
+            emailService.sendCodeEmail(request.getEmail(), code);
             return new Result(Code.SAVE_OK, true, "发送成功");
         } else {
-            return new Result(Code.SAVE_ERR, false, "发送失败");
+            return new Result(Code.SAVE_ERR, false, "发送失败,邮箱错误/账号已存在，请检查注册邮箱");
+        }
+    }
+
+    @PostMapping("/checkRegistrationCode")
+    public Result checkRegistrationCode(@RequestBody LoginDTO request) {
+        boolean b = emailService.checkRegistrationCode(request.getEmail(), request.getVerificationCode());
+        if (b) {
+            return new Result(Code.SAVE_OK, true, "验证成功");
+        } else {
+            return new Result(Code.SAVE_ERR, false, "验证失败");
+        }
+    }
+
+    @PostMapping("/sendVerificationCode")
+    public Result sendVerificationCode(@RequestBody LoginDTO request) {
+        String code = emailService.generateVerificationCode(request.getEmail());
+        if (code != null) {
+            emailService.sendCodeEmail(request.getEmail(), code);
+            return new Result(Code.SAVE_OK, true, "发送成功");
+        } else {
+            return new Result(Code.SAVE_ERR, false, "发送失败,账号不存在，请检查邮箱");
+        }
+    }
+
+    @PostMapping("/checkVerificationCode")
+    public Result checkVerificationCode(@RequestBody LoginDTO request) {
+        boolean b = emailService.checkVerificationCode(request.getEmail(), request.getVerificationCode());
+        if (b) {
+            return new Result(Code.SAVE_OK, true, "验证成功");
+        } else {
+            return new Result(Code.SAVE_ERR, false, "验证失败");
         }
     }
 

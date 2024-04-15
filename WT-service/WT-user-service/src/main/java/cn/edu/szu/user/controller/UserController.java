@@ -61,8 +61,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/status")
-    public Result updateStatus(@RequestBody User user) {
+    public Result updateStatus(User user) {
         boolean b = userService.updateById(user);
         if (b) {
             return new Result(Code.UPDATE_OK, true, "修改成功");

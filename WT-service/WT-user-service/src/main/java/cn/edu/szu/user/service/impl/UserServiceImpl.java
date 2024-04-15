@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 校验验证码
-        String cacheCode = stringRedisTemplate.opsForValue().getAndDelete(LOGIN_CODE_KEY + email);
+        String cacheCode = stringRedisTemplate.opsForValue().getAndDelete(LOGIN_REGISTER_CODE_KEY + email);
         String code = loginDTO.getVerificationCode();
         if (cacheCode == null || !cacheCode.equals(code)) {
             return new Result(Code.SAVE_ERR, null, "验证码错误");
@@ -85,12 +85,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result login(LoginDTO loginDTO) {
-        // 检查账户是否存在
         String email = loginDTO.getEmail();
         if (!RegexUtils.isEmail(email)) {
             return new Result(Code.SAVE_ERR, null, "邮箱格式错误/不支持该类邮箱");
         }
 
+        // 检查账户是否存在
         LambdaQueryWrapper<UserLogin> lqw = new LambdaQueryWrapper<>();
         lqw.eq(UserLogin::getEmail, email);
         UserLogin userLogin = userLoginMapper.selectOne(lqw);
