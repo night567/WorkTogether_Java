@@ -2,7 +2,7 @@ package cn.edu.szu.auth.service;
 
 import cn.edu.szu.auth.domain.AuthRole;
 import cn.edu.szu.auth.domain.WtAuthMenu;
-import cn.edu.szu.auth.expection.RoleNotFoundException;
+
 import cn.edu.szu.auth.mapper.WtAuthMenuMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 

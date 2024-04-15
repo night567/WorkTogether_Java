@@ -3,7 +3,8 @@ package cn.edu.szu.auth.service.impl;
 import cn.edu.szu.auth.domain.AuthAuthority;
 import cn.edu.szu.auth.domain.AuthRoleAuthorityList;
 
-import cn.edu.szu.auth.expection.RoleNotFoundException;
+
+import cn.edu.szu.auth.exception.RoleNotFoundException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import cn.edu.szu.auth.service.AuthRoleAuthorityService;

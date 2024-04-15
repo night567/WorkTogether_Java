@@ -2,8 +2,9 @@ package cn.edu.szu.auth.controller;
 
 import cn.edu.szu.auth.domain.UserRoleListDTO;
 import cn.edu.szu.auth.service.UserRoleService;
-import cn.edu.szu.common.domain.Code;
-import cn.edu.szu.common.domain.Result;
+
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

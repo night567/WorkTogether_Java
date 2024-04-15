@@ -1,7 +1,8 @@
 package cn.edu.szu.auth.service.impl;
 
-import cn.edu.szu.auth.expection.NameConflictException;
-import cn.edu.szu.auth.expection.RoleNotFoundException;
+import cn.edu.szu.auth.exception.NameConflictException;
+
+import cn.edu.szu.auth.exception.RoleNotFoundException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
