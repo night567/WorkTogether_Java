@@ -21,7 +21,7 @@ public class JwtUtil {
                 .setId(UUID.randomUUID().toString())
                 .setIssuedAt(new Date(currentTime))  //签发时间
                 .setSubject("system")  //说明
-                .setIssuer("heima") //签发者信息
+                .setIssuer("WorkTogether") //签发者信息
                 .setAudience("app")  //接收用户
                 .compressWith(CompressionCodecs.GZIP)  //数据压缩方式
                 .signWith(SignatureAlgorithm.HS512, generalKey()) //加密方式
@@ -53,6 +53,11 @@ public class JwtUtil {
         } catch (ExpiredJwtException e) {
             return null;
         }
+    }
+
+    public static Long getUserId(String token) {
+        Claims claimsBody = getClaimsBody(token);
+        return claimsBody == null ? null : Long.valueOf(claimsBody.get("id").toString());
     }
 
     /**

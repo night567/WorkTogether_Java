@@ -1,11 +1,9 @@
 package cn.edu.szu.auth.service;
 
+import cn.edu.szu.feign.pojo.CheckAuthDTO;
 import cn.edu.szu.auth.domain.UserRole;
 import cn.edu.szu.auth.domain.UserRoleListDTO;
-import cn.edu.szu.auth.domain.WtAuthMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
 * @author zgr24
@@ -14,4 +12,6 @@ import java.util.List;
 */
 public interface UserRoleService extends IService<UserRole> {
     boolean saveRoleToUser(UserRoleListDTO userRoleList);
+
+    boolean checkAuth(CheckAuthDTO checkAuthDTO);
 }

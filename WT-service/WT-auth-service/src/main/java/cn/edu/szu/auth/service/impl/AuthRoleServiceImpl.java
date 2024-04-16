@@ -1,15 +1,12 @@
 package cn.edu.szu.auth.service.impl;
 
 import cn.edu.szu.auth.exception.NameConflictException;
-
 import cn.edu.szu.auth.exception.RoleNotFoundException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.auth.domain.AuthRole;
 import cn.edu.szu.auth.service.AuthRoleService;
 import cn.edu.szu.auth.mapper.AuthRoleMapper;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

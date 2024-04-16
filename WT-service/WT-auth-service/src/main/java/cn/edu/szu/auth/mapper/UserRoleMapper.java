@@ -3,6 +3,8 @@ package cn.edu.szu.auth.mapper;
 import cn.edu.szu.auth.domain.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
 * @author zgr24
 * @description 针对表【wt_auth_user_role(角色分配
@@ -11,7 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity cn.edu.szu.auth.domain.AuthUserRole
 */
 public interface UserRoleMapper extends BaseMapper<UserRole> {
-
+    public List<String> getAllResourceIdsByUserId(Long id, Long companyId);
 }
 
 

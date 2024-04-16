@@ -21,9 +21,6 @@ import java.util.Date;
 @Builder
 @TableName(value = "wt_auth_user_role")
 public class UserRole implements Serializable {
-    /**
-     *
-     */
     @TableId(value = "id")
     private Long id;
 

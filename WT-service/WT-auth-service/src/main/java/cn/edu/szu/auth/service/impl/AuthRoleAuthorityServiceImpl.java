@@ -3,13 +3,11 @@ package cn.edu.szu.auth.service.impl;
 import cn.edu.szu.auth.domain.AuthAuthority;
 import cn.edu.szu.auth.domain.AuthRoleAuthorityList;
 
-
 import cn.edu.szu.auth.exception.RoleNotFoundException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.auth.domain.AuthRoleAuthority;
 import cn.edu.szu.auth.service.AuthRoleAuthorityService;
 import cn.edu.szu.auth.mapper.AuthRoleAuthorityMapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

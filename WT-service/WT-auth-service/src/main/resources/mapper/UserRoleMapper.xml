@@ -16,4 +16,15 @@
         id,role_id,user_id,
         create_user,create_time
     </sql>
+
+    <select id="getAllResourceIdsByUserId" resultType="java.lang.String">
+        SELECT re.url
+        FROM wt_auth.wt_auth_user_role ur
+                 INNER JOIN wt_auth.wt_auth_role r ON ur.role_id = r.id
+                 INNER JOIN wt_auth.wt_auth_role_authority ra ON r.id = ra.role_id
+                 INNER JOIN wt_auth.wt_auth_resource re ON ra.authority_id = re.id
+        WHERE ur.user_id = #{id}
+          AND r.company_id = #{companyId}
+          AND ra.authority_type = 'RESOURCE';
+    </select>
 </mapper>
