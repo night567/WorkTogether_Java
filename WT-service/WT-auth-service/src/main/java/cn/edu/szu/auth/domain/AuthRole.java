@@ -1,9 +1,7 @@
 package cn.edu.szu.auth.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -67,5 +65,9 @@ public class AuthRole implements Serializable {
 
     @TableField(value = "company_id")
     private Long companyId;
+
+    @TableField(value = "is_deleted")
+    @TableLogic(value = "0",delval = "1")
+    private boolean isDeleted;
 
 }

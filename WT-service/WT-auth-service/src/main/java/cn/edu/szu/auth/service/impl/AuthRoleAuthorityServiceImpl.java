@@ -91,6 +91,9 @@ public class AuthRoleAuthorityServiceImpl extends ServiceImpl<AuthRoleAuthorityM
     @Override
     public void deleteByRoleId(Long id) {
         List<Long> ids = selectIdsByAuthId(id);
+        if(ids.size() == 0 || ids == null){
+            throw new RoleNotFoundException("角色不存在或暂无权限");
+        }
         delRoleAuthorityByIds(ids);
     }
 

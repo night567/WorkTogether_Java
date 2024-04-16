@@ -85,6 +85,7 @@ public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
         int cnt = roleMapper.updateById(role);
 //        log.info("ttttttttt");
 //        System.out.println(cnt+" -------------------------------  ");
+        log.info("lll:"+cnt);
         if (cnt == 0){
             throw new RoleNotFoundException("Role not found with id: " + role.getId());
         }

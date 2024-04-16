@@ -16,10 +16,10 @@ import java.util.List;
 @Mapper
 public interface AuthRoleAuthorityMapper extends BaseMapper<AuthRoleAuthority> {
 
-    @Select("select id from wt_auth_role_authority where authority_id = #{authorityId}")
+    @Select("select id from wt_auth_role_authority where role_id = #{roleId}")
     List<Long> selectIdsByRoleId(Long authorityId);
 
-    @Select("select * from wt_auth_role_authority where authority_id = #{authorityId}")
+    @Select("select * from wt_auth_role_authority where role_id = #{roleId}")
     List<AuthRoleAuthority> selectByRoleId(Long authorityId);
 
 }
