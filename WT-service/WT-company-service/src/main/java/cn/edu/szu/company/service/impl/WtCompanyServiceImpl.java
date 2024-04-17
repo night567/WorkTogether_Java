@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * @author 86199
  * @description 针对表【wt_company(企业)】的数据库操作Service实现
@@ -59,6 +61,8 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
      */
     @Override
     public boolean addCompany(WtCompany company) {
+        Date date = new Date();
+        company.setCreateTime(date);
         try {
             companyMapper.insert(company);
         } catch (Exception e) {
