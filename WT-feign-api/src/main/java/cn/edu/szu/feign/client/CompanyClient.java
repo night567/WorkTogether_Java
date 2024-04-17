@@ -12,5 +12,5 @@ public interface CompanyClient {
     List<Long> selectUserIdsByCID(@RequestParam Long companyId);
 
     @GetMapping("/api/company_user/deleteMember")
-   boolean deleteMember(@RequestParam Long memberId);
+   boolean setMemberAsDeleted(@RequestParam Long memberId,@RequestParam Long companyId);
 }

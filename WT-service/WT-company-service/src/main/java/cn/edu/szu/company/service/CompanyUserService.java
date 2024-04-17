@@ -6,9 +6,9 @@ import java.util.List;
 public interface CompanyUserService {
     List<Long> selectUserIdsByCompanyId(Long companyId);
 
-    boolean deleteMember(Long memberId);
-
     Long getCompanyIdByInviteCode(String code);
 
     List<MemberDTO> getAllMember(Long companyId);
+
+    boolean setMemberAsDeleted(Long memberId,Long companyId);
 }

@@ -28,10 +28,6 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         return companyUserDao.selectUserIdsByCompanyId(companyId);
     }
 
-    @Override
-    public boolean deleteMember(Long memberId) {
-        return companyUserDao.deleteMember(memberId);
-    }
 
     @Override
     public List<MemberDTO> getAllMember(Long companyId) {
@@ -51,6 +47,11 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         }
 
         return companyUsers;
+    }
+
+    @Override
+    public boolean setMemberAsDeleted(Long memberId,Long companyId) {
+        return companyUserDao.setMemberAsDeleted(memberId,companyId);
     }
 
     @Override

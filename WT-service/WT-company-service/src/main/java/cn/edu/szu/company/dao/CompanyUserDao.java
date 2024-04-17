@@ -12,7 +12,7 @@ public interface CompanyUserDao extends BaseMapper<CompanyUser> {
     // 根据公司ID返回用户ID集合
     List<Long> selectUserIdsByCompanyId(Long companyId);
 
-    boolean deleteMember(Long memberId);
+    boolean setMemberAsDeleted(Long memberId,Long companyId);
 
     List<MemberDTO> selectAllByCompanyId(Long companyId);
 }
