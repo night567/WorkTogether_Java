@@ -1,0 +1,43 @@
+package cn.edu.szu.company.controller;
+
+import cn.edu.szu.common.pojo.Code;
+import cn.edu.szu.common.pojo.Result;
+import cn.edu.szu.company.domain.WtCompany;
+import cn.edu.szu.company.service.WtCompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/company")
+public class CompanyController {
+    @Autowired
+    WtCompanyService companyService;
+
+    @PutMapping("/updateCompany")
+    public Result updateCompany(@RequestBody WtCompany company){
+        companyService.updateCompany(company);
+        return new Result(Code.UPDATE_OK,null,"更新成功");
+    }
+
+    @DeleteMapping("/delCompany/{id}")
+    public Result delCompany(@PathVariable Long id){
+        companyService.deleteCompany(id);
+        return new Result(Code.DELETE_OK,null,"更新成功");
+    }
+
+    @PostMapping("/createCompany")
+    public Result addCompany(@RequestBody WtCompany company){
+
+        companyService.addCompany(company);
+
+        return new Result(Code.SAVE_OK,null,"创建公司成功");
+    }
+
+
+}
