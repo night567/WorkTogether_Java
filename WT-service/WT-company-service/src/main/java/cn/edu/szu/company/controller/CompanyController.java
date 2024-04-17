@@ -2,17 +2,11 @@ package cn.edu.szu.company.controller;
 
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
+import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.company.domain.WtCompany;
 import cn.edu.szu.company.service.WtCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/company")
@@ -49,8 +43,10 @@ public class CompanyController {
      * @return
      */
     @PostMapping("/createCompany")
-    public Result addCompany(@RequestBody WtCompany company){
-
+    public Result addCompany(@RequestHeader("Authorization") String token, @RequestBody WtCompany company){
+        System.out.println("???");
+        Long uid = JwtUtil.getUserId(token);
+        company.setFounderId(uid);
         companyService.addCompany(company);
 
         return new Result(Code.SAVE_OK,null,"创建公司成功");
