@@ -11,7 +11,7 @@
         <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
         <result property="status" column="status" jdbcType="BOOLEAN"/>
         <result property="joinTime" column="join_time" jdbcType="TIMESTAMP"/>
-        <result property="is_deleted" column="is_deleted" jdbcType="BIT"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="BIT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -43,7 +43,7 @@
     </delete>
 
     <update id="setMemberAsDeleted" parameterType="map">
-        UPDATE wt_company_user
+        UPDATE wt_company.wt_company_user
         SET is_deleted = 1
         WHERE user_id = #{memberId} AND company_id = #{companyId}
     </update>

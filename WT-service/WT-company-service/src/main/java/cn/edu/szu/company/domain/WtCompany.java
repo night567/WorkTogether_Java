@@ -47,7 +47,7 @@ public class WtCompany implements Serializable {
      * 企业规模
      */
     @TableField(value = "size")
-    private Integer size;
+    private String size;
 
     /**
      * 企业地址

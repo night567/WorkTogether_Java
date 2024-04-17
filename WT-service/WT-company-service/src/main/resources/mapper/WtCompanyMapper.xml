@@ -10,7 +10,7 @@
             <result property="founderId" column="founder_id" jdbcType="BIGINT"/>
             <result property="url" column="url" jdbcType="VARCHAR"/>
             <result property="industry" column="industry" jdbcType="VARCHAR"/>
-            <result property="size" column="size" jdbcType="INTEGER"/>
+            <result property="size" column="size" jdbcType="VARCHAR"/>
             <result property="address" column="address" jdbcType="VARCHAR"/>
             <result property="postalCode" column="postal_code" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
