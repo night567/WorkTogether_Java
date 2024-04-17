@@ -1,10 +1,8 @@
 package cn.edu.szu.company.dao;
 
-
 import cn.edu.szu.company.pojo.Company;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-
 
 @Mapper
 public interface CompanyDao extends BaseMapper<Company> {

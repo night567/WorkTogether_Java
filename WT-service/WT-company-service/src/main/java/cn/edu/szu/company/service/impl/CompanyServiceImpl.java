@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyDao companyDao;
+
     @Override
     public Company getCompanyById(Long id) {
         return companyDao.selectById(id);
