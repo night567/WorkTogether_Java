@@ -25,7 +25,7 @@
     <select id="selectUserIdsByCompanyId" resultType="java.lang.Long" parameterType="java.lang.Long">
         select user_id
         from wt_company.wt_company_user
-        where company_id = #{companyId}
+        where company_id = #{companyId} and is_deleted=0
     </select>
 
     <select id="selectAllByCompanyId" resultType="cn.edu.szu.company.pojo.MemberDTO">
@@ -41,5 +41,12 @@
         from wt_company.wt_company_user
         where user_id = #{memberId}
     </delete>
+
+    <update id="setMemberAsDeleted" parameterType="map">
+        UPDATE wt_company_user
+        SET is_deleted = 1
+        WHERE user_id = #{memberId} AND company_id = #{companyId}
+    </update>
+
 
 </mapper>

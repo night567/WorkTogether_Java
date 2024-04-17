@@ -67,9 +67,9 @@ public class UserController {
     }
 
     @DeleteMapping("/delete_member")
-    public Result deleteMember(@Param(value = "email") String email) {
+    public Result deleteMember(@Param(value = "email") String email,@Param(value = "companyId") Long companyId) {
         User user = userService.getUserByEmail(email);
-        boolean flag = companyClient.deleteMember(user.getId());
+        boolean flag = companyClient.setMemberAsDeleted(user.getId(),companyId);
         if (flag) {
             return new Result(Code.DELETE_OK, null, "移除成功");
         }
