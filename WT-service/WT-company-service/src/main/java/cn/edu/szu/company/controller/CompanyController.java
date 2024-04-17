@@ -16,13 +16,14 @@ public class CompanyController {
 
     /**
      * 更新公司
+     *
      * @param company
      * @return
      */
     @PutMapping("/updateCompany")
-    public Result updateCompany(@RequestBody WtCompany company){
+    public Result updateCompany(@RequestBody WtCompany company) {
         companyService.updateCompany(company);
-        return new Result(Code.UPDATE_OK,null,"更新成功");
+        return new Result(Code.UPDATE_OK, null, "更新成功");
     }
 
     /**
@@ -30,7 +31,6 @@ public class CompanyController {
      * @param id
      * @return
      */
-
     @DeleteMapping("/delCompany/{id}")
     public Result delCompany(@PathVariable Long id){
         companyService.deleteCompany(id);

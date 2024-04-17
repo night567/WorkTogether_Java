@@ -3,6 +3,7 @@ package cn.edu.szu.user.controller;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.feign.client.CompanyClient;
+import cn.edu.szu.feign.pojo.UserDTO;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
 import cn.edu.szu.user.service.UserService;
@@ -42,13 +43,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Result getUserById(@PathVariable Long id) {
-        User user = userService.getById(id);
-        if (user != null) {
-            return new Result(Code.GET_OK, user, "获取成功");
-        } else {
-            return new Result(Code.GET_ERR, null, "获取失败");
-        }
+    public UserDTO getUserById(@PathVariable Long id) {
+        return userService.getById(id);
     }
 
     @GetMapping("/company/{id}")

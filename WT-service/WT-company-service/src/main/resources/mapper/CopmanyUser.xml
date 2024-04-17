@@ -6,28 +6,40 @@
 
     <resultMap id="BaseResultMap" type="cn.edu.szu.company.pojo.CompanyUser">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
         <result property="companyId" column="company_id" jdbcType="BIGINT"/>
+        <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="BOOLEAN"/>
         <result property="joinTime" column="join_time" jdbcType="TIMESTAMP"/>
+        <result property="is_deleted" column="is_deleted" jdbcType="BIT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,user_id,company_id,join_time
+        id,user_id,company_id,dept_id,"status",join_time,is_deleted
     </sql>
     <sql id="BL">
         user_id
     </sql>
 
     <!--根据公司ID查询用户ID集合-->
-    <select id="selectUserIdsByCompanyId"  resultType="java.lang.Long" parameterType="java.lang.Long">
-        select
-        user_id
+    <select id="selectUserIdsByCompanyId" resultType="java.lang.Long" parameterType="java.lang.Long">
+        select user_id
         from wt_company.wt_company_user
-        where company_id =#{companyId}
+        where company_id = #{companyId}
     </select>
+
+    <select id="selectAllByCompanyId" resultType="cn.edu.szu.company.pojo.MemberDTO">
+        select cu.user_id as id, dept.name as deptName
+        from wt_company.wt_company_user cu,
+             wt_company.wt_company_dept dept
+        where cu.company_id = #{companyId}
+          and dept.id = cu.dept_id
+    </select>
+
     <delete id="deleteMember" parameterType="java.lang.Long">
-        delete from wt_company.wt_company_user
-        where user_id=#{memberId}
+        delete
+        from wt_company.wt_company_user
+        where user_id = #{memberId}
     </delete>
 
 </mapper>

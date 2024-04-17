@@ -5,6 +5,7 @@ import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.common.utils.RegexUtils;
 import cn.edu.szu.feign.client.CompanyClient;
+import cn.edu.szu.feign.pojo.UserDTO;
 import cn.edu.szu.user.mapper.UserLoginMapper;
 import cn.edu.szu.user.mapper.UserMapper;
 import cn.edu.szu.user.pojo.LoginDTO;
@@ -20,10 +21,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static cn.edu.szu.common.utils.RedisConstants.*;
@@ -137,12 +135,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(Long id) {
+    public UserDTO getById(Long id) {
         if (id == null) {
             return null;
         }
-
-        return userMapper.selectById(id);
+        User user = userMapper.selectById(id);
+        return BeanUtil.copyProperties(user, UserDTO.class);
     }
 
     @Override

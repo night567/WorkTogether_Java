@@ -1,6 +1,7 @@
 package cn.edu.szu.user.service;
 
 import cn.edu.szu.common.pojo.Result;
+import cn.edu.szu.feign.pojo.UserDTO;
 import cn.edu.szu.user.pojo.LoginDTO;
 import cn.edu.szu.user.pojo.User;
 
@@ -13,7 +14,7 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    User getById(Long id);
+    UserDTO getById(Long id);
 
     List<User> getUserByCompany(Long id);
 

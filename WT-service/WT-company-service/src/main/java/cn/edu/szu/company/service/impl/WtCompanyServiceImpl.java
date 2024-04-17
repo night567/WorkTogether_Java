@@ -1,27 +1,28 @@
 package cn.edu.szu.company.service.impl;
 
-import cn.edu.szu.company.exception.CompanyNotFoundException;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.edu.szu.company.domain.WtCompany;
-import cn.edu.szu.company.service.WtCompanyService;
+import cn.edu.szu.company.exception.CompanyNotFoundException;
 import cn.edu.szu.company.mapper.WtCompanyMapper;
+import cn.edu.szu.company.service.WtCompanyService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 /**
-* @author 86199
-* @description 针对表【wt_company(企业)】的数据库操作Service实现
-* @createDate 2024-04-16 16:59:21
-*/
+ * @author 86199
+ * @description 针对表【wt_company(企业)】的数据库操作Service实现
+ * @createDate 2024-04-16 16:59:21
+ */
 @Service
 public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany>
-    implements WtCompanyService{
+        implements WtCompanyService {
     @Autowired
     WtCompanyMapper companyMapper;
 
     /**
      * 更新公司
+     *
      * @param company
      * @return
      */
@@ -29,7 +30,7 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
     public boolean updateCompany(WtCompany company) {
 
         int cnt = companyMapper.updateById(company);
-        if(cnt == 0){
+        if (cnt == 0) {
             throw new CompanyNotFoundException("更新失败，未找到公司");
         }
         return true;
@@ -37,13 +38,14 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
 
     /**
      * 删除公司
+     *
      * @param id
      * @return
      */
     @Override
     public boolean deleteCompany(Long id) {
         int cnt = companyMapper.deleteById(id);
-        if(cnt == 0){
+        if (cnt == 0) {
             throw new CompanyNotFoundException("更新失败，未找到公司");//若更新的行为0
         }
         return true;
@@ -51,6 +53,7 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
 
     /**
      * 添加公司
+     *
      * @param company
      * @return
      */
@@ -75,13 +78,14 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
 
     /**
      * 根据公司id查询公司
+     *
      * @param id
      * @return
      */
     @Override
     public WtCompany selectCompany(Long id) {
         WtCompany company = companyMapper.selectById(id);
-        if (company == null){
+        if (company == null) {
             throw new CompanyNotFoundException("不存在此公司");
         }
         return company;
