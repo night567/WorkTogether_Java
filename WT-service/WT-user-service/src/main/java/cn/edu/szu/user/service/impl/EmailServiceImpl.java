@@ -129,7 +129,7 @@ public class EmailServiceImpl implements EmailService {
         //保存验证码到redis(10分钟有效期)
         stringRedisTemplate.opsForHash().put(INVITE_CODE_KEY + code, "email", email);
         stringRedisTemplate.opsForHash().put(INVITE_CODE_KEY + code, "companyId", companyId.toString());
-        stringRedisTemplate.expire(INVITE_CODE_KEY + code, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(INVITE_CODE_KEY + code, INVITE_CODE_TTL, TimeUnit.MINUTES);
 
         //发送验证码
         sendCodeEmail(email, code);

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Source;
 import java.util.Date;
 import java.util.List;
 
@@ -60,21 +61,38 @@ public class CompanyUserServiceImpl implements CompanyUserService {
     @Override
     public boolean joinCompany(String token, String code) {
         // 验证验证码有效期
-        if (Boolean.FALSE.equals(stringRedisTemplate.hasKey(INVITE_CODE_KEY + code))) {
+        String key = INVITE_CODE_KEY + code;
+        String cacheEmail = (String) stringRedisTemplate.opsForHash().get(key, "email");
+        Long companyId = getCompanyIdByInviteCode(code);
+        System.out.println(cacheEmail);
+        if (cacheEmail == null || cacheEmail.isEmpty()) {
             System.out.println("验证码已过期");
             return false;
         }
+        stringRedisTemplate.delete(key);
 
         //TODO：校验用户id
+        Long id = JwtUtil.getUserId(token);
+        if (id == null) {
+            System.out.println("用户id错误");
+            return false;
+        }
+        UserDTO user = userClient.getUserById(id);
+        System.out.println(user);
+        if (!cacheEmail.equals(user.getEmail())) {
+            System.out.println("邮箱不匹配");
+            return false;
+        }
 
         //写入数据库
         CompanyUser companyUser = new CompanyUser();
-        companyUser.setUserId(JwtUtil.getUserId(token));
-        companyUser.setCompanyId(getCompanyIdByInviteCode(code));
+        companyUser.setUserId(id);
+        companyUser.setCompanyId(companyId);
         companyUser.setDeptId(1L); // TODO:加入部门，暂时加入1L
         companyUser.setStatus(true);
         companyUser.setJoinTime(new Date());
         companyUser.setIsDeleted(false);
+        System.out.println(companyUser);
         companyUserDao.insert(companyUser);
 
         return true;

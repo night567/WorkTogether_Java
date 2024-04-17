@@ -62,8 +62,6 @@ public class CompanyUserController {
 
     @PostMapping("/joinCompany/{code}")
     public Result joinCompany(@RequestHeader("Authorization") String token, @PathVariable String code) {
-        System.out.println(token);
-        System.out.println(code);
         boolean b = companyUserService.joinCompany(token, code);
         if (b) {
             return new Result(Code.SAVE_OK, true, "加入成功");
