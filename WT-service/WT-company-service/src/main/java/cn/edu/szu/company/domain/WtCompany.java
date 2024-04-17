@@ -73,6 +73,4 @@ public class WtCompany implements Serializable {
     @TableField(value = "is_deleted")
     @TableLogic(value = "0",delval = "1")
     private Boolean isDeleted;
-
-
 }

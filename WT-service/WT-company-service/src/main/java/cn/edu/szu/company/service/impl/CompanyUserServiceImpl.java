@@ -1,6 +1,8 @@
 package cn.edu.szu.company.service.impl;
 
+import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.company.dao.CompanyUserDao;
+import cn.edu.szu.company.pojo.CompanyUser;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.service.CompanyUserService;
 import cn.edu.szu.feign.client.UserClient;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 import static cn.edu.szu.common.utils.RedisConstants.INVITE_CODE_KEY;
@@ -55,6 +58,29 @@ public class CompanyUserServiceImpl implements CompanyUserService {
     }
 
     @Override
+    public boolean joinCompany(String token, String code) {
+        // 验证验证码有效期
+        if (Boolean.FALSE.equals(stringRedisTemplate.hasKey(INVITE_CODE_KEY + code))) {
+            System.out.println("验证码已过期");
+            return false;
+        }
+
+        //TODO：校验用户id
+
+        //写入数据库
+        CompanyUser companyUser = new CompanyUser();
+        companyUser.setUserId(JwtUtil.getUserId(token));
+        companyUser.setCompanyId(getCompanyIdByInviteCode(code));
+        companyUser.setDeptId(1L); // TODO:加入部门，暂时加入1L
+        companyUser.setStatus(true);
+        companyUser.setJoinTime(new Date());
+        companyUser.setIsDeleted(false);
+        companyUserDao.insert(companyUser);
+
+        return true;
+    }
+
+    @Override
     public Long getCompanyIdByInviteCode(String code) {
         // 检查验证码是否存在
         Boolean hasCode = stringRedisTemplate.hasKey(INVITE_CODE_KEY + code);
@@ -74,5 +100,4 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         // 如果验证码不存在或没有关联的公司ID，则返回null
         return null;
     }
-
 }

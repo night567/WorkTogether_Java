@@ -1,6 +1,7 @@
 package cn.edu.szu.company.service;
 
 import cn.edu.szu.company.pojo.MemberDTO;
+
 import java.util.List;
 
 public interface CompanyUserService {
@@ -10,5 +11,7 @@ public interface CompanyUserService {
 
     List<MemberDTO> getAllMember(Long companyId);
 
-    boolean setMemberAsDeleted(Long memberId,Long companyId);
+    boolean joinCompany(String token, String code);
+
+    boolean setMemberAsDeleted(Long memberId, Long companyId);
 }

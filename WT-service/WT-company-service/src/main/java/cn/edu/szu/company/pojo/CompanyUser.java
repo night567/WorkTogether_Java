@@ -31,5 +31,5 @@ public class CompanyUser implements Serializable {
     private Date joinTime; // 加入时间
 
     @TableField(value = "is_deleted")
-    private Boolean is_deleted; // 逻辑删除
+    private Boolean isDeleted; // 逻辑删除
 }

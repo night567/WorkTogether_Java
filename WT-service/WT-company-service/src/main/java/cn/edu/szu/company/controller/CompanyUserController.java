@@ -7,10 +7,7 @@ import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.service.CompanyService;
 import cn.edu.szu.company.service.CompanyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -61,5 +58,16 @@ public class CompanyUserController {
             return new Result(Code.GET_ERR, null, "获取失败");
         }
         return new Result(Code.GET_ERR, null, "获取失败");
+    }
+
+    @PostMapping("/joinCompany/{code}")
+    public Result joinCompany(@RequestHeader("Authorization") String token, @PathVariable String code) {
+        System.out.println(token);
+        System.out.println(code);
+        boolean b = companyUserService.joinCompany(token, code);
+        if (b) {
+            return new Result(Code.SAVE_OK, true, "加入成功");
+        }
+        return new Result(Code.SAVE_ERR, false, "加入失败");
     }
 }
