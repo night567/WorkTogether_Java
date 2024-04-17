@@ -17,4 +17,6 @@ public interface WtCompanyService extends IService<WtCompany> {
 
     boolean addCompany(WtCompany company);
 
+    WtCompany selectCompany(Long id);
+
 }

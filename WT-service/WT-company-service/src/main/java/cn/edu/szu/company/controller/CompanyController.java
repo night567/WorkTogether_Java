@@ -6,6 +6,7 @@ import cn.edu.szu.company.domain.WtCompany;
 import cn.edu.szu.company.service.WtCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,11 +20,22 @@ public class CompanyController {
     @Autowired
     WtCompanyService companyService;
 
+    /**
+     * 更新公司
+     * @param company
+     * @return
+     */
     @PutMapping("/updateCompany")
     public Result updateCompany(@RequestBody WtCompany company){
         companyService.updateCompany(company);
         return new Result(Code.UPDATE_OK,null,"更新成功");
     }
+
+    /**
+     * 删除公司
+     * @param id
+     * @return
+     */
 
     @DeleteMapping("/delCompany/{id}")
     public Result delCompany(@PathVariable Long id){
@@ -31,12 +43,28 @@ public class CompanyController {
         return new Result(Code.DELETE_OK,null,"更新成功");
     }
 
+    /**
+     * 新建公司
+     * @param company
+     * @return
+     */
     @PostMapping("/createCompany")
     public Result addCompany(@RequestBody WtCompany company){
 
         companyService.addCompany(company);
 
         return new Result(Code.SAVE_OK,null,"创建公司成功");
+    }
+
+    /**
+     * 查询公司
+     * @param id
+     * @return
+     */
+    @GetMapping("/info/{id}")
+    public Result selectCompany(@PathVariable Long id){
+        WtCompany company = companyService.selectCompany(id);
+        return new Result(Code.GET_OK,company,"创建公司成功");
     }
 
 

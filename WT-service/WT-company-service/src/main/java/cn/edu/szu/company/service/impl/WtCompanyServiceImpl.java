@@ -19,6 +19,12 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
     implements WtCompanyService{
     @Autowired
     WtCompanyMapper companyMapper;
+
+    /**
+     * 更新公司
+     * @param company
+     * @return
+     */
     @Override
     public boolean updateCompany(WtCompany company) {
 
@@ -29,15 +35,25 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
         return true;
     }
 
+    /**
+     * 删除公司
+     * @param id
+     * @return
+     */
     @Override
     public boolean deleteCompany(Long id) {
         int cnt = companyMapper.deleteById(id);
         if(cnt == 0){
-            throw new CompanyNotFoundException("更新失败，未找到公司");
+            throw new CompanyNotFoundException("更新失败，未找到公司");//若更新的行为0
         }
         return true;
     }
 
+    /**
+     * 添加公司
+     * @param company
+     * @return
+     */
     @Override
     public boolean addCompany(WtCompany company) {
         try {
@@ -55,6 +71,20 @@ public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany
             }
         }
         return true;
+    }
+
+    /**
+     * 根据公司id查询公司
+     * @param id
+     * @return
+     */
+    @Override
+    public WtCompany selectCompany(Long id) {
+        WtCompany company = companyMapper.selectById(id);
+        if (company == null){
+            throw new CompanyNotFoundException("不存在此公司");
+        }
+        return company;
     }
 }
 
