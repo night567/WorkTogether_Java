@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/resource")
-public class AuthResourceController {
+public class ResourceController {
     @Autowired
     private AuthResourceService authResourceService;
 

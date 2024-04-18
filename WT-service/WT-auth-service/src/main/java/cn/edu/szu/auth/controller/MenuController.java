@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/menu")
-public class AuthMenuController {
+public class MenuController {
     @Autowired
     private WtAuthMenuService WtAuthMenuService;
 

@@ -3,8 +3,8 @@ package cn.edu.szu.company.controller;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
-import cn.edu.szu.company.pojo.domain.WtCompany;
-import cn.edu.szu.company.service.WtCompanyService;
+import cn.edu.szu.company.pojo.domain.Company;
+import cn.edu.szu.company.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/company")
 public class CompanyController {
     @Autowired
-    WtCompanyService companyService;
+    CompanyService companyService;
 
     /**
      * 更新公司
@@ -21,7 +21,7 @@ public class CompanyController {
      * @return
      */
     @PutMapping("/updateCompany")
-    public Result updateCompany(@RequestBody WtCompany company) {
+    public Result updateCompany(@RequestBody Company company) {
         companyService.updateCompany(company);
         return new Result(Code.UPDATE_OK, null, "更新成功");
     }
@@ -43,7 +43,7 @@ public class CompanyController {
      * @return
      */
     @PostMapping("/createCompany")
-    public Result addCompany(@RequestHeader("Authorization") String token, @RequestBody WtCompany company){
+    public Result addCompany(@RequestHeader("Authorization") String token, @RequestBody Company company){
         System.out.println("???");
         Long uid = JwtUtil.getUserId(token);
         company.setFounderId(uid);
@@ -59,7 +59,7 @@ public class CompanyController {
      */
     @GetMapping("/info/{id}")
     public Result selectCompany(@PathVariable Long id){
-        WtCompany company = companyService.selectCompany(id);
+        Company company = companyService.selectCompany(id);
         return new Result(Code.GET_OK,company,"创建公司成功");
     }
 

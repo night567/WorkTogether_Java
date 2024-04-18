@@ -2,8 +2,8 @@ package cn.edu.szu.company.controller;
 
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
-import cn.edu.szu.company.pojo.Company;
 import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.Company;
 import cn.edu.szu.company.service.CompanyService;
 import cn.edu.szu.company.service.CompanyUserService;
 import org.springframework.beans.factory.annotation.Autowired;

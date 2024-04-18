@@ -1,6 +1,6 @@
 package cn.edu.szu.company.mapper;
 
-import cn.edu.szu.company.pojo.domain.WtCompany;
+import cn.edu.szu.company.pojo.domain.Company;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @Entity cn.edu.szu.company.domain.WtCompany
 */
 @Mapper
-public interface CompanyMapper extends BaseMapper<WtCompany> {
+public interface CompanyMapper extends BaseMapper<Company> {
 }
 
 

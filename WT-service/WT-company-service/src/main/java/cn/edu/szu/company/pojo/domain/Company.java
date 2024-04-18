@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="wt_company")
 @Data
-public class WtCompany implements Serializable {
+public class Company implements Serializable {
     /**
      * 
      */
