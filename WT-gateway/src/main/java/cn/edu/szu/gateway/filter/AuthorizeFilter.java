@@ -67,7 +67,7 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
             return reject(exchange);
         }
 
-        String testToken = "eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAAABWLwQ6DMAxD_yVnKpG1Ulq-A2nndgkbmxCItAeE9u-Ei2U_2yd86wwDEFHp84tciB5dMHVJUnAskZklTaV46GDOFQYk9AHxkWIH2oq99dAqy92rWnyu-29c31I_shvMjQ3mbbsHZvF_AdrHxhd2AAAA.mJ2Gu-MixrWS71lwioIKF8MgKJJjK_PnfVjiGOD8SRYnliejHRuBCVG3xt4aE_FmnnPJTj7uNHySMjhbGCx21g";
+        String testToken = "eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAAABWLwQ6CQAxE_6VnNqFsV1i-w8Rz7VZEYiB0ORjjv1tuM-_NfOFVZxghDvrAQTSIaAok0oaMLIHaLifKhQslaGDmCiP2GClivFADdtz9bR-r-j69mdfbui_XddL61N0hH8Uhb9s58Ii_P4snN1x2AAAA.LN3i1dwDYCJLMLza6-OhTBmi9Tv_f753CX33JZBluovKpr5X8kw3u6X01cVQH3jg0AnKI2typC4aVTjFwCR_wg";
         if (testToken.equals(token)){
             return chain.filter(exchange);
         }
