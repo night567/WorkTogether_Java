@@ -1,7 +1,7 @@
 package cn.edu.szu.company.service.impl;
 
 import cn.edu.szu.common.utils.JwtUtil;
-import cn.edu.szu.company.dao.CompanyUserDao;
+import cn.edu.szu.company.mapper.CompanyUserMapper;
 import cn.edu.szu.company.pojo.CompanyUser;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.service.CompanyUserService;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.xml.transform.Source;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import static cn.edu.szu.common.utils.RedisConstants.INVITE_CODE_KEY;
 @Service
 public class CompanyUserServiceImpl implements CompanyUserService {
     @Autowired
-    private CompanyUserDao companyUserDao;
+    private CompanyUserMapper companyUserMapper;
     @Autowired
     private UserClient userClient;
     @Autowired
@@ -29,14 +28,14 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 
     @Override
     public List<Long> selectUserIdsByCompanyId(Long companyId) {
-        return companyUserDao.selectUserIdsByCompanyId(companyId);
+        return companyUserMapper.selectUserIdsByCompanyId(companyId);
     }
 
 
     @Override
     public List<MemberDTO> getAllMember(Long companyId) {
         // 获取企业成员数据
-        List<MemberDTO> companyUsers = companyUserDao.selectAllByCompanyId(companyId);
+        List<MemberDTO> companyUsers = companyUserMapper.selectAllByCompanyId(companyId);
 
         for (MemberDTO member : companyUsers) {
             UserDTO user = userClient.getUserById(member.getId());
@@ -55,7 +54,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 
     @Override
     public boolean setMemberAsDeleted(Long memberId,Long companyId) {
-        return companyUserDao.setMemberAsDeleted(memberId,companyId);
+        return companyUserMapper.setMemberAsDeleted(memberId,companyId);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         companyUser.setJoinTime(new Date());
         companyUser.setIsDeleted(false);
         System.out.println(companyUser);
-        companyUserDao.insert(companyUser);
+        companyUserMapper.insert(companyUser);
 
         return true;
     }

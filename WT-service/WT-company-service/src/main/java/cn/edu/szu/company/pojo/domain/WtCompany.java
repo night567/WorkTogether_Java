@@ -1,4 +1,4 @@
-package cn.edu.szu.company.domain;
+package cn.edu.szu.company.pojo.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 

@@ -1,6 +1,6 @@
 package cn.edu.szu.company.service;
 
-import cn.edu.szu.company.domain.WtCompany;
+import cn.edu.szu.company.pojo.domain.WtCompany;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

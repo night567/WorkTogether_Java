@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.szu.company.mapper.WtCompanyMapper">
 
-    <resultMap id="BaseResultMap" type="cn.edu.szu.company.domain.WtCompany">
+    <resultMap id="BaseResultMap" type="cn.edu.szu.company.pojo.domain.WtCompany">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="founderId" column="founder_id" jdbcType="BIGINT"/>

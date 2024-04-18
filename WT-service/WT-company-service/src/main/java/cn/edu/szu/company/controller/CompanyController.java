@@ -3,7 +3,7 @@ package cn.edu.szu.company.controller;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
-import cn.edu.szu.company.domain.WtCompany;
+import cn.edu.szu.company.pojo.domain.WtCompany;
 import cn.edu.szu.company.service.WtCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

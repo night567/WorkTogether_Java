@@ -1,4 +1,4 @@
-package cn.edu.szu.company.dao;
+package cn.edu.szu.company.mapper;
 
 import cn.edu.szu.company.pojo.Company;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

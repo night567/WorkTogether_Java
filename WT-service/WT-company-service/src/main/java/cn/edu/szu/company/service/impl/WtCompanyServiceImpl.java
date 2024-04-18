@@ -1,6 +1,6 @@
 package cn.edu.szu.company.service.impl;
 
-import cn.edu.szu.company.domain.WtCompany;
+import cn.edu.szu.company.pojo.domain.WtCompany;
 import cn.edu.szu.company.exception.CompanyNotFoundException;
 import cn.edu.szu.company.mapper.WtCompanyMapper;
 import cn.edu.szu.company.service.WtCompanyService;

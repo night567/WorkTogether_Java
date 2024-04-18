@@ -1,6 +1,6 @@
 package cn.edu.szu.company.mapper;
 
-import cn.edu.szu.company.domain.WtCompany;
+import cn.edu.szu.company.pojo.domain.WtCompany;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
