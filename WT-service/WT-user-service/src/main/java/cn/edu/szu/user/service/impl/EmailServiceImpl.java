@@ -1,7 +1,7 @@
 package cn.edu.szu.user.service.impl;
 
 import cn.edu.szu.common.utils.RegexUtils;
-import cn.edu.szu.user.pojo.User;
+import cn.edu.szu.user.pojo.domain.User;
 import cn.edu.szu.user.service.EmailService;
 import cn.edu.szu.user.service.UserService;
 import cn.hutool.core.util.RandomUtil;

@@ -2,7 +2,7 @@ package cn.edu.szu.company.service.impl;
 
 import cn.edu.szu.company.pojo.domain.WtCompany;
 import cn.edu.szu.company.exception.CompanyNotFoundException;
-import cn.edu.szu.company.mapper.WtCompanyMapper;
+import cn.edu.szu.company.mapper.CompanyMapper;
 import cn.edu.szu.company.service.WtCompanyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import java.util.Date;
  * @createDate 2024-04-16 16:59:21
  */
 @Service
-public class WtCompanyServiceImpl extends ServiceImpl<WtCompanyMapper, WtCompany>
+public class WtCompanyServiceImpl extends ServiceImpl<CompanyMapper, WtCompany>
         implements WtCompanyService {
     @Autowired
-    WtCompanyMapper companyMapper;
+    CompanyMapper companyMapper;
 
     /**
      * 更新公司

@@ -3,7 +3,7 @@ package cn.edu.szu.user.service;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.feign.pojo.UserDTO;
 import cn.edu.szu.user.pojo.LoginDTO;
-import cn.edu.szu.user.pojo.User;
+import cn.edu.szu.user.pojo.domain.User;
 
 import java.util.List;
 

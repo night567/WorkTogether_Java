@@ -1,6 +1,6 @@
 package cn.edu.szu.user.mapper;
 
-import cn.edu.szu.user.pojo.UserLogin;
+import cn.edu.szu.user.pojo.domain.UserLogin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

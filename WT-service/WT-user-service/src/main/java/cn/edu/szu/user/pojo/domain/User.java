@@ -1,4 +1,4 @@
-package cn.edu.szu.user.pojo;
+package cn.edu.szu.user.pojo.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

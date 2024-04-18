@@ -11,8 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @Entity cn.edu.szu.company.domain.WtCompany
 */
 @Mapper
-public interface WtCompanyMapper extends BaseMapper<WtCompany> {
-
+public interface CompanyMapper extends BaseMapper<WtCompany> {
 }
 
 

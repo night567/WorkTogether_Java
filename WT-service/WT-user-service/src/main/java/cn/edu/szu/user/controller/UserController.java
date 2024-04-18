@@ -5,7 +5,7 @@ import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.feign.pojo.UserDTO;
 import cn.edu.szu.user.pojo.LoginDTO;
-import cn.edu.szu.user.pojo.User;
+import cn.edu.szu.user.pojo.domain.User;
 import cn.edu.szu.user.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
