@@ -2,7 +2,7 @@ package cn.edu.szu.company.service.impl;
 
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.company.mapper.CompanyUserMapper;
-import cn.edu.szu.company.pojo.CompanyUser;
+import cn.edu.szu.company.pojo.domain.CompanyUser;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.service.CompanyUserService;
 import cn.edu.szu.feign.client.UserClient;
