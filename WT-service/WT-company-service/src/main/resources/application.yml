@@ -22,6 +22,9 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: 100
+  data:
+    mongodb:
+      uri: mongodb://root:2484101884@47.120.13.87:27017/wt_company?authSource=admin
   application:
     name: company-service
   cloud:
