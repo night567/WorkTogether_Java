@@ -4,33 +4,22 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
- * 部门
- *
- * @TableName wt_department
+ * 团队
+ * @TableName wt_group
  */
+@TableName(value ="wt_group")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@TableName(value = "wt_department")
-public class Department implements Serializable {
+public class Group implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @TableField(value = "parent_id")
-    private Long parent_id; // 父部门ID
-
     @TableField(value = "company_id")
-    private Long company_id; // 企业ID
+    private Long company_id; // 所属企业ID
 
     @TableField(value = "name")
     private String name; // 部门名称
@@ -40,6 +29,12 @@ public class Department implements Serializable {
 
     @TableField(value = "describe")
     private String describe; // 介绍
+
+    @TableField(value = "member_num")
+    private Integer member_num; // 团队人数
+
+    @TableField(value = "dept_num")
+    private Integer dept_num; // 包含部门数量
 
     @TableField(value = "create_time")
     private Date create_time; // 创建时间

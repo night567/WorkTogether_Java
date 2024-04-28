@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.szu.company.mapper.DepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="cn.edu.szu.company.pojo.domain.Department">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="parent_id" column="parent_id" jdbcType="BIGINT"/>
+            <result property="company_id" column="company_id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="manager_id" column="manager_id" jdbcType="BIGINT"/>
+            <result property="describe" column="describe" jdbcType="VARCHAR"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="is_deleted" column="is_deleted" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,parent_id,company_id,
+        name,manager_id,describe,
+        create_time,is_deleted
+    </sql>
+</mapper>
