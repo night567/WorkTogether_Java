@@ -13,11 +13,11 @@ import lombok.Data;
  */
 @TableName(value ="wt_auth_menu")
 @Data
-public class WtAuthMenu implements Serializable {
+public class Menu implements Serializable {
     /**
      * 主键
      */
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -27,17 +27,11 @@ public class WtAuthMenu implements Serializable {
     private String name;
 
     /**
-     * 功能描述
-     */
-    @TableField(value = "describe")
-    private String describe;
-
-    /**
      * 是否公开菜单
 就是无需分配就可以访问的。所有人可见
      */
     @TableField(value = "is_public")
-    private Boolean isPublic;
+    private Boolean is_public;
 
     /**
      * 对应路由path
@@ -46,32 +40,17 @@ public class WtAuthMenu implements Serializable {
     private String path;
 
     /**
-     * 对应路由组件component
+     * 菜单层级
      */
-    @TableField(value = "component")
-    private String component;
-
-    /**
-     * 状态(是否可用 0:不可用 1:可用)
-     */
-    @TableField(value = "is_enable")
-    private Boolean isEnable;
-
-    /**
-     * 排序
-     */
-    @TableField(value = "sort_value")
-    private Integer sortValue;
-
-    /**
-     * 菜单分组
-     */
-    @TableField(value = "group")
-    private String group;
+    @TableField(value = "level")
+    private Integer level;
 
     /**
      * 父级菜单id
      */
     @TableField(value = "parent_id")
-    private Long parentId;
+    private Long parent_id;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 }

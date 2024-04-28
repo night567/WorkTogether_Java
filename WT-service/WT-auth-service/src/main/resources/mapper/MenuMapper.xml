@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.szu.auth.mapper.MenuMapper">
+
+    <resultMap id="BaseResultMap" type="cn.edu.szu.auth.domain.Menu">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="is_public" column="is_public" jdbcType="BIT"/>
+            <result property="path" column="path" jdbcType="VARCHAR"/>
+            <result property="level" column="level" jdbcType="INTEGER"/>
+            <result property="parent_id" column="parent_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,is_public,
+        path,level,parent_id
+    </sql>
+</mapper>
