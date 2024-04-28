@@ -29,11 +29,10 @@
     </select>
 
     <select id="selectAllByCompanyId" resultType="cn.edu.szu.company.pojo.MemberDTO">
-        select cu.user_id as id, dept.name as deptName
-        from wt_company.wt_company_user cu,
-             wt_company.wt_company_dept dept
-        where cu.company_id = #{companyId}
-          and dept.id = cu.dept_id
+        SELECT cu.user_id AS id, dept.name AS deptName
+        FROM wt_company.wt_company_user cu
+        INNER JOIN wt_company.wt_department dept ON dept.id = cu.dept_id
+        WHERE cu.company_id = #{companyId}
     </select>
 
     <delete id="deleteMember" parameterType="java.lang.Long">

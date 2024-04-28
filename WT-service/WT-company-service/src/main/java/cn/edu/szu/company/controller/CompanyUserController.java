@@ -38,7 +38,7 @@ public class CompanyUserController {
     }
 
     @GetMapping("/getAllMember")
-    public Result getAllMember(@RequestParam Long companyId) {
+    public Result getAllMember(@RequestHeader("companyId") Long companyId) {
         List<MemberDTO> members = companyUserService.getAllMember(companyId);
         if (members != null && !members.isEmpty()) {
             return new Result(Code.GET_OK, members, "查询成功");

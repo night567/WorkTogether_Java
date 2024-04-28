@@ -64,6 +64,7 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
         String token = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isBlank(token)) {
             // 拦截
+            System.out.println("拦截请求：没有身份令牌");
             return reject(exchange);
         }
 
@@ -76,6 +77,7 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
         Long id = JwtUtil.getUserId(token);
         if (id == null) {
             // 拦截
+            System.out.println("拦截请求：token无法解析");
             return reject(exchange);
         }
 
@@ -83,6 +85,7 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
         String key = LOGIN_USER_KEY + id;
         if (stringRedisTemplate.opsForHash().entries(key).isEmpty()) {
             // 拦截
+            System.out.println("拦截请求：无效/过期的token");
             return reject(exchange);
         }
         stringRedisTemplate.expire(key, LOGIN_USER_TTL, TimeUnit.MINUTES);
