@@ -19,26 +19,26 @@ public class Group implements Serializable {
     private Long id;
 
     @TableField(value = "company_id")
-    private Long company_id; // 所属企业ID
+    private Long companyId; // 所属企业ID
 
     @TableField(value = "name")
     private String name; // 部门名称
 
     @TableField(value = "manager_id")
-    private Long manager_id; // 负责人ID
+    private Long managerId; // 负责人ID
 
     @TableField(value = "describe")
     private String describe; // 介绍
 
     @TableField(value = "member_num")
-    private Integer member_num; // 团队人数
+    private Integer memberNum; // 团队人数
 
     @TableField(value = "dept_num")
-    private Integer dept_num; // 包含部门数量
+    private Integer deptNum; // 包含部门数量
 
     @TableField(value = "create_time")
-    private Date create_time; // 创建时间
+    private Date createTime; // 创建时间
 
     @TableField(value = "is_deleted")
-    private Boolean is_deleted; // 逻辑删除
+    private Boolean isDeleted; // 逻辑删除
 }

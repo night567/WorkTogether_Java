@@ -27,23 +27,23 @@ public class Department implements Serializable {
     private Long id;
 
     @TableField(value = "parent_id")
-    private Long parent_id; // 父部门ID
+    private Long parentId; // 父部门ID
 
     @TableField(value = "company_id")
-    private Long company_id; // 企业ID
+    private Long companyId; // 企业ID
 
     @TableField(value = "name")
     private String name; // 部门名称
 
     @TableField(value = "manager_id")
-    private Long manager_id; // 负责人ID
+    private Long managerId; // 负责人ID
 
     @TableField(value = "describe")
     private String describe; // 介绍
 
     @TableField(value = "create_time")
-    private Date create_time; // 创建时间
+    private Date createTime; // 创建时间
 
     @TableField(value = "is_deleted")
-    private Boolean is_deleted; // 逻辑删除
+    private Boolean isDeleted; // 逻辑删除
 }

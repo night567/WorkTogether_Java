@@ -21,14 +21,14 @@ public class GroupUser implements Serializable {
     private Long id;
 
     @TableField(value = "user_id")
-    private Long user_id;
+    private Long userId;
 
     @TableField(value = "group_id")
-    private Long group_id;
+    private Long groupId;
 
     @TableField(value = "join_time")
-    private Date join_time;
+    private Date joinTime;
 
     @TableField(value = "is_deleted")
-    private Boolean is_deleted;
+    private Boolean isDeleted;
 }
