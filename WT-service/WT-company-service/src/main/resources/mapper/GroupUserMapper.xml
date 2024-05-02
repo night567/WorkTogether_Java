@@ -6,10 +6,10 @@
 
     <resultMap id="BaseResultMap" type="cn.edu.szu.company.pojo.domain.GroupUser">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="user_id" column="user_id" jdbcType="BIGINT"/>
-            <result property="group_id" column="group_id" jdbcType="BIGINT"/>
-            <result property="join_time" column="join_time" jdbcType="TIMESTAMP"/>
-            <result property="is_deleted" column="is_deleted" jdbcType="BIT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="groupId" column="group_id" jdbcType="BIGINT"/>
+            <result property="joinTime" column="join_time" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="BIT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
