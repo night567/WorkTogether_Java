@@ -4,6 +4,7 @@ import cn.edu.szu.company.pojo.domain.CompanyUser;
 import cn.edu.szu.company.pojo.MemberDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -15,4 +16,8 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
     boolean setMemberAsDeleted(Long memberId,Long companyId);
 
     List<MemberDTO> selectAllByCompanyId(Long companyId);
+
+    @Select("select  user_id from wt_company_user " +
+            "where company_id = #{companyId} and dept_id = #{deptId}")
+    List<Long> selectAllByCompanyIdAndDeptId(Long companyId,Long deptId);
 }

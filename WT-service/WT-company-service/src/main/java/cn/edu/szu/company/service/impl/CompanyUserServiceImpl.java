@@ -7,10 +7,12 @@ import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.service.CompanyUserService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,10 +35,18 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 
 
     @Override
-    public List<MemberDTO> getAllMember(Long companyId) {
+    public List<MemberDTO> getAllMember(Long companyId,Long deptId) {
         // 获取企业成员数据
-        List<MemberDTO> companyUsers = companyUserMapper.selectAllByCompanyId(companyId);
-
+        List<Long> ids = companyUserMapper.selectAllByCompanyIdAndDeptId(companyId,deptId);
+        System.out.println(ids);
+        List<MemberDTO> companyUsers = new ArrayList<>();
+        for (Long id : ids){
+            UserDTO userById = userClient.getUserById(id);
+            System.out.println(userById);
+            MemberDTO memberDTO = new MemberDTO();
+            BeanUtils.copyProperties(userById,memberDTO);
+            companyUsers.add(memberDTO);
+        }
         for (MemberDTO member : companyUsers) {
             UserDTO user = userClient.getUserById(member.getId());
             System.out.println(user);

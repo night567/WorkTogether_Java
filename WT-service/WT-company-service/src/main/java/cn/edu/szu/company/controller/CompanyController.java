@@ -47,6 +47,7 @@ public class CompanyController {
         System.out.println("???");
         Long uid = JwtUtil.getUserId(token);
         company.setFounderId(uid);
+        System.out.println(company);
         companyService.addCompany(company);
 
         return new Result(Code.SAVE_OK,null,"创建公司成功");
