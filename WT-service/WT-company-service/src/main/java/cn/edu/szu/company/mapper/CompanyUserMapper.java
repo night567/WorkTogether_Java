@@ -17,7 +17,7 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
 
     List<MemberDTO> selectAllByCompanyId(Long companyId);
 
-    @Select("select  user_id from wt_company_user " +
-            "where company_id = #{companyId} and dept_id = #{deptId}")
-    List<Long> selectAllByCompanyIdAndDeptId(Long companyId,Long deptId);
+    @Select("select t.user_id as id,d.name as deptName from wt_company_user t,wt_department d " +
+            "where t.company_id = #{companyId} and t.dept_id = #{deptId} and t.dept_id = d.id")
+    List<MemberDTO> selectAllByCompanyIdAndDeptId(Long companyId,Long deptId);
 }

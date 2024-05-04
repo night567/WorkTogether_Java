@@ -37,14 +37,15 @@ public class CompanyUserServiceImpl implements CompanyUserService {
     @Override
     public List<MemberDTO> getAllMember(Long companyId,Long deptId) {
         // 获取企业成员数据
-        List<Long> ids = companyUserMapper.selectAllByCompanyIdAndDeptId(companyId,deptId);
+        List<MemberDTO> ids = companyUserMapper.selectAllByCompanyIdAndDeptId(companyId,deptId);
         System.out.println(ids);
         List<MemberDTO> companyUsers = new ArrayList<>();
-        for (Long id : ids){
-            UserDTO userById = userClient.getUserById(id);
+        for (MemberDTO id : ids){
+            UserDTO userById = userClient.getUserById(id.getId());
             System.out.println(userById);
             MemberDTO memberDTO = new MemberDTO();
             BeanUtils.copyProperties(userById,memberDTO);
+            memberDTO.setDeptName(id.getDeptName());
             companyUsers.add(memberDTO);
         }
         for (MemberDTO member : companyUsers) {
