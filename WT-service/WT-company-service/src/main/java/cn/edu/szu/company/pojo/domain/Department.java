@@ -1,5 +1,6 @@
 package cn.edu.szu.company.pojo.domain;
 
+import cn.edu.szu.company.pojo.DeptDTO;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -49,4 +50,17 @@ public class Department implements Serializable {
 
     @TableField(value = "is_deleted")
     private Boolean isDeleted; // 逻辑删除
+
+
+    public Department(DeptDTO department) {
+        this.id=department.getId();
+        this.companyId=department.getCompanyId();
+        this.parentId=department.getParentId();
+        this.name=department.getName();
+        this.member_num=department.getMember_num();
+        this.managerId=department.getManagerId();
+        this.introduction=department.getIntroduction();
+        this.createTime=department.getCreateTime();
+
+    }
 }
