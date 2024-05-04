@@ -1,8 +1,11 @@
 package cn.edu.szu.company.mapper;
 
+import cn.edu.szu.company.pojo.DeptDTO;
 import cn.edu.szu.company.pojo.domain.Department;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
 * @author zgr24
@@ -12,6 +15,9 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface DepartmentMapper extends BaseMapper<Department> {
+
+    List<DeptDTO> selectHighestDeptByCompanyId(Long companyId);
+    List<DeptDTO> selectDeptsByParentId(Long parentId);
 
 }
 

@@ -35,11 +35,14 @@ public class Department implements Serializable {
     @TableField(value = "name")
     private String name; // 部门名称
 
+    @TableField(value = "member_num")
+    private Integer member_num; // 部门人数
+
     @TableField(value = "manager_id")
     private Long managerId; // 负责人ID
 
-    @TableField(value = "describe")
-    private String describe; // 介绍
+    @TableField(value = "introduction")
+    private String introduction; // 介绍
 
     @TableField(value = "create_time")
     private Date createTime; // 创建时间
