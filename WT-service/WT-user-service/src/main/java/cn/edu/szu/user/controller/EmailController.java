@@ -8,6 +8,9 @@ import cn.edu.szu.user.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/email")
 public class EmailController {
@@ -58,12 +61,22 @@ public class EmailController {
 
     @PostMapping("/sendInviteCode")
     public Result sendInviteEmail(@RequestBody InviteDTO request) {
-        boolean b = emailService.sendInviteCode(request.getEmail(),request.getCompanyId());
-        if (b) {
-            return new Result(Code.SAVE_OK, true, "发送成功");
-        } else {
-            return new Result(Code.SAVE_ERR, false, "发送失败");
+//        System.out.println("??");
+        String emails = request.getEmail();
+        Long cid = request.getCompanyId();
+        boolean b = true;
+        System.out.println(emails);
+        for (String s : emails.trim().split("\n")) {
+            System.out.println(s);
+            s = s.trim();
+            b = emailService.sendInviteCode(s,request.getCompanyId()) & b;
+            if (!b){
+                return new Result(Code.SAVE_ERR, false, "发送失败,失败的邮箱是： "+s);
+            }
         }
+
+        return new Result(Code.SAVE_OK, true, "发送成功");
+
     }
 }
 
