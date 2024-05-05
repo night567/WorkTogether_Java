@@ -38,12 +38,20 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Override
     public List<DeptDTO> selectHighestDeptByCompanyId(Long companyId){
-        return departmentMapper.selectHighestDeptByCompanyId(companyId);
+        List<DeptDTO> deptDTOS = departmentMapper.selectHighestDeptByCompanyId(companyId);
+        for(DeptDTO deptDTO :deptDTOS){
+            deptDTO.setManagerName(userClient.getUserById(deptDTO.getManagerId()).getName());
+        }
+        return deptDTOS;
     }
 
     @Override
     public List<DeptDTO> selectDeptsByParentId(Long parentId) {
-        return departmentMapper.selectDeptsByParentId(parentId);
+        List<DeptDTO> deptDTOS = departmentMapper.selectDeptsByParentId(parentId);
+        for(DeptDTO deptDTO :deptDTOS){
+            deptDTO.setManagerName(userClient.getUserById(deptDTO.getManagerId()).getName());
+        }
+        return deptDTOS;
     }
 }
 
