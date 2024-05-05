@@ -16,7 +16,7 @@ public class DeptController {
     @Autowired
     private DepartmentService departmentService;
 
-    //
+    //根据部门ID查询部门
     @GetMapping("/selectByID")
     public Result selectDeptByID(@RequestParam Long deptId){
         DeptDTO deptDTO = departmentService.selectDeptByID(deptId);
@@ -26,6 +26,7 @@ public class DeptController {
         return new Result(Code.GET_ERR,null,"查询失败！");
     }
 
+    //根据公司ID查询最高级部门的部门列表
     @GetMapping("/selectHighestDepts")
     public Result selectHighestDepts(@RequestParam Long companyId){
         List<DeptDTO> deptDTO = departmentService.selectHighestDeptByCompanyId(companyId);
@@ -35,6 +36,7 @@ public class DeptController {
         return new Result(Code.GET_ERR,null,"查询失败！");
     }
 
+    //根据上级部门ID查看子部门列表
     @GetMapping("/selectDeptsByParentId")
     public Result selectDeptsByParentId(@RequestParam Long parentDeptId){
         List<DeptDTO> deptDTO = departmentService.selectDeptsByParentId(parentDeptId);
@@ -44,6 +46,7 @@ public class DeptController {
         return new Result(Code.GET_ERR,null,"查询失败！");
     }
 
+    //编辑部门
     @PostMapping("/updateDeptInfo")
     public Result updateDeptInfo(@RequestParam Long id, @RequestParam String deptName, @RequestParam Long FatherDeptId,@RequestParam Long managerId){
         DeptDTO deptDTO = departmentService.selectDeptByID(id);
