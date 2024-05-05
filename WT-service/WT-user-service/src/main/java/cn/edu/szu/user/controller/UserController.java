@@ -9,6 +9,7 @@ import cn.edu.szu.user.pojo.domain.User;
 import cn.edu.szu.user.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,12 +68,26 @@ public class UserController {
     }
 
     @DeleteMapping("/delete_member")
-    public Result deleteMember(@Param(value = "email") String email,@Param(value = "companyId") Long companyId) {
-        User user = userService.getUserByEmail(email);
-        boolean flag = companyClient.setMemberAsDeleted(user.getId(),companyId);
-        if (flag) {
-            return new Result(Code.DELETE_OK, null, "移除成功");
+    public Result deleteMember(@Param(value = "ids") String ids,@RequestHeader("companyId") Long companyId) {
+
+        boolean flag = companyClient.setMemberAsDeleted(Long.valueOf(ids.trim()),companyId);
+        if (!flag) {
+            return new Result(Code.DELETE_ERR, null, "移除失败");
         }
-        return new Result(Code.DELETE_ERR, null, "移除失败");
+
+        return new Result(Code.DELETE_OK, null, "移除成功");
+    }
+    @Transactional
+    @DeleteMapping("/delete_members")
+    public Result deleteMembers(@RequestBody Long[] ids,@RequestHeader("companyId") Long companyId) {
+        System.out.println(ids);
+        for (Long id : ids){
+            boolean flag = companyClient.setMemberAsDeleted(id,companyId);
+            if (!flag) {
+                return new Result(Code.DELETE_ERR, null, "移除失败");
+            }
+
+        }
+        return new Result(Code.DELETE_OK, null, "移除成功");
     }
 }

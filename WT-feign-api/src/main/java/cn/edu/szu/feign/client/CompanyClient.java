@@ -8,9 +8,9 @@ import java.util.List;
 
 @FeignClient(name = "company-service")
 public interface CompanyClient {
-    @GetMapping("/api/company_user/selectUserIdsByCID")
+    @GetMapping( value="/api/company_user/selectUserIdsByCID")
     List<Long> selectUserIdsByCID(@RequestParam Long companyId);
 
-    @GetMapping("/api/company_user/deleteMember")
+    @GetMapping(value = "/api/company_user/deleteMember",headers = {"Connection=close"})
    boolean setMemberAsDeleted(@RequestParam Long memberId,@RequestParam Long companyId);
 }

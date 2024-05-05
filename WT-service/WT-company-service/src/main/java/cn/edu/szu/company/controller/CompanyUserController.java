@@ -33,6 +33,8 @@ public class CompanyUserController {
 
     @GetMapping("/deleteMember")
     public boolean deleteMember(@RequestParam Long memberId,@RequestParam Long companyId) {
+        System.out.println("???");
+        System.out.println(memberId +"    " +companyId);
         boolean b = companyUserService.setMemberAsDeleted(memberId,companyId);
         return b;
     }
