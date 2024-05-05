@@ -36,8 +36,8 @@ public class Department implements Serializable {
     @TableField(value = "name")
     private String name; // 部门名称
 
-    @TableField(value = "member_num")
-    private Integer member_num; // 部门人数
+    @TableField(value = "num")
+    private Long num; // 部门人数
 
     @TableField(value = "manager_id")
     private Long managerId; // 负责人ID
@@ -51,16 +51,19 @@ public class Department implements Serializable {
     @TableField(value = "is_deleted")
     private Boolean isDeleted; // 逻辑删除
 
+    @TableField(value = "job")
+    private Integer job; // 待分配任务数
+
 
     public Department(DeptDTO department) {
         this.id=department.getId();
         this.companyId=department.getCompanyId();
         this.parentId=department.getParentId();
         this.name=department.getName();
-        this.member_num=department.getMember_num();
         this.managerId=department.getManagerId();
         this.introduction=department.getIntroduction();
         this.createTime=department.getCreateTime();
-
+        this.job=department.getJob();
+        this.num=department.getNum();
     }
 }

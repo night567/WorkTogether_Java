@@ -10,16 +10,17 @@
             <result property="companyId" column="company_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="managerId" column="manager_id" jdbcType="BIGINT"/>
-            <result property="manager_num" column="manager_num" jdbcType="BIGINT"/>
-            <result property="describe" column="describe" jdbcType="VARCHAR"/>
+            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+            <result property="num" column="num" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="isDeleted" column="is_deleted" jdbcType="BIT"/>
+            <result property="job" column="job" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,parent_id,company_id,
-        name,manager_id,describe,
-        create_time,is_deleted,manager_num
+        name,manager_id,introduction,
+        create_time,is_deleted,job,num
     </sql>
     <select id="selectHighestDeptByCompanyId" resultType="cn.edu.szu.company.pojo.DeptDTO" parameterType="java.lang.Long">
         select *
