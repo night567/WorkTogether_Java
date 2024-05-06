@@ -46,9 +46,12 @@ public class CompanyUserServiceImpl implements CompanyUserService {
             MemberDTO memberDTO = new MemberDTO();
             BeanUtils.copyProperties(userById,memberDTO);
             memberDTO.setDeptName(id.getDeptName());
+            memberDTO.setId(String.valueOf(userById.getId()));
             companyUsers.add(memberDTO);
         }
+        System.out.println(companyUsers);
         for (MemberDTO member : companyUsers) {
+            System.out.println(member);
             UserDTO user = userClient.getUserById(Long.valueOf(member.getId()) );
             System.out.println(user);
             if (user != null) {
