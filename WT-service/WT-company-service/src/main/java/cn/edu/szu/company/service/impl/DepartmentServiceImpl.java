@@ -26,6 +26,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     private UserClient userClient;
 
 
+    //根据部门ID查询部门
     @Override
     public DeptDTO selectDeptByID(Long deptId) {
         Department department = departmentMapper.selectById(deptId);
@@ -36,14 +37,24 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         return  deptDTO;
     }
 
+    //根据公司ID查询最高级部门的部门列表
     @Override
     public List<DeptDTO> selectHighestDeptByCompanyId(Long companyId){
-        return departmentMapper.selectHighestDeptByCompanyId(companyId);
+        List<DeptDTO> deptDTOS = departmentMapper.selectHighestDeptByCompanyId(companyId);
+        for(DeptDTO deptDTO :deptDTOS){
+            deptDTO.setManagerName(userClient.getUserById(deptDTO.getManagerId()).getName());
+        }
+        return deptDTOS;
     }
 
+    //根据上级部门ID查看子部门列表
     @Override
     public List<DeptDTO> selectDeptsByParentId(Long parentId) {
-        return departmentMapper.selectDeptsByParentId(parentId);
+        List<DeptDTO> deptDTOS = departmentMapper.selectDeptsByParentId(parentId);
+        for(DeptDTO deptDTO :deptDTOS){
+            deptDTO.setManagerName(userClient.getUserById(deptDTO.getManagerId()).getName());
+        }
+        return deptDTOS;
     }
 }
 
