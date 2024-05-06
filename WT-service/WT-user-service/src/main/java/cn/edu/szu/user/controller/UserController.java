@@ -77,9 +77,9 @@ public class UserController {
 
         return new Result(Code.DELETE_OK, null, "移除成功");
     }
-    @Transactional
+
     @DeleteMapping("/delete_members")
-    public Result deleteMembers(@RequestBody Long[] ids,@RequestHeader("companyId") Long companyId) {
+    public Result deleteMembers(@RequestParam List<Long> ids,@RequestHeader("companyId") Long companyId) {
         System.out.println(ids);
         for (Long id : ids){
             boolean flag = companyClient.setMemberAsDeleted(id,companyId);

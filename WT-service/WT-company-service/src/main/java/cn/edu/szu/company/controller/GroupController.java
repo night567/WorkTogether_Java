@@ -56,4 +56,21 @@ public class GroupController {
         }
         return new Result(Code.GET_ERR, null, "查询失败");
     }
+
+    /**
+     * 获取团队内所有成员
+     * 需要返回MemberDTO的所有内容
+     * @param id
+     * @return
+     */
+    @GetMapping("/member/{id}")
+    public Result getGroupMemberById(@PathVariable Long id){
+
+
+        return null;
+    }
+
+
+
+
 }
