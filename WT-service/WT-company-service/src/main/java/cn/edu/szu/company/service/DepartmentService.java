@@ -16,4 +16,6 @@ public interface DepartmentService extends IService<Department> {
     List<DeptDTO> selectHighestDeptByCompanyId(Long companyId);
     List<DeptDTO> selectDeptsByParentId(Long parentId);
 
+    boolean updateUserDept(Long uid,Long did);
+
 }

@@ -4,6 +4,7 @@ import cn.edu.szu.company.pojo.DeptDTO;
 import cn.edu.szu.company.pojo.domain.Department;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public interface DepartmentMapper extends BaseMapper<Department> {
 
     List<DeptDTO> selectHighestDeptByCompanyId(Long companyId);
     List<DeptDTO> selectDeptsByParentId(Long parentId);
+
+    @Update("UPDATE wt_company_user SET dept_id = #{did} WHERE user_id = #{uid}")
+    int updateUserDept(Long uid,Long did);
 
 }
 

@@ -22,6 +22,7 @@
         name,manager_id,introduction,
         create_time,is_deleted,job,num
     </sql>
+
     <select id="selectHighestDeptByCompanyId" resultType="cn.edu.szu.company.pojo.DeptDTO" parameterType="java.lang.Long">
         select *
         from wt_company.wt_department

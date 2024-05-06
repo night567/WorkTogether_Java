@@ -4,9 +4,16 @@ import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.company.pojo.DeptDTO;
 import cn.edu.szu.company.pojo.domain.Department;
+import cn.edu.szu.company.pojo.domain.UserDept;
 import cn.edu.szu.company.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -58,5 +65,21 @@ public class DeptController {
             return new Result(Code.UPDATE_OK,null,"编辑成功！");
         return new Result(Code.UPDATE_ERR,null,"编辑失败！");
     }
+
+    /**
+     * 修改用户部门
+     * @param userDept
+     * @return
+     */
+    @PutMapping("/updateUserDept")
+    public Result updateUserDept(@RequestBody UserDept userDept){
+        System.out.println(userDept.toString());
+        if (departmentService.updateUserDept(userDept.getUid(), userDept.getDid())){
+            return new Result(Code.UPDATE_OK,null,"更新成功");
+        }
+
+        return new Result(Code.UPDATE_ERR,null,"更新失败");
+    }
+
 
 }

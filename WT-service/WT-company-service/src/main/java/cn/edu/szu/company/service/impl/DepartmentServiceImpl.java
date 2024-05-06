@@ -56,6 +56,21 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         }
         return deptDTOS;
     }
+
+    @Override
+    public boolean updateUserDept(Long uid, Long did) {
+        try {
+            int k = departmentMapper.updateUserDept(uid,did);
+            System.out.println(uid+ "     "+did);
+            if (k <= 0){
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
+
+        return true;
+    }
 }
 
 
