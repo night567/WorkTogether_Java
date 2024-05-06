@@ -41,7 +41,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         System.out.println(ids);
         List<MemberDTO> companyUsers = new ArrayList<>();
         for (MemberDTO id : ids){
-            UserDTO userById = userClient.getUserById(id.getId());
+            UserDTO userById = userClient.getUserById(Long.valueOf(id.getId()) );
             System.out.println(userById);
             MemberDTO memberDTO = new MemberDTO();
             BeanUtils.copyProperties(userById,memberDTO);
@@ -49,7 +49,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
             companyUsers.add(memberDTO);
         }
         for (MemberDTO member : companyUsers) {
-            UserDTO user = userClient.getUserById(member.getId());
+            UserDTO user = userClient.getUserById(Long.valueOf(member.getId()) );
             System.out.println(user);
             if (user != null) {
                 member.setName(user.getName());

@@ -7,7 +7,7 @@ import lombok.Data;
  */
 @Data
 public class MemberDTO {
-    private Long id;
+    private String id;
     private String name; // 姓名
     private String email; // 邮箱
     private String deptName; // 部门名称
