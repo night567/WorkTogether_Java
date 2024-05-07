@@ -7,13 +7,7 @@ import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserDept;
 import cn.edu.szu.company.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -82,5 +76,33 @@ public class DeptController {
         return new Result(Code.UPDATE_ERR,null,"更新失败");
     }
 
+    @PostMapping("/createDept")
+    public Result createDepartment(@RequestParam Long companyId, @RequestBody DeptDTO deptDTO) {
+        boolean result = departmentService.createDepartment(companyId, deptDTO);
+        if (result) {
+            return new Result(Code.SAVE_OK, true, "部门创建成功");
+        } else {
+            return new Result(Code.SAVE_ERR, false, "部门创建失败");
+        }
+    }
 
+    @DeleteMapping("/deleteDept")
+    public Result deleteDepartment(@RequestParam Long deptId) {
+        boolean result = departmentService.deleteDepartment(deptId);
+        if (result) {
+            return new Result(Code.DELETE_OK, true, "部门删除成功");
+        } else {
+            return new Result(Code.DELETE_ERR, false, "部门删除失败");
+        }
+    }
+
+    @DeleteMapping("/deleteDepartments")
+    public Result deleteDepartments(@RequestBody List<Long> deptIds) {
+        boolean result = departmentService.deleteDepartments(deptIds);
+        if (result) {
+            return new Result(Code.DELETE_OK, true, "批量部门删除成功");
+        } else {
+            return new Result(Code.DELETE_ERR, false, "批量部门删除失败");
+        }
+    }
 }

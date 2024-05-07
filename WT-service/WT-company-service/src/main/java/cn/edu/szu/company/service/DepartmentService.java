@@ -18,6 +18,10 @@ public interface DepartmentService extends IService<Department> {
 
     boolean updateUserDept(Long uid,Long did);
 
-    Long selectIdByName(String name);
+    boolean deleteDepartment(Long deptId);
 
+    boolean createDepartment(Long companyId, DeptDTO deptDTO);
+
+    Long selectIdByName(String fatherDeptName);
+    boolean deleteDepartments(List<Long> deptIds); // 批量删除部门
 }
