@@ -10,10 +10,15 @@ import cn.edu.szu.company.pojo.domain.*;
 import cn.edu.szu.company.service.GroupService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,15 +44,22 @@ public class GroupServiceImpl implements GroupService {
         this.userClient = userClient;
     }
 
+    /**
+     * 创建团队信息
+     *
+     * @param companyId 公司ID，用于指定团队所属公司
+     * @param groupDTO  团队数据传输对象，包含团队的基本信息
+     * @return boolean 创建成功返回true，否则返回false
+     */
     @Override
     @Transactional
     public boolean createGroup(Long companyId, GroupDTO groupDTO) {
-        // 基本信息判断
+        // 判断传入的基本信息是否为空
         if (groupDTO == null || companyId == null || groupDTO.getName() == null || groupDTO.getManagerId() == null) {
             return false;
         }
 
-        // 创建Group对象
+        // 初始化Group对象并设置团队信息
         Group group = new Group();
         group.setName(groupDTO.getName());
         group.setManagerId(groupDTO.getManagerId());
@@ -56,7 +68,7 @@ public class GroupServiceImpl implements GroupService {
         group.setCreateTime(new Date());
         group.setMemberNum(1);
 
-        // 查询团队管理员信息(判断部门数量)
+        // 根据团队管理员ID查询管理员在公司的信息，以确认其存在性
         LambdaQueryWrapper<CompanyUser> lqw = new LambdaQueryWrapper<>();
         lqw.eq(CompanyUser::getUserId, group.getManagerId());
         lqw.eq(CompanyUser::getCompanyId, group.getCompanyId());
@@ -64,16 +76,81 @@ public class GroupServiceImpl implements GroupService {
         if (companyUser == null) {
             return false;
         }
-        // 根据管理员信息设置DeptNum
+
+        // 设置团队的部门数量，未指定部门则为0
         if (companyUser.getDeptId() == null) {
             group.setDeptNum(0);
         } else {
             group.setDeptNum(1);
         }
 
-        // 将创建信息写入数据库
+        // 将团队信息和团队成员信息插入数据库
         groupMapper.insert(group);
-        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false,1L));
+        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false, 1L));
+
+        return true;
+    }
+
+
+    /**
+     * 通过Excel文件创建团队。
+     *
+     * @param companyId 公司ID，用于指定团队所属的公司。
+     * @param groupFile 包含团队信息的Excel文件。
+     * @return 总是返回true，表示创建过程完成。如果有异常发生，则会抛出运行时异常。
+     */
+    @Override
+    @Transactional
+    public boolean createByExcel(Long companyId, MultipartFile groupFile) {
+        // 检查输入参数是否为null
+        if (companyId == null || groupFile == null) {
+            throw new RuntimeException("上传文件异常");
+        }
+
+        // 通过Excel文件逐个添加团队
+        try {
+            // 读取Excel文件
+            ExcelReader reader = ExcelUtil.getReader(groupFile.getInputStream());
+            List<List<Object>> rowList = reader.read(2); // 从第二行开始读取数据
+            for (List<Object> row : rowList) {
+                // 打印行数据用于调试
+                System.out.println(row.get(0) + ", " + row.get(1) + ", " + row.get(2) + ", " + row.get(3));
+                // 初始化团队信息
+                GroupDTO groupDTO = new GroupDTO();
+                groupDTO.setName(row.get(1).toString());
+                // 获取并检验团队经理的ID
+                Long managerId = userClient.getUserByMail(row.get(2).toString());
+                if (managerId == null) {
+                    throw new RuntimeException("用户不存在");
+                }
+                LambdaQueryWrapper<CompanyUser> lqw = new LambdaQueryWrapper<>();
+                lqw.eq(CompanyUser::getUserId, managerId);
+                lqw.eq(CompanyUser::getCompanyId, companyId);
+                CompanyUser companyUser = companyUserMapper.selectOne(lqw);
+                if (companyUser == null) {
+                    throw new RuntimeException("用户不存在");
+                }
+                groupDTO.setManagerId(managerId);
+                groupDTO.setDescription(row.get(3).toString());
+
+                // 创建/更新团队
+                String id = row.get(0).toString();
+                if (StrUtil.isBlank(id)) {
+                    boolean isCreated = createGroup(companyId, groupDTO);
+                    if (!isCreated) {
+                        throw new RuntimeException("创建失败");
+                    }
+                } else {
+                    groupDTO.setId(Long.parseLong(id));
+                    boolean isUpdated = updateGroup(groupDTO);
+                    if (!isUpdated) {
+                        throw new RuntimeException("更新失败");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return true;
     }
@@ -166,6 +243,7 @@ public class GroupServiceImpl implements GroupService {
 
     /**
      * 获取成员列表
+     *
      * @param id
      * @return
      */
@@ -186,19 +264,20 @@ public class GroupServiceImpl implements GroupService {
 
     /**
      * 通过邮箱添加用户加入团队
+     *
      * @param emails
      * @param gid
      * @return
      */
     @Override
     public boolean addMemberToGroup(List<String> emails, Long gid) {
-        if (emails==null||emails.isEmpty()){
+        if (emails == null || emails.isEmpty()) {
             return false;
         }
         for (String email : emails) {
             System.out.println(email);
             Long id = userClient.getUserByMail(email);
-            if (id == null){
+            if (id == null) {
                 return false;
             }
             GroupUser groupUser = new GroupUser();
@@ -208,7 +287,7 @@ public class GroupServiceImpl implements GroupService {
             groupUser.setJoinTime(new Date());
             groupUser.setType(1L);
             int k = groupUserMapper.insert(groupUser);
-            if (k == 0){
+            if (k == 0) {
                 return false;
             }
         }
@@ -218,8 +297,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean delMemberFromGroup(Long uid, Long gid) {
-        int k = groupUserMapper.delMemberFromGroup(uid,gid);
-        if (k == 0){
+        int k = groupUserMapper.delMemberFromGroup(uid, gid);
+        if (k == 0) {
             return false;
         }
         return true;
@@ -228,7 +307,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean updateMember(UserGroupRequest request) {
         int k = groupUserMapper.updateMember(request.getId(), request.getGroupId(), request.getType());
-        if (k == 0){
+        if (k == 0) {
             return false;
         }
         return true;
