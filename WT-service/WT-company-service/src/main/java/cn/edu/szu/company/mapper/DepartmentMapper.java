@@ -25,7 +25,8 @@ public interface DepartmentMapper extends BaseMapper<Department> {
 
     Long selectIdByName(String name);
 
-
+    @Update("update wt_company_user set type = #{type} where user_id = #{uid} and dept_id = #{did} ")
+    int updateUDPosition(Long uid,Long did,Long type);
 }
 
 

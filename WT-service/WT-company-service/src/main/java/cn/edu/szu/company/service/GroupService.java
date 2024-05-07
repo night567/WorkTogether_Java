@@ -32,4 +32,6 @@ public interface GroupService {
     boolean delMemberFromGroup(Long uid,Long gid);
 
     boolean updateMember(UserGroupRequest request);
+
+    List<String> getPosition();
 }

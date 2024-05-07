@@ -127,4 +127,14 @@ public class GroupController {
         return new Result(Code.UPDATE_ERR, null, "更新失败");
     }
 
+    @GetMapping("/position")
+    public Result getPosition(){
+        List<String> res = groupService.getPosition();
+        if (res == null || res.isEmpty()){
+            return new Result(Code.GET_ERR,null,"查询失败");
+        }
+        return new Result(Code.GET_ERR,res,"查询成功");
+    }
+
+
 }
