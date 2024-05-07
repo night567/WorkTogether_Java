@@ -3,6 +3,7 @@ package cn.edu.szu.company.service;
 import cn.edu.szu.company.pojo.GroupDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public interface GroupService {
     boolean createGroup(Long companyId, GroupDTO groupDTO);
+
+    boolean createByExcel(Long companyId, MultipartFile groupFile);
 
     boolean deleteGroup(Long deptId);
 
@@ -29,5 +32,4 @@ public interface GroupService {
     boolean delMemberFromGroup(Long uid,Long gid);
 
     boolean updateMember(UserGroupRequest request);
-
 }
