@@ -42,7 +42,14 @@ public class UserController {
             return new Result(Code.GET_ERR, null, "获取失败");
         }
     }
-
+    @GetMapping("/findIdByEmail/{email}")
+    public Long getIdByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+        if (user == null){
+            return null;
+        }
+        return user.getId();
+    }
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id) {
         return userService.getById(id);

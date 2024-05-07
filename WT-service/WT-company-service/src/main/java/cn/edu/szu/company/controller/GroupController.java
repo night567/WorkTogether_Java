@@ -84,12 +84,26 @@ public class GroupController {
         return new Result(Code.GET_OK, res, "查询成功");
     }
 
+    /**
+     * 向团队中添加成员
+     * @param userGroup
+     * @return
+     */
     @PostMapping("/member/addByMail")
     public Result addMember(@RequestBody UserGroupRequest userGroup){
         List<String> list = userGroup.getList();
-        int groupId = userGroup.getGroupId();
+        Long groupId = userGroup.getGroupId();
         System.out.println(list);
         System.out.println(groupId);
+        boolean k = groupService.addMemberToGroup(list,groupId);
+        if (k){
+            return new Result(Code.SAVE_OK, null, "添加成功");
+        }
+        return new Result(Code.SAVE_ERR, null, "添加失败");
+    }
+
+    @DeleteMapping("/member/{id}/{gid}")
+    public Result delMember(@PathVariable Long id,@PathVariable Long gid){
 
 
         return null;
