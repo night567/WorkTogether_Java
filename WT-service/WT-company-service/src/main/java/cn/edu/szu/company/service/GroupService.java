@@ -1,6 +1,7 @@
 package cn.edu.szu.company.service;
 
 import cn.edu.szu.company.pojo.GroupDTO;
+import cn.edu.szu.company.pojo.MemberDTO;
 
 import java.util.List;
 
@@ -19,4 +20,9 @@ public interface GroupService {
     List<GroupDTO> getAllGroup(Long companyId);
 
     GroupDTO getGroupById(Long id);
+
+    List<MemberDTO> getGroupMember(Long id);
+
+    boolean addMemberToGroup(List<String> emails, Long gid);
+
 }

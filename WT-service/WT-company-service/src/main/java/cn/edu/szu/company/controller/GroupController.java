@@ -3,9 +3,19 @@ package cn.edu.szu.company.controller;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.company.pojo.GroupDTO;
+import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import cn.edu.szu.company.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -65,12 +75,25 @@ public class GroupController {
      */
     @GetMapping("/member/{id}")
     public Result getGroupMemberById(@PathVariable Long id){
+        List<MemberDTO> res = groupService.getGroupMember(id);
+        if (res == null){
+            return new Result(Code.GET_ERR, null, "查询失败");
+        }else if(res.isEmpty()){
+            return new Result(Code.GET_OK, res, "查询结果为空");
+        }
+        return new Result(Code.GET_OK, res, "查询成功");
+    }
+
+    @PostMapping("/member/addByMail")
+    public Result addMember(@RequestBody UserGroupRequest userGroup){
+        List<String> list = userGroup.getList();
+        int groupId = userGroup.getGroupId();
+        System.out.println(list);
+        System.out.println(groupId);
 
 
         return null;
     }
-
-
 
 
 }

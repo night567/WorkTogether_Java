@@ -5,6 +5,7 @@ import cn.edu.szu.company.mapper.CompanyUserMapper;
 import cn.edu.szu.company.mapper.GroupMapper;
 import cn.edu.szu.company.mapper.GroupUserMapper;
 import cn.edu.szu.company.pojo.GroupDTO;
+import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Company;
 import cn.edu.szu.company.pojo.domain.CompanyUser;
 import cn.edu.szu.company.pojo.domain.Group;
@@ -166,6 +167,36 @@ public class GroupServiceImpl implements GroupService {
         }
         return null;
     }
+
+    /**
+     * 获取成员列表
+     * @param id
+     * @return
+     */
+    @Override
+    public List<MemberDTO> getGroupMember(Long id) {
+        List<MemberDTO> memberDTOS = groupUserMapper.selectByGroupId(id);
+        for (MemberDTO memberDTO : memberDTOS) {
+            String userId = memberDTO.getId();
+            UserDTO user = userClient.getUserById(Long.valueOf(userId));
+            memberDTO.setName(user.getName());
+            memberDTO.setEmail(user.getEmail());
+            memberDTO.setPosition("职员");
+        }
+        System.out.println(memberDTOS);
+        return memberDTOS;
+    }
+
+    @Override
+    public boolean addMemberToGroup(List<String> emails, Long gid) {
+        for (String email : emails) {
+
+        }
+
+        return false;
+    }
+
+
 }
 
 
