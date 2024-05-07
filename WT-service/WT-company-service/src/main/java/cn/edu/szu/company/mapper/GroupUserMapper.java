@@ -1,8 +1,12 @@
 package cn.edu.szu.company.mapper;
 
+import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.GroupUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author zgr24
@@ -13,6 +17,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface GroupUserMapper extends BaseMapper<GroupUser> {
 
+    @Select("select gu.user_id as id,g.name as deptName from wt_group_user as gu ,wt_group as g " +
+            "where gu.group_id = g.id and gu.group_id = #{id}")
+    List<MemberDTO> selectByGroupId(Long id);
 }
 
 
