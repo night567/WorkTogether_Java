@@ -25,6 +25,7 @@ public interface DepartmentMapper extends BaseMapper<Department> {
 
     Long selectIdByName(String name);
 
+
 }
 
 
