@@ -10,6 +10,7 @@ import cn.edu.szu.company.pojo.domain.*;
 import cn.edu.szu.company.service.GroupService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -47,7 +48,7 @@ public class GroupServiceImpl implements GroupService {
      * 创建团队信息
      *
      * @param companyId 公司ID，用于指定团队所属公司
-     * @param groupDTO 团队数据传输对象，包含团队的基本信息
+     * @param groupDTO  团队数据传输对象，包含团队的基本信息
      * @return boolean 创建成功返回true，否则返回false
      */
     @Override
@@ -113,22 +114,38 @@ public class GroupServiceImpl implements GroupService {
             List<List<Object>> rowList = reader.read(2); // 从第二行开始读取数据
             for (List<Object> row : rowList) {
                 // 打印行数据用于调试
-                System.out.println(row.get(0) + ", " + row.get(1) + ", " + row.get(2));
+                System.out.println(row.get(0) + ", " + row.get(1) + ", " + row.get(2) + ", " + row.get(3));
                 // 初始化团队信息
                 GroupDTO groupDTO = new GroupDTO();
-                groupDTO.setName(row.get(0).toString());
-                // 获取并设置团队经理的ID
-                Long managerId = userClient.getUserByMail(row.get(1).toString());
+                groupDTO.setName(row.get(1).toString());
+                // 获取并检验团队经理的ID
+                Long managerId = userClient.getUserByMail(row.get(2).toString());
                 if (managerId == null) {
                     throw new RuntimeException("用户不存在");
                 }
+                LambdaQueryWrapper<CompanyUser> lqw = new LambdaQueryWrapper<>();
+                lqw.eq(CompanyUser::getUserId, managerId);
+                lqw.eq(CompanyUser::getCompanyId, companyId);
+                CompanyUser companyUser = companyUserMapper.selectOne(lqw);
+                if (companyUser == null) {
+                    throw new RuntimeException("用户不存在");
+                }
                 groupDTO.setManagerId(managerId);
-                groupDTO.setDescription(row.get(2).toString());
+                groupDTO.setDescription(row.get(3).toString());
 
-                // 创建团队
-                boolean isCreated = createGroup(companyId, groupDTO);
-                if (!isCreated) {
-                    throw new RuntimeException("创建失败");
+                // 创建/更新团队
+                String id = row.get(0).toString();
+                if (StrUtil.isBlank(id)) {
+                    boolean isCreated = createGroup(companyId, groupDTO);
+                    if (!isCreated) {
+                        throw new RuntimeException("创建失败");
+                    }
+                } else {
+                    groupDTO.setId(Long.parseLong(id));
+                    boolean isUpdated = updateGroup(groupDTO);
+                    if (!isUpdated) {
+                        throw new RuntimeException("更新失败");
+                    }
                 }
             }
         } catch (IOException e) {
