@@ -233,6 +233,11 @@ public class GroupServiceImpl implements GroupService {
         return true;
     }
 
+    @Override
+    public List<String> getPosition() {
+        return groupUserMapper.selectPosition();
+    }
+
 
 }
 

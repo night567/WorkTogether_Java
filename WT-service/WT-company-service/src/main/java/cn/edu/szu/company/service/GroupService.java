@@ -30,4 +30,6 @@ public interface GroupService {
 
     boolean updateMember(UserGroupRequest request);
 
+    List<String> getPosition();
+
 }

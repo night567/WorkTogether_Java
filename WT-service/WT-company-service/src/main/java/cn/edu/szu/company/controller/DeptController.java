@@ -4,10 +4,18 @@ import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.company.pojo.DeptDTO;
 import cn.edu.szu.company.pojo.domain.Department;
+import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import cn.edu.szu.company.pojo.domain.UserDept;
 import cn.edu.szu.company.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -104,5 +112,15 @@ public class DeptController {
         } else {
             return new Result(Code.DELETE_ERR, false, "批量部门删除失败");
         }
+    }
+
+    @PutMapping("/member")
+    public Result updateDUPosition(@RequestBody UserCompanyRequest request){
+        boolean k = departmentService.updateDUPosition(request);
+        if (k){
+            return new Result(Code.UPDATE_OK, true, "修改成功");
+        }
+
+        return new Result(Code.UPDATE_ERR, true, "修改失败");
     }
 }

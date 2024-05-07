@@ -1,6 +1,7 @@
 package cn.edu.szu.company.service.impl;
 
 import cn.edu.szu.company.pojo.DeptDTO;
+import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -125,6 +126,16 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean updateDUPosition(UserCompanyRequest request) {
+        int k = departmentMapper.updateUDPosition(request.getUid(), request.getDid() ,request.getType());
+        if (k == 0){
+            return false;
+        }
+
+        return true;
     }
 }
 

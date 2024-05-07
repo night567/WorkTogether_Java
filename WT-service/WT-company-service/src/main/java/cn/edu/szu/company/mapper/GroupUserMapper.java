@@ -29,6 +29,8 @@ public interface GroupUserMapper extends BaseMapper<GroupUser> {
 
     @Update("UPDATE wt_group_user set type = #{type} where user_id = #{uid} and group_id = #{gid}")
      int updateMember(Long uid,Long gid,Long type);
+    @Select("select type from wt_type")
+    List<String> selectPosition();
 
 }
 
