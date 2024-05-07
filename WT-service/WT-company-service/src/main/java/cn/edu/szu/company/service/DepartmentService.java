@@ -23,4 +23,5 @@ public interface DepartmentService extends IService<Department> {
     boolean createDepartment(Long companyId, DeptDTO deptDTO);
 
     Long selectIdByName(String fatherDeptName);
+    boolean deleteDepartments(List<Long> deptIds); // 批量删除部门
 }

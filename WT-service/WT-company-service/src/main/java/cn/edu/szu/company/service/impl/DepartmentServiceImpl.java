@@ -9,6 +9,7 @@ import cn.edu.szu.company.service.DepartmentService;
 import cn.edu.szu.company.mapper.DepartmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -111,6 +112,19 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     public Long selectIdByName(String deptName) {
         // 实现根据部门名称查询部门ID的逻辑
         return departmentMapper.selectIdByName(deptName);
+    }
+    @Override
+    @Transactional
+    public boolean deleteDepartments(List<Long> deptIds) {
+        try {
+            for (Long deptId : deptIds) {
+                departmentMapper.deleteById(deptId);
+            }
+            return true; // 批量删除成功
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 

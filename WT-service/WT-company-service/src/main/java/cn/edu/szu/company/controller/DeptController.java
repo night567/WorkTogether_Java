@@ -96,5 +96,13 @@ public class DeptController {
         }
     }
 
-
+    @DeleteMapping("/deleteDepartments")
+    public Result deleteDepartments(@RequestBody List<Long> deptIds) {
+        boolean result = departmentService.deleteDepartments(deptIds);
+        if (result) {
+            return new Result(Code.DELETE_OK, true, "批量部门删除成功");
+        } else {
+            return new Result(Code.DELETE_ERR, false, "批量部门删除失败");
+        }
+    }
 }
