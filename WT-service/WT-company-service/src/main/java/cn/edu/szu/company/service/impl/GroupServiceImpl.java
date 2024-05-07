@@ -175,6 +175,7 @@ public class GroupServiceImpl implements GroupService {
         for (MemberDTO memberDTO : memberDTOS) {
             String userId = memberDTO.getId();
             UserDTO user = userClient.getUserById(Long.valueOf(userId));
+            memberDTO.setDeptName(companyUserMapper.selectDeptName(user.getId()));
             memberDTO.setName(user.getName());
             memberDTO.setEmail(user.getEmail());
 //            memberDTO.setPosition("职员");
@@ -235,6 +236,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<String> getPosition() {
+
         return groupUserMapper.selectPosition();
     }
 
