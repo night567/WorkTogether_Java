@@ -10,6 +10,7 @@ import cn.edu.szu.company.mapper.DepartmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,6 +71,37 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         }
 
         return true;
+    }
+    @Override
+    public boolean createDepartment(Long companyId, DeptDTO deptDTO) {
+        // 实现创建部门的方法
+        try {
+            Department department = new Department();
+            department.setCompanyId(companyId);
+            department.setParentId(deptDTO.getParentId());
+            department.setName(deptDTO.getName());
+            department.setManagerId(deptDTO.getManagerId());
+            department.setIntroduction(deptDTO.getIntroduction());
+            department.setCreateTime(new Date());
+            department.setJob(0); // 初始待分配任务数为0
+            department.setNum(0L); // 初始部门人数为0
+
+            return departmentMapper.insert(department) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteDepartment(Long deptId) {
+        // 实现删除部门的方法
+        try {
+            return departmentMapper.deleteById(deptId) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 

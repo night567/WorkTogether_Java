@@ -18,4 +18,7 @@ public interface DepartmentService extends IService<Department> {
 
     boolean updateUserDept(Long uid,Long did);
 
+    boolean deleteDepartment(Long deptId);
+
+    boolean createDepartment(Long companyId, DeptDTO deptDTO);
 }
