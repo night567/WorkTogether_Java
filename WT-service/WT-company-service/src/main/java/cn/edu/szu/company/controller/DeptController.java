@@ -49,8 +49,9 @@ public class DeptController {
 
     //编辑部门
     @PostMapping("/updateDeptInfo")
-    public Result updateDeptInfo(@RequestParam Long id, @RequestParam String deptName, @RequestParam Long FatherDeptId,@RequestParam Long managerId){
+    public Result updateDeptInfo(@RequestParam Long id, @RequestParam String deptName, @RequestParam String FatherDeptName,@RequestParam Long managerId){
         DeptDTO deptDTO = departmentService.selectDeptByID(id);
+        Long FatherDeptId = departmentService.selectIdByName(FatherDeptName);
         deptDTO.setName(deptName);
         deptDTO.setParentId(FatherDeptId);
         deptDTO.setManagerId(managerId);

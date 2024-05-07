@@ -34,4 +34,10 @@
         from wt_company.wt_department
         where parent_id = #{parentId} and is_deleted=0
     </select>
+
+    <select id="selectIdByName" resultType="java.lang.Long" parameterType="java.lang.String">
+        select id
+        from wt_company.wt_department
+        where name = #{name} and is_deleted=0
+    </select>
 </mapper>
