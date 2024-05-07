@@ -71,6 +71,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
         return true;
     }
+
+    @Override
+    public Long selectIdByName(String name) {
+        return departmentMapper.selectIdByName(name);
+    }
 }
 
 

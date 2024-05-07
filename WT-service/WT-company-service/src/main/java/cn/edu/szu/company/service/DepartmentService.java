@@ -18,4 +18,6 @@ public interface DepartmentService extends IService<Department> {
 
     boolean updateUserDept(Long uid,Long did);
 
+    Long selectIdByName(String name);
+
 }
