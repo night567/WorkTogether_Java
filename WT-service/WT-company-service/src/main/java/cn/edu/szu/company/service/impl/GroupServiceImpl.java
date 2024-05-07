@@ -187,13 +187,35 @@ public class GroupServiceImpl implements GroupService {
         return memberDTOS;
     }
 
+    /**
+     * 通过邮箱添加用户加入团队
+     * @param emails
+     * @param gid
+     * @return
+     */
     @Override
     public boolean addMemberToGroup(List<String> emails, Long gid) {
+        if (emails==null||emails.isEmpty()){
+            return false;
+        }
         for (String email : emails) {
-
+            System.out.println(email);
+            Long id = userClient.getUserByMail(email);
+            if (id == null){
+                return false;
+            }
+            GroupUser groupUser = new GroupUser();
+            groupUser.setGroupId(gid);
+            groupUser.setUserId(id);
+            groupUser.setIsDeleted(false);
+            groupUser.setJoinTime(new Date());
+            int k = groupUserMapper.insert(groupUser);
+            if (k == 0){
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
 

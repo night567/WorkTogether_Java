@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class UserGroupRequest {
     private List<String> list;
-    private int groupId;
+    private Long groupId;
 }
