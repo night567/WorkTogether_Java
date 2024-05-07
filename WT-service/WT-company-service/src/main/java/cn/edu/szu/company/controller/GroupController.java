@@ -27,7 +27,7 @@ public class GroupController {
         return new Result(Code.SAVE_ERR, false, "创建失败");
     }
 
-    @PostMapping("/createOrUpdateByExcel")
+    @PostMapping("/excel/upload")
     public Result createGroupByExcel(@RequestHeader("companyId") Long companyId, @RequestPart("groupFile") MultipartFile groupFile) {
         try {
             boolean flag = groupService.createByExcel(companyId,groupFile);
