@@ -104,10 +104,21 @@ public class GroupController {
 
     @DeleteMapping("/member/{id}/{gid}")
     public Result delMember(@PathVariable Long id,@PathVariable Long gid){
+        boolean k = groupService.delMemberFromGroup(id, gid);
+        if (k){
+            return new Result(Code.DELETE_OK, null, "删除成功");
+        }
 
-
-        return null;
+        return new Result(Code.DELETE_ERR, null, "删除失败");
     }
 
+    @PutMapping("/member")
+    public Result updateMember(@RequestBody UserGroupRequest request){
+        boolean k = groupService.updateMember(request);
+        if (k){
+            return new Result(Code.UPDATE_OK, null, "更新成功");
+        }
+        return new Result(Code.UPDATE_ERR, null, "更新失败");
+    }
 
 }

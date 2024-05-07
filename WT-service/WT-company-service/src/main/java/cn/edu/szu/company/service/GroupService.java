@@ -2,6 +2,7 @@ package cn.edu.szu.company.service;
 
 import cn.edu.szu.company.pojo.GroupDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 
 import java.util.List;
 
@@ -24,5 +25,9 @@ public interface GroupService {
     List<MemberDTO> getGroupMember(Long id);
 
     boolean addMemberToGroup(List<String> emails, Long gid);
+
+    boolean delMemberFromGroup(Long uid,Long gid);
+
+    boolean updateMember(UserGroupRequest request);
 
 }

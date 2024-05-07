@@ -12,4 +12,6 @@ import java.util.List;
 public class UserGroupRequest {
     private List<String> list;
     private Long groupId;
+    private Long type;
+    private Long id;
 }

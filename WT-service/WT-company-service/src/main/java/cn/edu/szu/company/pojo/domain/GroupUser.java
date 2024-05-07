@@ -35,4 +35,7 @@ public class GroupUser implements Serializable {
 
     @TableField(value = "is_deleted")
     private Boolean isDeleted;
+
+    @TableField(value = "type")
+    private Long type;
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.Date;
 import java.util.List;
@@ -19,12 +20,15 @@ import java.util.List;
 @Mapper
 public interface GroupUserMapper extends BaseMapper<GroupUser> {
 
-    @Select("select gu.user_id as id,g.name as deptName from wt_group_user as gu ,wt_group as g " +
-            "where gu.group_id = g.id and gu.group_id = #{id}")
+    @Select("select gu.user_id as id,g.name as deptName,t.type as position from wt_group_user as gu ,wt_group as g,wt_type as t " +
+            "where gu.group_id = g.id and gu.group_id = #{id} and t.id = gu.type")
     List<MemberDTO> selectByGroupId(Long id);
 
-    @Insert(("insert into wt_group_user "))
-    int addUserToGroup(Long uid, Long gid, Date date);
+    @Update("UPDATE wt_group_user set is_deleted = 1 where user_id = #{uid} and group_id = #{gid}")
+    int delMemberFromGroup(Long uid,Long gid);
+
+    @Update("UPDATE wt_group_user set type = #{type} where user_id = #{uid} and group_id = #{gid}")
+     int updateMember(Long uid,Long gid,Long type);
 
 }
 

@@ -6,15 +6,11 @@ import cn.edu.szu.company.mapper.GroupMapper;
 import cn.edu.szu.company.mapper.GroupUserMapper;
 import cn.edu.szu.company.pojo.GroupDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
-import cn.edu.szu.company.pojo.domain.Company;
-import cn.edu.szu.company.pojo.domain.CompanyUser;
-import cn.edu.szu.company.pojo.domain.Group;
-import cn.edu.szu.company.pojo.domain.GroupUser;
+import cn.edu.szu.company.pojo.domain.*;
 import cn.edu.szu.company.service.GroupService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,7 +73,7 @@ public class GroupServiceImpl implements GroupService {
 
         // 将创建信息写入数据库
         groupMapper.insert(group);
-        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false));
+        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false,1L));
 
         return true;
     }
@@ -181,7 +177,7 @@ public class GroupServiceImpl implements GroupService {
             UserDTO user = userClient.getUserById(Long.valueOf(userId));
             memberDTO.setName(user.getName());
             memberDTO.setEmail(user.getEmail());
-            memberDTO.setPosition("职员");
+//            memberDTO.setPosition("职员");
         }
         System.out.println(memberDTOS);
         return memberDTOS;
@@ -209,12 +205,31 @@ public class GroupServiceImpl implements GroupService {
             groupUser.setUserId(id);
             groupUser.setIsDeleted(false);
             groupUser.setJoinTime(new Date());
+            groupUser.setType(1L);
             int k = groupUserMapper.insert(groupUser);
             if (k == 0){
                 return false;
             }
         }
 
+        return true;
+    }
+
+    @Override
+    public boolean delMemberFromGroup(Long uid, Long gid) {
+        int k = groupUserMapper.delMemberFromGroup(uid,gid);
+        if (k == 0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateMember(UserGroupRequest request) {
+        int k = groupUserMapper.updateMember(request.getId(), request.getGroupId(), request.getType());
+        if (k == 0){
+            return false;
+        }
         return true;
     }
 
