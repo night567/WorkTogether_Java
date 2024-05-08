@@ -15,6 +15,7 @@ public class GroupDTO {
     private String name; // 部门名称
     private Long managerId; // 负责人ID
     private String managerName; // 负责人名称
+    private String managerEmail; // 负责人邮箱
     private String managerPhone; // 负责人电话
     private String description; // 介绍
     private Integer memberNum; // 团队人数
@@ -34,6 +35,7 @@ public class GroupDTO {
         }
         this.managerId = userDTO.getId();
         this.managerName = userDTO.getName();
+        this.managerEmail = userDTO.getEmail();
         this.managerPhone = userDTO.getPhone();
     }
 }

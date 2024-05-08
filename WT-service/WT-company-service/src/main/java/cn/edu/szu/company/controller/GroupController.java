@@ -6,7 +6,13 @@ import cn.edu.szu.company.pojo.GroupDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import cn.edu.szu.company.service.GroupService;
+import cn.hutool.core.io.FileUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,8 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -51,10 +58,10 @@ public class GroupController {
     @GetMapping("/excel/getTemplate")
     public ResponseEntity<Resource> getTemplate() throws IOException {
         // 假设文件路径为 /path/to/your/excel/example.xlsx
-        String filePath = "WT-service/WT-company-service/src/main/resources/excel/GroupTemplate.xlsx";
+        String filePath = "excel/GroupTemplate.xlsx";
 
         // 创建文件资源对象
-        Resource fileResource = new FileSystemResource(new File(filePath));
+        Resource fileResource = new FileSystemResource(FileUtil.file(filePath));
 
         // 设置响应头
         HttpHeaders headers = new HttpHeaders();
@@ -66,6 +73,39 @@ public class GroupController {
                 .status(HttpStatus.OK)
                 .headers(headers)
                 .body(fileResource);
+    }
+
+    @GetMapping("/excel/export")
+    public void exportExcel(@RequestHeader("companyId") Long companyId, HttpServletResponse response) {
+        List<GroupDTO> groupDTOList = groupService.getAllGroup(companyId);
+
+        String path = "excel/GroupTemplate.xlsx";
+        Resource resource = new ClassPathResource(path);
+        try {
+            InputStream inputStream = resource.getInputStream();
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            inputStream.close();
+
+            // 获取工作表
+            Sheet sheet = workbook.getSheet("Sheet1");
+
+            int i = 2;
+            for (GroupDTO groupDTO : groupDTOList) {
+                Row row = sheet.createRow(i++);
+                row.createCell(0).setCellValue(groupDTO.getId().toString());
+                row.createCell(1).setCellValue(groupDTO.getName());
+                row.createCell(2).setCellValue(groupDTO.getManagerEmail());
+                row.createCell(3).setCellValue(groupDTO.getDescription());
+            }
+
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment;filename=GroupList.xlsx");
+            workbook.write(response.getOutputStream());
+            workbook.close();
+            response.flushBuffer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DeleteMapping("/delete/{deptId}")

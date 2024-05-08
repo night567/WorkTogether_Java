@@ -29,7 +29,7 @@ public interface GroupService {
 
     boolean addMemberToGroup(List<String> emails, Long gid);
 
-    boolean delMemberFromGroup(Long uid,Long gid);
+    boolean delMemberFromGroup(Long uid, Long gid);
 
     boolean updateMember(UserGroupRequest request);
 
