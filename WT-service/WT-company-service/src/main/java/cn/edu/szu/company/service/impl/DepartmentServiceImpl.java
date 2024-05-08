@@ -139,7 +139,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Override
     public boolean updateDUPosition(UserCompanyRequest request) {
-        int k = departmentMapper.updateUDPosition(request.getUid(), request.getDid(), request.getType());
+        Long pid = departmentMapper.selectPositionId(request.getPosition());
+        if(pid == null){
+            return false;
+        }
+        int k = departmentMapper.updateUDPosition(request.getUid(), request.getDid(), pid);
         if (k == 0) {
             return false;
         }

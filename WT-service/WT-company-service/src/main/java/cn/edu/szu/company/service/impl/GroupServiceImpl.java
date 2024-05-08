@@ -320,7 +320,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean updateMember(UserGroupRequest request) {
-        int k = groupUserMapper.updateMember(request.getId(), request.getGroupId(), request.getType());
+        Long pid = groupUserMapper.selectPositionId(request.getPosition());
+        if (pid == null){
+            return false;
+        }
+        int k = groupUserMapper.updateMember(request.getId(), request.getGroupId(), pid);
         if (k == 0) {
             return false;
         }

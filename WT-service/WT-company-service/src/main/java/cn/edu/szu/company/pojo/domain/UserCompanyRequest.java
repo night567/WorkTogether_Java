@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCompanyRequest {
-    Long uid;
-    Long did;
-    Long type;
-
+    private Long uid;
+    private Long did;
+    private Long type;
+    private String position;
 }

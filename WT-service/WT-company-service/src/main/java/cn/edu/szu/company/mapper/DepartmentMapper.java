@@ -35,6 +35,8 @@ public interface DepartmentMapper extends BaseMapper<Department> {
     List<MemberDTO> getDeptMember(Long deptId,Long companyId);
 
     List<Department> selectDeptByCompanyId(Long companyId);
+    @Select("select id from wt_type where type = #{position}" )
+    Long selectPositionId(String position);
 
 }
 

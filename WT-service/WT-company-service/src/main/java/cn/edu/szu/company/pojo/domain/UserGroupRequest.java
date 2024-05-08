@@ -14,4 +14,5 @@ public class UserGroupRequest {
     private Long groupId;
     private Long type;
     private Long id;
+    private String position;
 }
