@@ -2,6 +2,8 @@ package cn.edu.szu.company.pojo;
 
 import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.feign.pojo.UserDTO;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupDTO {
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private String companyName; // 所属企业ID
     private String name; // 部门名称
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long managerId; // 负责人ID
     private String managerName; // 负责人名称
     private String managerEmail; // 负责人邮箱
