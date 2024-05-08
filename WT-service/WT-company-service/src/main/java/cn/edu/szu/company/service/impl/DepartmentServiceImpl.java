@@ -1,6 +1,7 @@
 package cn.edu.szu.company.service.impl;
 
 import cn.edu.szu.company.pojo.DeptDTO;
+import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
@@ -137,6 +138,22 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
         return true;
     }
+
+    @Override
+    public List<MemberDTO> getDeptMember(Long deptId,Long companyId) {
+        List<MemberDTO> deptMembers = departmentMapper.getDeptMember(deptId, companyId);
+        for (MemberDTO deptMember : deptMembers) {
+            String id = deptMember.getId();
+            UserDTO user = userClient.getUserById(Long.valueOf(id));
+            deptMember.setEmail(user.getEmail());
+            deptMember.setName(user.getName());
+        }
+
+
+        return deptMembers;
+    }
+
+
 }
 
 

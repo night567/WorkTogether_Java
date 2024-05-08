@@ -1,9 +1,11 @@
 package cn.edu.szu.company.mapper;
 
 import cn.edu.szu.company.pojo.DeptDTO;
+import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Department;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -27,6 +29,11 @@ public interface DepartmentMapper extends BaseMapper<Department> {
 
     @Update("update wt_company_user set type = #{type} where user_id = #{uid} and dept_id = #{did} ")
     int updateUDPosition(Long uid,Long did,Long type);
+
+    @Select("select wcu.user_id as id, wd.name as deptName, wt.type as position  from wt_company_user as wcu,wt_department as wd ,wt_type as wt where" +
+            " wcu.dept_id = #{deptId} and wcu.company_id = #{companyId} and wcu.dept_id = wd.id and wcu.type = wt.id")
+    List<MemberDTO> getDeptMember(Long deptId,Long companyId);
+
 }
 
 
