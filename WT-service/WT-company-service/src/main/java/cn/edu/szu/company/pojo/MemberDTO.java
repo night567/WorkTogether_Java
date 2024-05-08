@@ -11,5 +11,6 @@ public class MemberDTO {
     private String name; // 姓名
     private String email; // 邮箱
     private String deptName; // 部门名称
+    private String groupName;
     private String position; // 职位
 }
