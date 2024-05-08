@@ -86,7 +86,7 @@ public class GroupServiceImpl implements GroupService {
 
         // 将团队信息和团队成员信息插入数据库
         groupMapper.insert(group);
-        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false, 1L));
+        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false, 2L));
 
         return true;
     }
