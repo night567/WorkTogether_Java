@@ -1,5 +1,6 @@
 package cn.edu.szu.company.service.impl;
 
+import cn.edu.szu.company.mapper.CompanyUserMapper;
 import cn.edu.szu.company.mapper.DepartmentMapper;
 import cn.edu.szu.company.pojo.DeptDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
@@ -11,6 +12,7 @@ import cn.edu.szu.feign.pojo.UserDTO;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     private DepartmentMapper departmentMapper;
     @Autowired
     private UserClient userClient;
+    @Autowired
+    private CompanyUserMapper CompanyUserMapper;
 
     //根据部门ID查询部门
     @Override
@@ -86,12 +90,22 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     }
 
     @Override
+    @Transactional
     public boolean createDepartment(Long companyId, DeptDTO deptDTO) {
         // 实现创建部门的方法
         try {
             Department department = new Department();
             department.setCompanyId(companyId);
-            department.setParentId(deptDTO.getParentId());
+            //department.setParentId(deptDTO.getParentId());
+
+            LambdaQueryWrapper<Department> lqw = new LambdaQueryWrapper<>();
+            lqw.eq(Department::getName, deptDTO.getParentName());
+            Department parent = departmentMapper.selectOne(lqw);
+            if (parent == null) {
+                return false;
+            }
+            department.setParentId(parent.getId());
+
             department.setName(deptDTO.getName());
             department.setManagerId(deptDTO.getManagerId());
             department.setIntroduction(deptDTO.getIntroduction());

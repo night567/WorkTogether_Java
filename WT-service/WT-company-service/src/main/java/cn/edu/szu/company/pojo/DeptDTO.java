@@ -18,6 +18,7 @@ public class DeptDTO {
     private Long id;
     @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId; // 父部门ID
+    private String parentName; // 父部门名称
     @JsonSerialize(using = ToStringSerializer.class)
     private Long companyId; // 企业ID
     private String name; // 部门名称
