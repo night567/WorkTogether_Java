@@ -16,6 +16,7 @@ public class GroupDTO {
     private Long id;
     private String companyName; // 所属企业ID
     private String name; // 部门名称
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long managerId; // 负责人ID
     private String managerName; // 负责人名称
     private String managerEmail; // 负责人邮箱
