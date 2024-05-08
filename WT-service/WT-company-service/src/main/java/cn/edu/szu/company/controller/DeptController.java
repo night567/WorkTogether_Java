@@ -3,19 +3,13 @@ package cn.edu.szu.company.controller;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.company.pojo.DeptDTO;
+import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import cn.edu.szu.company.pojo.domain.UserDept;
 import cn.edu.szu.company.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -123,4 +117,16 @@ public class DeptController {
 
         return new Result(Code.UPDATE_ERR, true, "修改失败");
     }
+
+    @GetMapping("/member/{deptId}")
+    public Result getDeptMember(@PathVariable Long deptId,@RequestHeader Long companyId){
+        List<MemberDTO> deptMember = departmentService.getDeptMember(deptId, companyId);
+        if (deptMember == null ){
+            return new Result(Code.GET_ERR,null,"查询失败");
+        }
+
+        return new Result(Code.GET_OK,deptMember,"查询成功");
+    }
+
+
 }

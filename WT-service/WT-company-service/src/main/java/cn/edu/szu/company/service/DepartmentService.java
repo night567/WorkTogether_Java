@@ -1,6 +1,7 @@
 package cn.edu.szu.company.service;
 
 import cn.edu.szu.company.pojo.DeptDTO;
+import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -27,5 +28,7 @@ public interface DepartmentService extends IService<Department> {
     boolean deleteDepartments(List<Long> deptIds); // 批量删除部门
 
     boolean updateDUPosition(UserCompanyRequest request);
+
+    List<MemberDTO> getDeptMember(Long deptId,Long companyId);
 
 }
