@@ -10,7 +10,6 @@ import cn.edu.szu.company.pojo.domain.*;
 import cn.edu.szu.company.service.GroupService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -91,7 +90,6 @@ public class GroupServiceImpl implements GroupService {
         return true;
     }
 
-
     /**
      * 通过Excel文件创建团队。
      *
@@ -114,7 +112,7 @@ public class GroupServiceImpl implements GroupService {
             List<List<Object>> rowList = reader.read(2); // 从第二行开始读取数据
             for (List<Object> row : rowList) {
                 // 打印行数据用于调试
-                System.out.println(row.get(0) + ", " + row.get(1) + ", " + row.get(2) + ", " + row.get(3));
+                System.out.println(row.get(0) + ", " + row.get(1) + ", " + row.get(2));
                 // 初始化团队信息
                 GroupDTO groupDTO = new GroupDTO();
                 groupDTO.setName(row.get(1).toString());
@@ -131,16 +129,18 @@ public class GroupServiceImpl implements GroupService {
                     throw new RuntimeException("用户不存在");
                 }
                 groupDTO.setManagerId(managerId);
-                groupDTO.setDescription(row.get(3).toString());
+                if (row.size() > 3) {
+                    groupDTO.setDescription(row.get(3).toString());
+                }
 
                 // 创建/更新团队
-                String id = row.get(0).toString();
-                if (StrUtil.isBlank(id)) {
+                if (row.get(0) == null) {
                     boolean isCreated = createGroup(companyId, groupDTO);
                     if (!isCreated) {
                         throw new RuntimeException("创建失败");
                     }
                 } else {
+                    String id = row.get(0).toString();
                     groupDTO.setId(Long.parseLong(id));
                     boolean isUpdated = updateGroup(groupDTO);
                     if (!isUpdated) {
