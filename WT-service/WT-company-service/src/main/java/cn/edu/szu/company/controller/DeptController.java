@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/dept")
@@ -104,7 +105,7 @@ public class DeptController {
     }
 
     @PostMapping("/createDept")
-    public Result createDepartment(@RequestParam Long companyId, @RequestBody DeptDTO deptDTO) {
+    public Result createDepartment(@RequestHeader("companyId") Long companyId, @RequestBody DeptDTO deptDTO) {
         boolean result = departmentService.createDepartment(companyId, deptDTO);
         if (result) {
             return new Result(Code.SAVE_OK, true, "部门创建成功");
@@ -113,8 +114,8 @@ public class DeptController {
         }
     }
 
-    @DeleteMapping("/deleteDept")
-    public Result deleteDepartment(@RequestParam Long deptId) {
+    @DeleteMapping("/deleteDept/{deptId}")
+    public Result deleteDepartment(@PathVariable Long deptId) {
         boolean result = departmentService.deleteDepartment(deptId);
         if (result) {
             return new Result(Code.DELETE_OK, true, "部门删除成功");
@@ -124,8 +125,10 @@ public class DeptController {
     }
 
     @DeleteMapping("/deleteDepartments")
-    public Result deleteDepartments(@RequestBody List<Long> deptIds) {
-        boolean result = departmentService.deleteDepartments(deptIds);
+    public Result deleteDepartments(@RequestBody Map<String, List<Long>> requestMap) {
+        List<Long> deptId = requestMap.get("deptId");
+        System.out.println(deptId);
+        boolean result = departmentService.deleteDepartments(deptId);
         if (result) {
             return new Result(Code.DELETE_OK, true, "批量部门删除成功");
         } else {

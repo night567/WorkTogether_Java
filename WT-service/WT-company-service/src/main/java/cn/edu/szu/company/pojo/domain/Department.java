@@ -1,10 +1,7 @@
 package cn.edu.szu.company.pojo.domain;
 
 import cn.edu.szu.company.pojo.DeptDTO;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,6 +46,7 @@ public class Department implements Serializable {
     private Date createTime; // 创建时间
 
     @TableField(value = "is_deleted")
+    @TableLogic(value = "0",delval = "1")
     private Boolean isDeleted; // 逻辑删除
 
     @TableField(value = "job")

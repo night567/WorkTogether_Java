@@ -95,9 +95,9 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             department.setName(deptDTO.getName());
             department.setManagerId(deptDTO.getManagerId());
             department.setIntroduction(deptDTO.getIntroduction());
+            department.setNum(1L);
             department.setCreateTime(new Date());
             department.setJob(0); // 初始待分配任务数为0
-            department.setNum(0L); // 初始部门人数为0
 
             return departmentMapper.insert(department) > 0;
         } catch (Exception e) {
@@ -127,10 +127,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Transactional
     public boolean deleteDepartments(List<Long> deptIds) {
         try {
-            for (Long deptId : deptIds) {
-                departmentMapper.deleteById(deptId);
-            }
-            return true; // 批量删除成功
+            return departmentMapper.deleteBatchIds(deptIds) > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
