@@ -21,7 +21,7 @@ import java.util.List;
 public interface GroupUserMapper extends BaseMapper<GroupUser> {
 
     @Select("select gu.user_id as id,g.name as groupName,t.type as position from wt_group_user as gu ,wt_group as g,wt_type as t " +
-            "where gu.group_id = g.id and gu.group_id = #{id} and t.id = gu.type")
+            "where gu.group_id = g.id and gu.group_id = #{id} and t.id = gu.type and gu.is_deleted = 0")
     List<MemberDTO> selectByGroupId(Long id);
 
     @Update("UPDATE wt_group_user set is_deleted = 1 where user_id = #{uid} and group_id = #{gid}")
