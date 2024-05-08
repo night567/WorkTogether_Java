@@ -38,4 +38,5 @@ public interface DepartmentService extends IService<Department> {
     boolean createOrUpdateByExcel(Long companyId, MultipartFile deptFile);
 
     List<Department> selectDeptByCompanyId(Long companyId);
+    Boolean updateDept(DeptDTO deptDTO);
 }

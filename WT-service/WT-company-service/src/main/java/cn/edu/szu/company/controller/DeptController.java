@@ -73,11 +73,16 @@ public class DeptController {
     @PostMapping("/updateDeptInfo")
     public Result updateDeptInfo(@RequestParam Long id, @RequestParam String deptName, @RequestParam String FatherDeptName, @RequestParam Long managerId) {
         DeptDTO deptDTO = departmentService.selectDeptByID(id);
-        Long FatherDeptId = departmentService.selectIdByName(FatherDeptName);
+        if(FatherDeptName!=null){
+            Long FatherDeptId = departmentService.selectIdByName(FatherDeptName);
+            deptDTO.setParentId(FatherDeptId);
+        }
+        else{
+            deptDTO.setParentId(null);
+        }
         deptDTO.setName(deptName);
-        deptDTO.setParentId(FatherDeptId);
         deptDTO.setManagerId(managerId);
-        boolean b = departmentService.updateById(new Department(deptDTO));
+        boolean b = departmentService.updateDept(deptDTO);
         if (b)
             return new Result(Code.UPDATE_OK, null, "编辑成功！");
         return new Result(Code.UPDATE_ERR, null, "编辑失败！");
@@ -148,6 +153,7 @@ public class DeptController {
         return new Result(Code.GET_OK, deptMember, "查询成功");
     }
 
+    //批量创建或修改部门
     @PostMapping("/excel/upload")
     public Result createGroupByExcel(@RequestHeader("companyId") Long companyId, @RequestPart("departmentFile") MultipartFile deptFile) {
         try {
@@ -160,6 +166,7 @@ public class DeptController {
             return new Result(Code.SAVE_ERR, false, e.getMessage());
         }
     }
+
 
     @GetMapping("/excel/getTemplate")
     public ResponseEntity<Resource> getTemplate() {
@@ -225,4 +232,6 @@ public class DeptController {
             throw new RuntimeException(e);
         }
     }
+
+
 }

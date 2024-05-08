@@ -38,6 +38,8 @@ public interface DepartmentMapper extends BaseMapper<Department> {
     @Select("select id from wt_type where type = #{position}" )
     Long selectPositionId(String position);
 
+    Boolean updateDept(DeptDTO deptDTO);
+
 }
 
 

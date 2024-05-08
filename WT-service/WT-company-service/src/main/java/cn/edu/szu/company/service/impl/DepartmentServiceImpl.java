@@ -178,15 +178,41 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             ExcelReader reader = ExcelUtil.getReader(deptFile.getInputStream());
             List<List<Object>> rowList = reader.read(2); // 从第二行开始读取数据
             for (List<Object> row : rowList) {
-                // 打印行数据用于调试
-                System.out.println(row);
+                //定义部门数据
+                Long id=null;
+                Long parentId=null;
+                String deptName=null;
+                String email=null;
+                //获取四列的数据
+                Object row1 = row.get(1);
+                Object row2 = row.get(2);
+                Object row3 = row.get(3);
 
+                DeptDTO deptDTO=new DeptDTO();
+                if(row1 instanceof Long && row1!=null){
+                    parentId=(Long) row1;
+                }if(row2 instanceof String ){
+                    deptName=(String) row2;
+                }if(row3 instanceof String){
+                    email=(String) row3;
+                }
+
+                //存入部门实体
+                deptDTO.setParentId(parentId);
+                deptDTO.setName(deptName);
+                Long userId = userClient.getUserByMail(email);
+                deptDTO.setManagerId(userId);
                 // 创建/更新部门
                 Object row0 = row.get(0); // 有时excel为空时row[0]会返回A（列名）
                 if (row0 == null || StrUtil.isBlank(row0.toString())|| row0.toString().equals("A")) {
-                    System.out.println("创建部门");
+                    //创建部门
+                    boolean department = createDepartment(companyId, deptDTO);
                 } else {
-                    System.out.println("更新部门");
+                    if(row0 instanceof Long){
+                        id=(Long) row0;
+                    }
+                    deptDTO.setId(id);
+                    departmentMapper.updateDept(deptDTO);
                 }
             }
         } catch (IOException e) {
@@ -199,6 +225,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Override
     public List<Department> selectDeptByCompanyId(Long companyId) {
         return departmentMapper.selectDeptByCompanyId(companyId);
+    }
+
+    @Override
+    public Boolean updateDept(DeptDTO deptDTO) {
+        return departmentMapper.updateDept(deptDTO);
     }
 }
 

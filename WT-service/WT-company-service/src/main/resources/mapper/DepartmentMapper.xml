@@ -46,4 +46,18 @@
         from wt_company.wt_department
         where company_id = #{companyId} and is_deleted=0
     </select>
+
+    <update id="updateDept" parameterType="cn.edu.szu.company.pojo.DeptDTO">
+        update wt_company.wt_department
+        <set>
+            <if test="name!= null">
+                name = #{name},
+            </if>
+            <if test="managerId!= null">
+                manager_id = #{managerId},
+            </if>
+            parent_id=#{parentId}
+            where id=#{id}
+        </set>
+    </update>
 </mapper>
