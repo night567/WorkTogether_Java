@@ -305,6 +305,18 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
+    public boolean delMemberFromGroup(List<Long> uid, Long gid) {
+        for (Long id : uid) {
+            int k = groupUserMapper.delMemberFromGroup(id, gid);
+            if (k == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public boolean updateMember(UserGroupRequest request) {
         int k = groupUserMapper.updateMember(request.getId(), request.getGroupId(), request.getType());
         if (k == 0) {
