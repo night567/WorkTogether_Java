@@ -10,6 +10,7 @@ import cn.edu.szu.company.pojo.domain.*;
 import cn.edu.szu.company.service.GroupService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -112,7 +113,7 @@ public class GroupServiceImpl implements GroupService {
             List<List<Object>> rowList = reader.read(2); // 从第二行开始读取数据
             for (List<Object> row : rowList) {
                 // 打印行数据用于调试
-                System.out.println(row.get(0) + ", " + row.get(1) + ", " + row.get(2));
+                System.out.println(row);
                 // 初始化团队信息
                 GroupDTO groupDTO = new GroupDTO();
                 groupDTO.setName(row.get(1).toString());
@@ -134,13 +135,14 @@ public class GroupServiceImpl implements GroupService {
                 }
 
                 // 创建/更新团队
-                if (row.get(0) == null) {
+                Object row0 = row.get(0);
+                if (row0 == null || StrUtil.isBlank(row0.toString())|| row0.toString().equals("A")) {
                     boolean isCreated = createGroup(companyId, groupDTO);
                     if (!isCreated) {
                         throw new RuntimeException("创建失败");
                     }
                 } else {
-                    String id = row.get(0).toString();
+                    String id = row0.toString();
                     groupDTO.setId(Long.parseLong(id));
                     boolean isUpdated = updateGroup(groupDTO);
                     if (!isUpdated) {

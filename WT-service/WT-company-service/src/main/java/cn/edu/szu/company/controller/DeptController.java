@@ -8,8 +8,15 @@ import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import cn.edu.szu.company.pojo.domain.UserDept;
 import cn.edu.szu.company.service.DepartmentService;
+import cn.edu.szu.feign.client.UserClient;
+import cn.edu.szu.feign.pojo.UserDTO;
 import cn.hutool.core.io.FileUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +24,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -25,6 +36,8 @@ import java.util.List;
 public class DeptController {
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private UserClient userClient;
 
     //根据部门ID查询部门
     @GetMapping("/selectByID")
@@ -135,6 +148,19 @@ public class DeptController {
         return new Result(Code.GET_OK, deptMember, "查询成功");
     }
 
+    @PostMapping("/excel/upload")
+    public Result createGroupByExcel(@RequestHeader("companyId") Long companyId, @RequestPart("departmentFile") MultipartFile deptFile) {
+        try {
+            boolean flag = departmentService.createOrUpdateByExcel(companyId, deptFile);
+            if (flag) {
+                return new Result(Code.SAVE_OK, true, "创建成功");
+            }
+            return new Result(Code.SAVE_ERR, false, "文件不存在");
+        } catch (Exception e) {
+            return new Result(Code.SAVE_ERR, false, e.getMessage());
+        }
+    }
+
     @GetMapping("/excel/getTemplate")
     public ResponseEntity<Resource> getTemplate() {
         // 文件路径
@@ -145,7 +171,7 @@ public class DeptController {
 
         // 设置响应头
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=GroupTemplate.xlsx");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=DepartmentTemplate.xlsx");
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
 
         // 返回文件内容
@@ -153,5 +179,50 @@ public class DeptController {
                 .status(HttpStatus.OK)
                 .headers(headers)
                 .body(fileResource);
+    }
+
+
+    //导出excel部门文件
+    @GetMapping("/excel/export")
+    public void exportExcel(@RequestHeader("companyId") Long companyId, HttpServletResponse response) {
+        // TODO:获取部门信息(↓假设)
+        List<Department> deptList = departmentService.selectDeptByCompanyId(companyId);
+
+        String path = "excel/DepartmentTemplate.xlsx";
+        Resource resource = new ClassPathResource(path);
+        try {
+            InputStream inputStream = resource.getInputStream();
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            inputStream.close();
+            // 获取工作表
+            Sheet sheet = workbook.getSheet("Sheet1");
+
+            // TODO：写入数据
+            int i = 2;
+            for (Department dept : deptList) {
+                Row row = sheet.createRow(i++);
+                //写入部门ID
+                row.createCell(0).setCellValue(dept.getId());
+                //写入上级部门ID
+                if(dept.getParentId()!=null){
+                    row.createCell(1).setCellValue(dept.getParentId());
+                }
+                //写入部门名称
+                row.createCell(2).setCellValue(dept.getName());
+                //写入部门负责人邮箱
+                Long managerId = dept.getManagerId();
+                UserDTO user = userClient.getUserById(managerId);
+                row.createCell(3).setCellValue(user.getEmail());
+            }
+
+            // 设置HTTP相应
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment;filename=DepartmentList.xlsx");
+            workbook.write(response.getOutputStream());
+            workbook.close();
+            response.flushBuffer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

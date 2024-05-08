@@ -34,6 +34,8 @@ public interface DepartmentMapper extends BaseMapper<Department> {
             " wcu.dept_id = #{deptId} and wcu.company_id = #{companyId} and wcu.dept_id = wd.id and wcu.type = wt.id")
     List<MemberDTO> getDeptMember(Long deptId,Long companyId);
 
+    List<Department> selectDeptByCompanyId(Long companyId);
+
 }
 
 

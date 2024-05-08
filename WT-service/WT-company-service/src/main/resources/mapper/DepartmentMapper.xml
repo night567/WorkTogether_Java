@@ -40,4 +40,10 @@
         from wt_company.wt_department
         where name = #{name} and is_deleted=0
     </select>
+
+    <select id="selectDeptByCompanyId" resultType="cn.edu.szu.company.pojo.domain.Department" parameterType="java.lang.Long">
+        select *
+        from wt_company.wt_department
+        where company_id = #{companyId} and is_deleted=0
+    </select>
 </mapper>

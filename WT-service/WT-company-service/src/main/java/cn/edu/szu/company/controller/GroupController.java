@@ -205,6 +205,7 @@ public class GroupController {
         }
         return new Result(Code.GET_ERR, res, "查询成功");
     }
+
 //    @RequestParam List<Long> ids
     @DeleteMapping("/members/{gid}")
     public Result deleteGroupMembers(@RequestParam List<Long> ids,@PathVariable Long gid){
@@ -216,6 +217,4 @@ public class GroupController {
 
         return new Result(Code.DELETE_ERR, null, "删除失败");
     }
-
-
 }
