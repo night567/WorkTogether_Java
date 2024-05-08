@@ -191,6 +191,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
         return true;
     }
+
+    @Override
+    public List<Department> selectDeptByCompanyId(Long companyId) {
+        return departmentMapper.selectDeptByCompanyId(companyId);
+    }
 }
 
 

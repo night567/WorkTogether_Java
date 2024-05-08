@@ -8,6 +8,8 @@ import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import cn.edu.szu.company.pojo.domain.UserDept;
 import cn.edu.szu.company.service.DepartmentService;
+import cn.edu.szu.feign.client.UserClient;
+import cn.edu.szu.feign.pojo.UserDTO;
 import cn.hutool.core.io.FileUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -34,6 +36,8 @@ import java.util.List;
 public class DeptController {
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private UserClient userClient;
 
     //根据部门ID查询部门
     @GetMapping("/selectByID")
@@ -177,10 +181,12 @@ public class DeptController {
                 .body(fileResource);
     }
 
+
+    //导出excel部门文件
     @GetMapping("/excel/export")
     public void exportExcel(@RequestHeader("companyId") Long companyId, HttpServletResponse response) {
         // TODO:获取部门信息(↓假设)
-        List<Department> deptList = departmentService.list();
+        List<Department> deptList = departmentService.selectDeptByCompanyId(companyId);
 
         String path = "excel/DepartmentTemplate.xlsx";
         Resource resource = new ClassPathResource(path);
@@ -195,10 +201,18 @@ public class DeptController {
             int i = 2;
             for (Department dept : deptList) {
                 Row row = sheet.createRow(i++);
-                row.createCell(0).setCellValue("部门ID");
-                row.createCell(1).setCellValue("上级部门ID");
-                row.createCell(2).setCellValue("部门名称");
-                row.createCell(3).setCellValue("部门负责人邮箱");
+                //写入部门ID
+                row.createCell(0).setCellValue(dept.getId());
+                //写入上级部门ID
+                if(dept.getParentId()!=null){
+                    row.createCell(1).setCellValue(dept.getParentId());
+                }
+                //写入部门名称
+                row.createCell(2).setCellValue(dept.getName());
+                //写入部门负责人邮箱
+                Long managerId = dept.getManagerId();
+                UserDTO user = userClient.getUserById(managerId);
+                row.createCell(3).setCellValue(user.getEmail());
             }
 
             // 设置HTTP相应
