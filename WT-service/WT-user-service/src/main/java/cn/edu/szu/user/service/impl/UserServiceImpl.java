@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.*;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private CompanyClient companyClient;
 
     @Override
+    @Transactional
     public Result createAccount(LoginDTO loginDTO) {
         // 校验邮箱
         String email = loginDTO.getEmail();
@@ -75,6 +77,24 @@ public class UserServiceImpl implements UserService {
         user.setSex(3);
         userMapper.insert(user);
 
+        // 保存用户登录信息
+        user.setLastLoginTime(new Date());
+        userMapper.updateById(user);
+        System.out.println(user);
+        Map<String, Object> userMap = BeanUtil.beanToMap(user, new HashMap<>(),
+                CopyOptions.create()
+                        .setIgnoreNullValue(true)
+                        .setFieldValueEditor((fieldName, fieldValue) -> {
+                            if(fieldValue != null) {
+                                return fieldValue.toString();
+                            } else {
+                                return null;
+                            }
+                        }));
+        String key = LOGIN_USER_KEY + userLogin.getId().toString();
+        stringRedisTemplate.opsForHash().putAll(key, userMap);
+        stringRedisTemplate.expire(key, LOGIN_USER_TTL, TimeUnit.MINUTES);
+
         //生成token
         String token = JwtUtil.getToken(userLogin.getId());
         System.out.println(user + " " + token);
@@ -82,6 +102,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Result login(LoginDTO loginDTO) {
         String email = loginDTO.getEmail();
         if (!RegexUtils.isEmail(email)) {
@@ -111,7 +132,13 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> userMap = BeanUtil.beanToMap(user, new HashMap<>(),
                 CopyOptions.create()
                         .setIgnoreNullValue(true)
-                        .setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
+                        .setFieldValueEditor((fieldName, fieldValue) -> {
+                            if(fieldValue != null) {
+                                return fieldValue.toString();
+                            } else {
+                                return null;
+                            }
+                        }));
         String key = LOGIN_USER_KEY + userLogin.getId().toString();
         stringRedisTemplate.opsForHash().putAll(key, userMap);
         stringRedisTemplate.expire(key, LOGIN_USER_TTL, TimeUnit.MINUTES);
