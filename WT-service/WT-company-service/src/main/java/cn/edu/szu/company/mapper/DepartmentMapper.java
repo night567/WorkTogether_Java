@@ -30,7 +30,7 @@ public interface DepartmentMapper extends BaseMapper<Department> {
     @Update("update wt_company_user set type = #{type} where user_id = #{uid} and dept_id = #{did} ")
     int updateUDPosition(Long uid,Long did,Long type);
 
-    @Select("select wcu.user_id as id, wd.name as deptName, wt.type as position  from wt_company_user as wcu,wt_department as wd ,wt_type as wt where" +
+    @Select("select wcu.user_id as id, wd.name as deptName, wt.type as position,wcu.join_time as joinTime  from wt_company_user as wcu,wt_department as wd ,wt_type as wt where" +
             " wcu.dept_id = #{deptId} and wcu.company_id = #{companyId} and wcu.dept_id = wd.id and wcu.type = wt.id")
     List<MemberDTO> getDeptMember(Long deptId,Long companyId);
 
