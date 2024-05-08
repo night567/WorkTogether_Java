@@ -56,8 +56,8 @@ public class GroupController {
     }
 
     @GetMapping("/excel/getTemplate")
-    public ResponseEntity<Resource> getTemplate() throws IOException {
-        // 假设文件路径为 /path/to/your/excel/example.xlsx
+    public ResponseEntity<Resource> getTemplate() {
+        // 文件路径
         String filePath = "excel/GroupTemplate.xlsx";
 
         // 创建文件资源对象
