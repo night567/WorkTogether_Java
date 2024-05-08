@@ -7,9 +7,17 @@ import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import cn.edu.szu.company.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -30,7 +38,7 @@ public class GroupController {
     @PostMapping("/excel/upload")
     public Result createGroupByExcel(@RequestHeader("companyId") Long companyId, @RequestPart("groupFile") MultipartFile groupFile) {
         try {
-            boolean flag = groupService.createByExcel(companyId,groupFile);
+            boolean flag = groupService.createByExcel(companyId, groupFile);
             if (flag) {
                 return new Result(Code.SAVE_OK, true, "创建成功");
             }
@@ -38,6 +46,26 @@ public class GroupController {
         } catch (Exception e) {
             return new Result(Code.SAVE_ERR, false, e.getMessage());
         }
+    }
+
+    @GetMapping("/excel/getTemplate")
+    public ResponseEntity<Resource> getTemplate() throws IOException {
+        // 假设文件路径为 /path/to/your/excel/example.xlsx
+        String filePath = "WT-service/WT-company-service/src/main/resources/excel/GroupTemplate.xlsx";
+
+        // 创建文件资源对象
+        Resource fileResource = new FileSystemResource(new File(filePath));
+
+        // 设置响应头
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=GroupTemplate.xlsx");
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+
+        // 返回文件内容
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .body(fileResource);
     }
 
     @DeleteMapping("/delete/{deptId}")
@@ -76,15 +104,16 @@ public class GroupController {
     /**
      * 获取团队内所有成员
      * 需要返回MemberDTO的所有内容
+     *
      * @param id
      * @return
      */
     @GetMapping("/member/{id}")
-    public Result getGroupMemberById(@PathVariable Long id){
+    public Result getGroupMemberById(@PathVariable Long id) {
         List<MemberDTO> res = groupService.getGroupMember(id);
-        if (res == null){
+        if (res == null) {
             return new Result(Code.GET_ERR, null, "查询失败");
-        }else if(res.isEmpty()){
+        } else if (res.isEmpty()) {
             return new Result(Code.GET_OK, res, "查询结果为空");
         }
         return new Result(Code.GET_OK, res, "查询成功");
@@ -92,26 +121,27 @@ public class GroupController {
 
     /**
      * 向团队中添加成员
+     *
      * @param userGroup
      * @return
      */
     @PostMapping("/member/addByMail")
-    public Result addMember(@RequestBody UserGroupRequest userGroup){
+    public Result addMember(@RequestBody UserGroupRequest userGroup) {
         List<String> list = userGroup.getList();
         Long groupId = userGroup.getGroupId();
         System.out.println(list);
         System.out.println(groupId);
-        boolean k = groupService.addMemberToGroup(list,groupId);
-        if (k){
+        boolean k = groupService.addMemberToGroup(list, groupId);
+        if (k) {
             return new Result(Code.SAVE_OK, null, "添加成功");
         }
         return new Result(Code.SAVE_ERR, null, "添加失败");
     }
 
     @DeleteMapping("/member/{id}/{gid}")
-    public Result delMember(@PathVariable Long id,@PathVariable Long gid){
+    public Result delMember(@PathVariable Long id, @PathVariable Long gid) {
         boolean k = groupService.delMemberFromGroup(id, gid);
-        if (k){
+        if (k) {
             return new Result(Code.DELETE_OK, null, "删除成功");
         }
 
@@ -119,21 +149,21 @@ public class GroupController {
     }
 
     @PutMapping("/member")
-    public Result updateMember(@RequestBody UserGroupRequest request){
+    public Result updateMember(@RequestBody UserGroupRequest request) {
         boolean k = groupService.updateMember(request);
-        if (k){
+        if (k) {
             return new Result(Code.UPDATE_OK, null, "更新成功");
         }
         return new Result(Code.UPDATE_ERR, null, "更新失败");
     }
 
     @GetMapping("/position")
-    public Result getPosition(){
+    public Result getPosition() {
         List<String> res = groupService.getPosition();
-        if (res == null || res.isEmpty()){
-            return new Result(Code.GET_ERR,null,"查询失败");
+        if (res == null || res.isEmpty()) {
+            return new Result(Code.GET_ERR, null, "查询失败");
         }
-        return new Result(Code.GET_ERR,res,"查询成功");
+        return new Result(Code.GET_ERR, res, "查询成功");
     }
 
 
