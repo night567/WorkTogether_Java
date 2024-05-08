@@ -137,7 +137,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Override
     public boolean updateDUPosition(UserCompanyRequest request) {
         Long pid = departmentMapper.selectPositionId(request.getPosition());
-        if(pid == null){
+        if (pid == null) {
             return false;
         }
         int k = departmentMapper.updateUDPosition(request.getUid(), request.getDid(), pid);
@@ -150,14 +150,18 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Override
     public List<MemberDTO> getDeptMember(Long deptId, Long companyId) {
-        List<MemberDTO> deptMembers = departmentMapper.getDeptMember(deptId, companyId);
+        List<MemberDTO> deptMembers;
+        if (deptId == 0L) {
+            deptMembers = departmentMapper.selectAllByCompanyId(companyId);
+        } else {
+            deptMembers = departmentMapper.getDeptMember(deptId, companyId);
+        }
         for (MemberDTO deptMember : deptMembers) {
             String id = deptMember.getId();
             UserDTO user = userClient.getUserById(Long.valueOf(id));
             deptMember.setEmail(user.getEmail());
             deptMember.setName(user.getName());
         }
-
 
         return deptMembers;
     }
@@ -176,22 +180,24 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             List<List<Object>> rowList = reader.read(2); // 从第二行开始读取数据
             for (List<Object> row : rowList) {
                 //定义部门数据
-                Long id=null;
-                Long parentId=null;
-                String deptName=null;
-                String email=null;
+                Long id = null;
+                Long parentId = null;
+                String deptName = null;
+                String email = null;
                 //获取四列的数据
                 Object row1 = row.get(1);
                 Object row2 = row.get(2);
                 Object row3 = row.get(3);
 
-                DeptDTO deptDTO=new DeptDTO();
-                if(row1 instanceof Long && row1!=null){
-                    parentId=(Long) row1;
-                }if(row2 instanceof String ){
-                    deptName=(String) row2;
-                }if(row3 instanceof String){
-                    email=(String) row3;
+                DeptDTO deptDTO = new DeptDTO();
+                if (row1 instanceof Long && row1 != null) {
+                    parentId = (Long) row1;
+                }
+                if (row2 instanceof String) {
+                    deptName = (String) row2;
+                }
+                if (row3 instanceof String) {
+                    email = (String) row3;
                 }
 
                 //存入部门实体
@@ -201,12 +207,12 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
                 deptDTO.setManagerId(userId);
                 // 创建/更新部门
                 Object row0 = row.get(0); // 有时excel为空时row[0]会返回A（列名）
-                if (row0 == null || StrUtil.isBlank(row0.toString())|| row0.toString().equals("A")) {
+                if (row0 == null || StrUtil.isBlank(row0.toString()) || row0.toString().equals("A")) {
                     //创建部门
                     boolean department = createDepartment(companyId, deptDTO);
                 } else {
-                    if(row0 instanceof Long){
-                        id=(Long) row0;
+                    if (row0 instanceof Long) {
+                        id = (Long) row0;
                     }
                     deptDTO.setId(id);
                     departmentMapper.updateDept(deptDTO);

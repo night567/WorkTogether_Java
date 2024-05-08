@@ -60,4 +60,11 @@
             where id=#{id}
         </set>
     </update>
+
+    <select id="selectAllByCompanyId" resultType="cn.edu.szu.company.pojo.MemberDTO">
+        SELECT cu.user_id AS id, dept.name AS deptName
+        FROM wt_company.wt_company_user cu
+                 INNER JOIN wt_company.wt_department dept ON dept.id = cu.dept_id
+        WHERE cu.company_id = #{companyId}
+    </select>
 </mapper>
