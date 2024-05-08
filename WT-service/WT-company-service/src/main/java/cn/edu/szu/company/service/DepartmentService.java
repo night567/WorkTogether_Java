@@ -5,6 +5,7 @@ import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,4 +34,6 @@ public interface DepartmentService extends IService<Department> {
     boolean updateDUPosition(UserCompanyRequest request);
 
     List<MemberDTO> getDeptMember(Long deptId, Long companyId);
+
+    boolean createOrUpdateByExcel(Long companyId, MultipartFile deptFile);
 }

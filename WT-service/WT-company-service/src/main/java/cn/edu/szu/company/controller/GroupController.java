@@ -205,6 +205,4 @@ public class GroupController {
         }
         return new Result(Code.GET_ERR, res, "查询成功");
     }
-
-
 }

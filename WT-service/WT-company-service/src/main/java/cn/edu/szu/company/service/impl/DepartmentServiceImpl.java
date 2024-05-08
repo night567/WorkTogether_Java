@@ -1,29 +1,34 @@
 package cn.edu.szu.company.service.impl;
 
+import cn.edu.szu.company.mapper.DepartmentMapper;
 import cn.edu.szu.company.pojo.DeptDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
+import cn.edu.szu.company.service.DepartmentService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.edu.szu.company.pojo.domain.Department;
-import cn.edu.szu.company.service.DepartmentService;
-import cn.edu.szu.company.mapper.DepartmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 /**
-* @author zgr24
-* @description 针对表【wt_department(部门)】的数据库操作Service实现
-* @createDate 2024-04-28 16:39:41
-*/
+ * @author zgr24
+ * @description 针对表【wt_department(部门)】的数据库操作Service实现
+ * @createDate 2024-04-28 16:39:41
+ */
 @Service
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Department>
-    implements DepartmentService{
+        implements DepartmentService {
     @Autowired
     private DepartmentMapper departmentMapper;
     @Autowired
@@ -47,9 +52,9 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     //根据公司ID查询最高级部门的部门列表
     @Override
-    public List<DeptDTO> selectHighestDeptByCompanyId(Long companyId){
+    public List<DeptDTO> selectHighestDeptByCompanyId(Long companyId) {
         List<DeptDTO> deptDTOS = departmentMapper.selectHighestDeptByCompanyId(companyId);
-        for(DeptDTO deptDTO :deptDTOS){
+        for (DeptDTO deptDTO : deptDTOS) {
             deptDTO.setManagerName(userClient.getUserById(deptDTO.getManagerId()).getName());
         }
         return deptDTOS;
@@ -59,7 +64,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Override
     public List<DeptDTO> selectDeptsByParentId(Long parentId) {
         List<DeptDTO> deptDTOS = departmentMapper.selectDeptsByParentId(parentId);
-        for(DeptDTO deptDTO :deptDTOS){
+        for (DeptDTO deptDTO : deptDTOS) {
             deptDTO.setManagerName(userClient.getUserById(deptDTO.getManagerId()).getName());
         }
         return deptDTOS;
@@ -68,17 +73,18 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Override
     public boolean updateUserDept(Long uid, Long did) {
         try {
-            int k = departmentMapper.updateUserDept(uid,did);
-            System.out.println(uid+ "     "+did);
-            if (k <= 0){
+            int k = departmentMapper.updateUserDept(uid, did);
+            System.out.println(uid + "     " + did);
+            if (k <= 0) {
                 return false;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
 
         return true;
     }
+
     @Override
     public boolean createDepartment(Long companyId, DeptDTO deptDTO) {
         // 实现创建部门的方法
@@ -110,11 +116,13 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             return false;
         }
     }
+
     @Override
     public Long selectIdByName(String deptName) {
         // 实现根据部门名称查询部门ID的逻辑
         return departmentMapper.selectIdByName(deptName);
     }
+
     @Override
     @Transactional
     public boolean deleteDepartments(List<Long> deptIds) {
@@ -131,8 +139,8 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Override
     public boolean updateDUPosition(UserCompanyRequest request) {
-        int k = departmentMapper.updateUDPosition(request.getUid(), request.getDid() ,request.getType());
-        if (k == 0){
+        int k = departmentMapper.updateUDPosition(request.getUid(), request.getDid(), request.getType());
+        if (k == 0) {
             return false;
         }
 
@@ -140,7 +148,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     }
 
     @Override
-    public List<MemberDTO> getDeptMember(Long deptId,Long companyId) {
+    public List<MemberDTO> getDeptMember(Long deptId, Long companyId) {
         List<MemberDTO> deptMembers = departmentMapper.getDeptMember(deptId, companyId);
         for (MemberDTO deptMember : deptMembers) {
             String id = deptMember.getId();
@@ -153,7 +161,36 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         return deptMembers;
     }
 
+    @Override
+    public boolean createOrUpdateByExcel(Long companyId, MultipartFile deptFile) {
+        // 检查输入参数是否为null
+        if (companyId == null || deptFile == null) {
+            throw new RuntimeException("上传文件异常");
+        }
 
+        // 通过Excel文件逐个添加部门
+        try {
+            // 读取Excel文件
+            ExcelReader reader = ExcelUtil.getReader(deptFile.getInputStream());
+            List<List<Object>> rowList = reader.read(2); // 从第二行开始读取数据
+            for (List<Object> row : rowList) {
+                // 打印行数据用于调试
+                System.out.println(row);
+
+                // 创建/更新部门
+                Object row0 = row.get(0); // 有时excel为空时row[0]会返回A（列名）
+                if (row0 == null || StrUtil.isBlank(row0.toString())|| row0.toString().equals("A")) {
+                    System.out.println("创建部门");
+                } else {
+                    System.out.println("更新部门");
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
 }
 
 
