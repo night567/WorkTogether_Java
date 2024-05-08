@@ -4,6 +4,7 @@ import cn.edu.szu.company.mapper.CompanyUserMapper;
 import cn.edu.szu.company.mapper.DepartmentMapper;
 import cn.edu.szu.company.pojo.DeptDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.CompanyUser;
 import cn.edu.szu.company.pojo.domain.Department;
 import cn.edu.szu.company.pojo.domain.UserCompanyRequest;
 import cn.edu.szu.company.service.DepartmentService;
@@ -36,7 +37,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Autowired
     private UserClient userClient;
     @Autowired
-    private CompanyUserMapper CompanyUserMapper;
+    private CompanyUserMapper companyUserMapper;
 
     //根据部门ID查询部门
     @Override
@@ -98,6 +99,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             department.setCompanyId(companyId);
             //department.setParentId(deptDTO.getParentId());
 
+            // 设置parentId
             LambdaQueryWrapper<Department> lqw = new LambdaQueryWrapper<>();
             lqw.eq(Department::getName, deptDTO.getParentName());
             Department parent = departmentMapper.selectOne(lqw);
@@ -106,14 +108,30 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             }
             department.setParentId(parent.getId());
 
+            //设置ManagerId
+            Long managerId = deptDTO.getManagerId();
+            LambdaQueryWrapper<CompanyUser> lqw1 = new LambdaQueryWrapper<>();
+            lqw1.eq(CompanyUser::getUserId, managerId);
+            CompanyUser companyUser = companyUserMapper.selectOne(lqw1);
+            if (managerId == null || companyUser == null) {
+                return false;
+            }
+            department.setManagerId(managerId);
+
             department.setName(deptDTO.getName());
-            department.setManagerId(deptDTO.getManagerId());
             department.setIntroduction(deptDTO.getIntroduction());
             department.setNum(1L);
             department.setCreateTime(new Date());
             department.setJob(0); // 初始待分配任务数为0
 
-            return departmentMapper.insert(department) > 0;
+            boolean b1 = departmentMapper.insert(department) > 0;
+            companyUser.setDeptId(department.getId());
+            boolean b2 = companyUserMapper.updateById(companyUser) > 0;
+            if (b1 && b2) {
+                return true;
+            } else {
+                throw new RuntimeException("创建失败");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;

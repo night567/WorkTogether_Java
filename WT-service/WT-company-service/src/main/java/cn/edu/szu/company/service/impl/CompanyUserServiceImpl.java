@@ -102,7 +102,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         CompanyUser companyUser = new CompanyUser();
         companyUser.setUserId(id);
         companyUser.setCompanyId(companyId);
-        companyUser.setDeptId(1L); // TODO:加入部门，暂时加入1L
+        companyUser.setDeptId(0L); // TODO:加入部门，暂时加入0L
         companyUser.setStatus(true);
         companyUser.setJoinTime(new Date());
         companyUser.setIsDeleted(false);
