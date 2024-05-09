@@ -13,7 +13,7 @@ public class MemberDTO {
     private String name; // 姓名
     private String email; // 邮箱
     private String deptName; // 部门名称
-    private String groupName;
+    private String groupName; // 团队名称
     private String position; // 职位
     private Date joinTime;//加入时间
 }

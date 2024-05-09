@@ -39,9 +39,9 @@ public class CompanyUserController {
         return b;
     }
 
-    @GetMapping("/getAllMember/{deptId}")
-    public Result getAllMember(@RequestHeader("companyId") Long companyId,@PathVariable Long deptId) {
-        List<MemberDTO> members = companyUserService.getAllMember(companyId,deptId);
+    @GetMapping("/getAllMember")
+    public Result getAllMember(@RequestHeader("companyId") Long companyId) {
+        List<MemberDTO> members = companyUserService.getAllMember(companyId);
         if (members != null && !members.isEmpty()) {
             return new Result(Code.GET_OK, members, "查询成功");
         } else {

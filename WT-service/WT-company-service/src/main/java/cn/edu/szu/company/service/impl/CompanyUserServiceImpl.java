@@ -35,22 +35,10 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 
 
     @Override
-    public List<MemberDTO> getAllMember(Long companyId,Long deptId) {
+    public List<MemberDTO> getAllMember(Long companyId) {
         // 获取企业成员数据
-        List<MemberDTO> ids = companyUserMapper.selectAllByCompanyIdAndDeptId(companyId,deptId);
+        List<MemberDTO> companyUsers = companyUserMapper.selectAllByCompanyId(companyId);
 
-        System.out.println(ids);
-        List<MemberDTO> companyUsers = new ArrayList<>();
-        for (MemberDTO id : ids){
-            UserDTO userById = userClient.getUserById(Long.valueOf(id.getId()) );
-            System.out.println(userById);
-            MemberDTO memberDTO = new MemberDTO();
-            BeanUtils.copyProperties(userById,memberDTO);
-            memberDTO.setDeptName(id.getDeptName());
-            memberDTO.setId(String.valueOf(userById.getId()));
-            companyUsers.add(memberDTO);
-        }
-        System.out.println(companyUsers);
         for (MemberDTO member : companyUsers) {
             System.out.println(member);
             UserDTO user = userClient.getUserById(Long.valueOf(member.getId()) );
@@ -58,7 +46,6 @@ public class CompanyUserServiceImpl implements CompanyUserService {
             if (user != null) {
                 member.setName(user.getName());
                 member.setEmail(user.getEmail());
-                member.setPosition("普通职员");
             } else {
                 companyUsers.remove(member);
             }

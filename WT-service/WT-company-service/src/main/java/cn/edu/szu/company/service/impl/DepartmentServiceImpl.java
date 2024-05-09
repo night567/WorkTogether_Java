@@ -243,9 +243,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
                     //创建部门
                     boolean department = createDepartment(companyId, deptDTO);
                 } else {
-                    if (row0 instanceof Long) {
-                        id = (Long) row0;
-                    }
+                    id = Long.valueOf(row0.toString());
                     deptDTO.setId(id);
                     departmentMapper.updateDept(deptDTO);
                 }

@@ -9,7 +9,7 @@ public interface CompanyUserService {
 
     Long getCompanyIdByInviteCode(String code);
 
-    List<MemberDTO> getAllMember(Long companyId,Long deptId);
+    List<MemberDTO> getAllMember(Long companyId);
 
     boolean joinCompany(String token, String code);
 

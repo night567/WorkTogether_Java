@@ -212,7 +212,7 @@ public class DeptController {
             for (Department dept : deptList) {
                 Row row = sheet.createRow(i++);
                 //写入部门ID
-                row.createCell(0).setCellValue(dept.getId());
+                row.createCell(0).setCellValue(dept.getId().toString());
                 //写入上级部门ID
                 if(dept.getParentId()!=null){
                     row.createCell(1).setCellValue(dept.getParentId());
