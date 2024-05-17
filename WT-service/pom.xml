@@ -16,6 +16,7 @@
         <module>WT-user-service</module>
         <module>WT-auth-service</module>
         <module>WT-company-service</module>
+        <module>WT-teamwork-service</module>
     </modules>
 
     <properties>

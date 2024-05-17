@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.szu.teamwork.mapper.ScheduleUserMapper">
+
+    <resultMap id="BaseResultMap" type="cn.edu.szu.teamwork.pojo.domain.ScheduleUser">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="scheduleId" column="schedule_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="join" column="join" jdbcType="INTEGER"/>
+            <result property="refuseReason" column="refuse_reason" jdbcType="VARCHAR"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,schedule_id,user_id,
+        join,refuse_reason,is_deleted
+    </sql>
+</mapper>

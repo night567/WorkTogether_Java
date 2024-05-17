@@ -16,6 +16,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
         <!-- springboot 集成邮件依赖 -->
         <dependency>
@@ -28,7 +29,6 @@
             <version>1.6.2</version> <!-- 或者其他版本 -->
        </dependency>
     </dependencies>
-
 
     <build>
         <finalName>app</finalName>
