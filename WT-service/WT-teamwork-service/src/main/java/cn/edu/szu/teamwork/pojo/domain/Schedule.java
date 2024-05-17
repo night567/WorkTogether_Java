@@ -19,16 +19,16 @@ public class Schedule implements Serializable {
     @TableField(value = "group_id")
     private Long groupId; // 所属团队ID
 
-    @TableField(value = "create_id")
-    private Long createId; // 创建者ID
+    @TableField(value = "creator_id")
+    private Long creatorId; // 创建者ID
 
     @TableField(value = "title")
     private String title; // 标题
 
-    @TableField(value = "startTime")
+    @TableField(value = "start_time")
     private LocalDateTime startTime; // 开始时间
 
-    @TableField(value = "endTime")
+    @TableField(value = "end_time")
     private LocalDateTime endTime; // 结束时间
 
     @TableField(value = "type")

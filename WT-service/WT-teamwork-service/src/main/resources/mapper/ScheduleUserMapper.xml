@@ -8,13 +8,13 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="scheduleId" column="schedule_id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="join" column="join" jdbcType="INTEGER"/>
+            <result property="joinStatus" column="join_status" jdbcType="INTEGER"/>
             <result property="refuseReason" column="refuse_reason" jdbcType="VARCHAR"/>
             <result property="isDeleted" column="is_deleted" jdbcType="BIT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,schedule_id,user_id,
-        join,refuse_reason,is_deleted
+        join_status,refuse_reason,is_deleted
     </sql>
 </mapper>

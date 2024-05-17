@@ -21,8 +21,8 @@ public class ScheduleUser implements Serializable {
     @TableField(value = "user_id")
     private Long userId; // 用户ID
 
-    @TableField(value = "join")
-    private Integer join; // 是否参加(0:暂定, 1:接受, 2:拒绝)
+    @TableField(value = "join_status")
+    private Integer joinStatus; // 是否参加(0:暂定, 1:接受, 2:拒绝)
 
     @TableField(value = "refuse_reason")
     private String refuseReason; // 拒绝理由
