@@ -4,6 +4,9 @@ import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
 * @author zgr24
 * @description 针对表【wt_schedule(日程)】的数据库操作Service
@@ -14,4 +17,10 @@ public interface ScheduleService extends IService<Schedule> {
     boolean createSchedule(ScheduleDTO scheduleDTO);
 
     boolean updateSchedule(ScheduleDTO scheduleDTO);
+
+    List<Schedule> selectUserSchedule(Long groupId,Long userId,String startTime,String endTime);
+
+     boolean isScheduleInTimeRange(Schedule schedule, LocalDateTime startTime, LocalDateTime endTime);
+
+
 }

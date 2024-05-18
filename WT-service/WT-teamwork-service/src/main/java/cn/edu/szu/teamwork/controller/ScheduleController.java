@@ -4,9 +4,12 @@ import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
+import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/schedule")
@@ -52,5 +55,13 @@ public class ScheduleController {
         } catch (Exception e) {
             return new Result(Code.UPDATE_ERR, false, e.getMessage());
         }
+    }
+    //获取个人日程
+    @GetMapping("/user")
+    private Result selectUserSchedule(@RequestParam Long groupId, @RequestParam Long userId, @RequestParam String startTime, @RequestParam String endTime){
+        List<Schedule> schedules = scheduleService.selectUserSchedule(groupId, userId, startTime, endTime);
+        if(schedules==null||schedules.isEmpty())
+            return  new Result(Code.GET_ERR,schedules,"查询失败！");
+        return  new Result(Code.GET_OK,schedules,"查询成功！");
     }
 }

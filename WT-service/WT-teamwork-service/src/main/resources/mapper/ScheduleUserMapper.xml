@@ -17,4 +17,9 @@
         id,schedule_id,user_id,
         join_status,refuse_reason,is_deleted
     </sql>
+    <select id="selectScheduleIdByUserId" resultType="java.lang.Long" parameterType="java.util.List">
+        select schedule_id
+        from wt_teamwork.wt_schedule_user
+        where user_id = #{userId} and is_deleted=0
+    </select>
 </mapper>

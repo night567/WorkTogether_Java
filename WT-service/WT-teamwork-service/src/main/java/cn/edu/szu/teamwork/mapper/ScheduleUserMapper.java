@@ -1,8 +1,11 @@
 package cn.edu.szu.teamwork.mapper;
 
+import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
 * @author zgr24
@@ -12,6 +15,8 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface ScheduleUserMapper extends BaseMapper<ScheduleUser> {
+    List<Long> selectScheduleIdByUserId(Long userId);
+
 
 }
 

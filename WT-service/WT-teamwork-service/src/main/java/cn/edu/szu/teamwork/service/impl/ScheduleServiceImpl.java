@@ -11,7 +11,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,8 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     private ScheduleMapper scheduleMapper;
     @Autowired
     private ScheduleUserMapper scheduleUserMapper;
+    // 日期时间格式
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     @Transactional
@@ -121,8 +124,44 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         return true;
     }
 
+    @Override
+    public List<Schedule> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime) {
+        // 解析字符串形式的时间为 LocalDateTime 对象
+        LocalDateTime start = LocalDateTime.parse(startTime,DATE_TIME_FORMATTER);
+        LocalDateTime end = LocalDateTime.parse(endTime,DATE_TIME_FORMATTER);
 
-}
+        // 查询用户日程ID集合
+        List<Long> scheduleIds = scheduleUserMapper.selectScheduleIdByUserId(userId);
+
+        List<Schedule> scheduleList = new ArrayList<>();
+        for(Long id : scheduleIds) {
+            // 查询日程
+            Schedule schedule = scheduleMapper.selectScheduleByIdAndGroupId(id, groupId);
+
+            // 判断日程在给定时间范围内
+            if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
+                scheduleList.add(schedule);
+            }
+        }
+        return scheduleList;
+        }
+
+
+    // 判断日程是否在给定时间范围内的辅助方法
+    @Override
+    public boolean isScheduleInTimeRange(Schedule schedule, LocalDateTime startTime, LocalDateTime endTime) {
+        LocalDateTime scheduleStartTime = schedule.getStartTime();
+        LocalDateTime scheduleEndTime = schedule.getEndTime();
+
+        // 日程开始时间晚于给定时间范围的结束时间，或者日程结束时间早于给定时间范围的开始时间，则日程不在时间范围内
+        return !scheduleStartTime.isAfter(endTime) && !scheduleEndTime.isBefore(startTime);
+    }
+    }
+
+
+
+
+
 
 
 
