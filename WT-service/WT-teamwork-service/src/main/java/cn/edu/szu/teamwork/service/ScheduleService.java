@@ -18,11 +18,12 @@ public interface ScheduleService extends IService<Schedule> {
 
     boolean updateSchedule(ScheduleDTO scheduleDTO);
 
-    List<Schedule> selectUserSchedule(Long groupId,Long userId,String startTime,String endTime);
+    List<Schedule> selectUserSchedule(Long groupId,Long userId,String startTime,String endTime,boolean flag);
 
      boolean isScheduleInTimeRange(Schedule schedule, LocalDateTime startTime, LocalDateTime endTime);
 
-    List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime);
+    List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime,boolean flag);
+    List<Schedule> selectScheduleByType(Long groupId,Long type,String startTime,String endTime,boolean flag);
 
 
 }

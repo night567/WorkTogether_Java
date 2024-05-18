@@ -123,27 +123,37 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
         return true;
     }
-
+    //获取个人日程
     @Override
-    public List<Schedule> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime) {
-        // 解析字符串形式的时间为 LocalDateTime 对象
-        LocalDateTime start = LocalDateTime.parse(startTime,DATE_TIME_FORMATTER);
-        LocalDateTime end = LocalDateTime.parse(endTime,DATE_TIME_FORMATTER);
-
+    public List<Schedule> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime,boolean flag) {
         // 查询用户日程ID集合
         List<Long> scheduleIds = scheduleUserMapper.selectScheduleIdByUserId(userId);
 
+        // 解析字符串形式的时间为 LocalDateTime 对象
+        LocalDateTime start=null;
+        LocalDateTime end=null;
+        if(flag==true) {
+             start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
+             end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
+        }
         List<Schedule> scheduleList = new ArrayList<>();
         for(Long id : scheduleIds) {
             // 查询日程
             Schedule schedule = scheduleMapper.selectScheduleByIdAndGroupId(id, groupId);
 
-            // 判断日程在给定时间范围内
-            if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
+            //判断获取全部还是时间区内的
+            if(flag==true) {
+                // 判断日程在给定时间范围内
+                if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
+                    scheduleList.add(schedule);
+                }
+            }else {
                 scheduleList.add(schedule);
             }
         }
-        return scheduleList;
+            return scheduleList;
+
+
         }
 
 
@@ -159,19 +169,56 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     //获取团队日程集合
     @Override
-    public List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime) {
+    public List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime,boolean flag) {
         // 解析字符串形式的时间为 LocalDateTime 对象
-        LocalDateTime start = LocalDateTime.parse(startTime,DATE_TIME_FORMATTER);
-        LocalDateTime end = LocalDateTime.parse(endTime,DATE_TIME_FORMATTER);
+        LocalDateTime start=null;
+        LocalDateTime end=null;
+        if(flag==true) {
+            start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
+            end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
+        }
         //获取团队全部日程
         List<Schedule> schedules = scheduleMapper.selectScheduleByGroupId(groupId);
         //定义符合时间的日程
         List<Schedule> scheduleList=new ArrayList<>();
         for(Schedule schedule:schedules){
-            // 判断日程在给定时间范围内
-            if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
+            if(flag==true) {
+                // 判断日程在给定时间范围内
+                if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
+                    scheduleList.add(schedule);
+                }
+            }
+            else {
                 scheduleList.add(schedule);
             }
+        }
+        return scheduleList;
+    }
+
+    //获取不同类型日程集合
+    @Override
+    public List<Schedule> selectScheduleByType(Long groupId, Long type,String startTime,String endTime,boolean flag) {
+        // 解析字符串形式的时间为 LocalDateTime 对象
+        LocalDateTime start=null;
+        LocalDateTime end=null;
+        if(flag==true) {
+            start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
+            end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
+        }
+        //获取该类型全部日程
+        List<Schedule> schedules = scheduleMapper.selectScheduleByType(groupId, type);
+        //定义符合时间的日程
+        List<Schedule> scheduleList=new ArrayList<>();
+        for(Schedule schedule:schedules){
+            if(flag==true){
+                // 判断日程在给定时间范围内
+                if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
+                    scheduleList.add(schedule);
+                }
+            }else {
+                scheduleList.add(schedule);
+            }
+
         }
         return scheduleList;
     }
