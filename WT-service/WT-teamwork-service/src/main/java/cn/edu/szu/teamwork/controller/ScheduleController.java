@@ -64,4 +64,13 @@ public class ScheduleController {
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");
     }
+
+    //获取团队日程
+    @GetMapping("/group")
+    private Result selectGroupSchedule(@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime){
+        List<Schedule> schedules = scheduleService.selectScheduleByGroupId(groupId, startTime, endTime);
+        if(schedules==null||schedules.isEmpty())
+            return  new Result(Code.GET_ERR,schedules,"查询失败！");
+        return  new Result(Code.GET_OK,schedules,"查询成功！");
+    }
 }

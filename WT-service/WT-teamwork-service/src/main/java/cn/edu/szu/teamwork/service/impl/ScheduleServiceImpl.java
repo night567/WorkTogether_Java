@@ -156,7 +156,26 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         // 日程开始时间晚于给定时间范围的结束时间，或者日程结束时间早于给定时间范围的开始时间，则日程不在时间范围内
         return !scheduleStartTime.isAfter(endTime) && !scheduleEndTime.isBefore(startTime);
     }
+
+    //获取团队日程集合
+    @Override
+    public List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime) {
+        // 解析字符串形式的时间为 LocalDateTime 对象
+        LocalDateTime start = LocalDateTime.parse(startTime,DATE_TIME_FORMATTER);
+        LocalDateTime end = LocalDateTime.parse(endTime,DATE_TIME_FORMATTER);
+        //获取团队全部日程
+        List<Schedule> schedules = scheduleMapper.selectScheduleByGroupId(groupId);
+        //定义符合时间的日程
+        List<Schedule> scheduleList=new ArrayList<>();
+        for(Schedule schedule:schedules){
+            // 判断日程在给定时间范围内
+            if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
+                scheduleList.add(schedule);
+            }
+        }
+        return scheduleList;
     }
+}
 
 
 

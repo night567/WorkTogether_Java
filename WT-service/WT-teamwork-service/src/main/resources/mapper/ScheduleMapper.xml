@@ -27,4 +27,10 @@
         from wt_teamwork.wt_schedule
         where id = #{Id} and is_deleted=0 and group_id=#{groupId}
     </select>
+
+    <select id="selectScheduleByGroupId" resultType="cn.edu.szu.teamwork.pojo.domain.Schedule" parameterType="java.lang.Long">
+        select *
+        from wt_teamwork.wt_schedule
+        where is_deleted=0 and group_id=#{groupId}
+    </select>
 </mapper>

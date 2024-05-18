@@ -22,5 +22,7 @@ public interface ScheduleService extends IService<Schedule> {
 
      boolean isScheduleInTimeRange(Schedule schedule, LocalDateTime startTime, LocalDateTime endTime);
 
+    List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime);
+
 
 }

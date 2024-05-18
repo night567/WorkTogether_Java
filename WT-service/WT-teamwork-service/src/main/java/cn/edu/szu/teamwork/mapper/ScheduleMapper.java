@@ -15,6 +15,7 @@ import java.util.List;
 @Mapper
 public interface ScheduleMapper extends BaseMapper<Schedule> {
     Schedule selectScheduleByIdAndGroupId(Long Id, Long groupId);
+    List<Schedule> selectScheduleByGroupId(Long groupId);
 
 }
 
