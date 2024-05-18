@@ -28,7 +28,7 @@ public class ScheduleController {
             }
             return new Result(Code.SAVE_ERR, false, "创建失败");
         } catch (Exception e) {
-            return new Result(Code.SAVE_ERR, false, "创建失败");
+            return new Result(Code.SAVE_ERR, false, e.getMessage());
         }
     }
 
@@ -50,7 +50,7 @@ public class ScheduleController {
             }
             return new Result(Code.UPDATE_ERR, false, "更新失败");
         } catch (Exception e) {
-            return new Result(Code.UPDATE_ERR, false, "更新失败");
+            return new Result(Code.UPDATE_ERR, false, e.getMessage());
         }
     }
 }
