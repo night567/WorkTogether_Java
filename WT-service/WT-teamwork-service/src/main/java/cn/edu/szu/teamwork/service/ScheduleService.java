@@ -1,5 +1,6 @@
 package cn.edu.szu.teamwork.service;
 
+import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ScheduleService extends IService<Schedule> {
 
+    boolean createSchedule(ScheduleDTO scheduleDTO);
+
+    boolean updateSchedule(ScheduleDTO scheduleDTO);
 }

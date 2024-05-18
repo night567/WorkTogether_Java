@@ -30,6 +30,10 @@ spring:
           uri: lb://company-service
           predicates:
             - Path=/api/company_user/**,/api/company/**,/api/group/**,/api/dept/**
+        - id: teamwork-service
+          uri: lb://teamwork-service
+          predicates:
+            - Path=/api/schedule/**
       globalcors: # 跨域设置
         corsConfigurations:
           '[/**]':

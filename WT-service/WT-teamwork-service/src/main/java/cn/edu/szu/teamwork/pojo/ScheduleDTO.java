@@ -1,9 +1,11 @@
 package cn.edu.szu.teamwork.pojo;
 
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +19,9 @@ public class ScheduleDTO {
     private String creatorId; // 创建者ID
     private List<String> userIds; // 参与者ID
     private String title; // 标题
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startTime; // 开始时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endTime; // 结束时间
     private Integer type; // 日程类型
     private String description; // 描述

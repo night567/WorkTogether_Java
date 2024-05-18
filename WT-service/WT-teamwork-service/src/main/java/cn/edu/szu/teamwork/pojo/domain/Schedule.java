@@ -1,7 +1,11 @@
 package cn.edu.szu.teamwork.pojo.domain;
 
+import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,6 +15,9 @@ import java.time.LocalDateTime;
  * @TableName wt_schedule
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName(value = "wt_schedule")
 public class Schedule implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
