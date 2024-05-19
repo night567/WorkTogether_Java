@@ -21,4 +21,10 @@
         manager_id,description,member_num,
         dept_num,create_time,is_deleted
     </sql>
+    <select id="selectMyGroup" resultType="cn.edu.szu.company.pojo.domain.Group">
+        SELECT g.id as id, g.company_id as company_id, g.name as name, g.manager_id as manager_id, g.description as description, g.member_num as member_num, g.dept_num as dept_num, g.create_time as create_time, g.is_deleted as is_deleted
+        FROM wt_company.wt_group g
+        INNER JOIN wt_company.wt_group_user gu ON g.id = gu.group_id
+        WHERE gu.user_id = #{uid} AND g.company_id = #{cid} AND g.is_deleted = 0 AND gu.is_deleted = 0;
+    </select>
 </mapper>

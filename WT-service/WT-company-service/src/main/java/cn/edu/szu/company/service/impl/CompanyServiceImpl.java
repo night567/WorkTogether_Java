@@ -1,15 +1,17 @@
 package cn.edu.szu.company.service.impl;
 
-import cn.edu.szu.company.pojo.domain.Company;
 import cn.edu.szu.company.exception.CompanyNotFoundException;
 import cn.edu.szu.company.mapper.CompanyMapper;
+import cn.edu.szu.company.pojo.domain.Company;
 import cn.edu.szu.company.service.CompanyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 86199
@@ -17,8 +19,7 @@ import java.util.Date;
  * @createDate 2024-04-16 16:59:21
  */
 @Service
-public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company>
-        implements CompanyService {
+public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> implements CompanyService {
     @Autowired
     CompanyMapper companyMapper;
 
@@ -98,6 +99,15 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company>
     @Override
     public Company getCompanyById(Long id) {
         return companyMapper.selectById(id);
+    }
+
+    @Override
+    public List<Company> selectMyCompany(Long uid) {
+        if (uid == null) {
+            return Collections.emptyList();
+        }
+
+        return companyMapper.selectMyCompany(uid);
     }
 }
 

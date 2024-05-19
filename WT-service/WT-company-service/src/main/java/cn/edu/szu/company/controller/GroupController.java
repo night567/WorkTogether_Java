@@ -2,8 +2,10 @@ package cn.edu.szu.company.controller;
 
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
+import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.company.pojo.GroupDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import cn.edu.szu.company.service.GroupService;
 import cn.hutool.core.io.FileUtil;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -141,6 +144,16 @@ public class GroupController {
         return new Result(Code.GET_ERR, null, "查询失败");
     }
 
+    @GetMapping("/myGroup")
+    public Result getMyGroup(@RequestHeader("Authorization") String token, @RequestHeader("companyId") Long cid) {
+        Long uid = JwtUtil.getUserId(token);
+        List<Group> groupList = groupService.selectMyGroup(uid, cid);
+        if (groupList != null) {
+            return new Result(Code.GET_OK, groupList, "查询成功");
+        }
+        return new Result(Code.GET_ERR, Collections.emptyList(), "查询失败");
+    }
+
     /**
      * 获取团队内所有成员
      * 需要返回MemberDTO的所有内容
@@ -206,10 +219,10 @@ public class GroupController {
         return new Result(Code.GET_ERR, res, "查询成功");
     }
 
-//    @RequestParam List<Long> ids
+    //    @RequestParam List<Long> ids
     @DeleteMapping("/members/{gid}")
-    public Result deleteGroupMembers(@RequestParam List<Long> ids,@PathVariable Long gid){
-        boolean k = groupService.delMemberFromGroup(ids,gid);
+    public Result deleteGroupMembers(@RequestParam List<Long> ids, @PathVariable Long gid) {
+        boolean k = groupService.delMemberFromGroup(ids, gid);
 
         if (k) {
             return new Result(Code.DELETE_OK, null, "删除成功");

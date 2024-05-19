@@ -2,6 +2,7 @@ package cn.edu.szu.company.service;
 
 import cn.edu.szu.company.pojo.GroupDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,12 +26,16 @@ public interface GroupService {
 
     GroupDTO getGroupById(Long id);
 
+    List<Group> selectMyGroup(Long uid, Long cid);
+
     List<MemberDTO> getGroupMember(Long id);
 
     boolean addMemberToGroup(List<String> emails, Long gid);
 
     boolean delMemberFromGroup(Long uid, Long gid);
+
     boolean delMemberFromGroup(List<Long> uid, Long gid);
+
     boolean updateMember(UserGroupRequest request);
 
     List<String> getPosition();

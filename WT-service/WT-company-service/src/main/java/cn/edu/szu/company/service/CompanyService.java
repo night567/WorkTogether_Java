@@ -3,6 +3,8 @@ package cn.edu.szu.company.service;
 import cn.edu.szu.company.pojo.domain.Company;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author 86199
 * @description 针对表【wt_company(企业)】的数据库操作Service
@@ -21,4 +23,5 @@ public interface CompanyService extends IService<Company> {
 
     public Company getCompanyById(Long id);
 
+    List<Company> selectMyCompany(Long uid);
 }

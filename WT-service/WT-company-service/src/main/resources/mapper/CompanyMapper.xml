@@ -23,4 +23,11 @@
         address,postal_code,create_time,
         is_deleted
     </sql>
+
+    <select id="selectMyCompany" resultType="cn.edu.szu.company.pojo.domain.Company">
+        SELECT c.id as id, c.name as name, c.founder_id as founder_id, c.url as url, c.industry as industry, c.size as size, c.address as address, c.postal_code as postal_code, c.create_time as create_time, c.is_deleted as is_deleted
+        FROM wt_company.wt_company c
+        INNER JOIN wt_company.wt_company_user cu ON c.id = cu.company_id
+        WHERE cu.user_id = #{uid} AND cu.is_deleted = 0 AND c.is_deleted = 0;
+    </select>
 </mapper>

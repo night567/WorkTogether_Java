@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 /**
@@ -17,6 +20,7 @@ public class Company implements Serializable {
      * 
      */
     @TableId(value = "id",type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -29,6 +33,7 @@ public class Company implements Serializable {
      * 创建人id
      */
     @TableField(value = "founder_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long founderId;
 
     /**

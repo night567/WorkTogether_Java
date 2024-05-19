@@ -28,6 +28,7 @@ public class GroupDTO {
     public GroupDTO(Group group) {
         this.id = group.getId();
         this.name = group.getName();
+        this.managerId = group.getManagerId();
         this.description = group.getDescription();
         this.memberNum = group.getMemberNum();
         this.deptNum = group.getDeptNum();

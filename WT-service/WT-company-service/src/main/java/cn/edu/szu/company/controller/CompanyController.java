@@ -8,6 +8,9 @@ import cn.edu.szu.company.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/company")
 public class CompanyController {
@@ -32,9 +35,9 @@ public class CompanyController {
      * @return
      */
     @DeleteMapping("/delCompany/{id}")
-    public Result delCompany(@PathVariable Long id){
+    public Result delCompany(@PathVariable Long id) {
         companyService.deleteCompany(id);
-        return new Result(Code.DELETE_OK,null,"更新成功");
+        return new Result(Code.DELETE_OK, null, "更新成功");
     }
 
     /**
@@ -43,14 +46,14 @@ public class CompanyController {
      * @return
      */
     @PostMapping("/createCompany")
-    public Result addCompany(@RequestHeader("Authorization") String token, @RequestBody Company company){
+    public Result addCompany(@RequestHeader("Authorization") String token, @RequestBody Company company) {
         System.out.println("???");
         Long uid = JwtUtil.getUserId(token);
         company.setFounderId(uid);
         System.out.println(company);
         companyService.addCompany(company);
 
-        return new Result(Code.SAVE_OK,null,"创建公司成功");
+        return new Result(Code.SAVE_OK, null, "创建公司成功");
     }
 
     /**
@@ -59,10 +62,18 @@ public class CompanyController {
      * @return
      */
     @GetMapping("/info/{id}")
-    public Result selectCompany(@PathVariable Long id){
+    public Result selectCompany(@PathVariable Long id) {
         Company company = companyService.selectCompany(id);
-        return new Result(Code.GET_OK,company,"创建公司成功");
+        return new Result(Code.GET_OK, company, "创建公司成功");
     }
 
-
+    @GetMapping("/myCompany")
+    public Result selectMyCompany(@RequestHeader("Authorization") String token) {
+        Long uid = JwtUtil.getUserId(token);
+        List<Company> companyList = companyService.selectMyCompany(uid);
+        if (companyList != null) {
+            return new Result(Code.GET_OK, companyList, "查询成功");
+        }
+        return new Result(Code.GET_ERR, Collections.emptyList(), "查询失败");
+    }
 }

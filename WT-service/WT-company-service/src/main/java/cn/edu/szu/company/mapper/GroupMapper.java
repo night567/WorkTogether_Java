@@ -4,6 +4,8 @@ import cn.edu.szu.company.pojo.domain.Group;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * @author zgr24
 * @description 针对表【wt_group(团队)】的数据库操作Mapper
@@ -12,7 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface GroupMapper extends BaseMapper<Group> {
-
+    List<Group> selectMyGroup(Long uid, Long cid);
 }
 
 

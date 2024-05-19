@@ -4,6 +4,8 @@ import cn.edu.szu.company.pojo.domain.Company;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * @author 86199
 * @description 针对表【wt_company(企业)】的数据库操作Mapper
@@ -12,6 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface CompanyMapper extends BaseMapper<Company> {
+    List<Company> selectMyCompany(Long uid);
 }
 
 

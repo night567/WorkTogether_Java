@@ -136,7 +136,7 @@ public class GroupServiceImpl implements GroupService {
 
                 // 创建/更新团队
                 Object row0 = row.get(0);
-                if (row0 == null || StrUtil.isBlank(row0.toString())|| row0.toString().equals("A")) {
+                if (row0 == null || StrUtil.isBlank(row0.toString()) || row0.toString().equals("A")) {
                     boolean isCreated = createGroup(companyId, groupDTO);
                     if (!isCreated) {
                         throw new RuntimeException("创建失败");
@@ -243,6 +243,15 @@ public class GroupServiceImpl implements GroupService {
         return null;
     }
 
+    @Override
+    public List<Group> selectMyGroup(Long uid, Long cid) {
+        if (uid == null || cid == null) {
+            return null;
+        }
+
+        return groupMapper.selectMyGroup(uid, cid);
+    }
+
     /**
      * 获取成员列表
      *
@@ -321,7 +330,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean updateMember(UserGroupRequest request) {
         Long pid = groupUserMapper.selectPositionId(request.getPosition());
-        if (pid == null){
+        if (pid == null) {
             return false;
         }
         int k = groupUserMapper.updateMember(request.getId(), request.getGroupId(), pid);

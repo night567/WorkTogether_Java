@@ -1,6 +1,8 @@
 package cn.edu.szu.company.pojo.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,14 +17,17 @@ import java.util.Date;
 @TableName(value = "wt_group")
 public class Group implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField(value = "company_id")
     private Long companyId; // 所属企业ID
 
     @TableField(value = "name")
     private String name; // 部门名称
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField(value = "manager_id")
     private Long managerId; // 负责人ID
 
