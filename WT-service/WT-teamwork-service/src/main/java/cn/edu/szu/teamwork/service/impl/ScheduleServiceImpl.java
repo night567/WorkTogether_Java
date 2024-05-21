@@ -222,6 +222,12 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         }
         return scheduleList;
     }
+
+    @Override
+    public Schedule selectScheduleById(Long id) {
+        Schedule schedule = scheduleMapper.selectById(id);
+        return schedule;
+    }
 }
 
 

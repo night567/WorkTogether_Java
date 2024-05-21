@@ -6,6 +6,7 @@ import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.service.ScheduleService;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,4 +107,14 @@ public class ScheduleController {
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");
     }
+
+    @GetMapping("/{id}")
+    public Result selectScheduleById(@PathVariable Long id){
+        Schedule schedule = scheduleService.selectScheduleById(id);
+        if (schedule != null){
+            return new Result(Code.GET_OK,schedule,"查询成功！");
+        }
+        return  new Result(Code.GET_ERR,null,"查询失败！");
+    }
+
 }

@@ -25,5 +25,5 @@ public interface ScheduleService extends IService<Schedule> {
     List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime,boolean flag);
     List<Schedule> selectScheduleByType(Long groupId,Long type,String startTime,String endTime,boolean flag);
 
-
+    Schedule selectScheduleById(Long id);
 }
