@@ -169,7 +169,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Override
     public boolean updateDUPosition(UserCompanyRequest request) {
         Long pid = departmentMapper.selectPositionId(request.getPosition());
-        if (pid == null) {
+        if(pid == null){
             return false;
         }
         int k = departmentMapper.updateUDPosition(request.getUid(), request.getDid(), pid);
@@ -194,6 +194,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             deptMember.setEmail(user.getEmail());
             deptMember.setName(user.getName());
         }
+
 
         return deptMembers;
     }

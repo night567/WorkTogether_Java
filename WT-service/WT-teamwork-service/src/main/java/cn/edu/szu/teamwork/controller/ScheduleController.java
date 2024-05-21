@@ -6,7 +6,9 @@ import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.service.ScheduleService;
+import cn.hutool.jwt.JWTUtil;
 import com.sun.org.apache.regexp.internal.RE;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -110,11 +112,22 @@ public class ScheduleController {
 
     @GetMapping("/{id}")
     public Result selectScheduleById(@PathVariable Long id){
-        Schedule schedule = scheduleService.selectScheduleById(id);
+        ScheduleDTO schedule = scheduleService.selectScheduleById(id);
+
         if (schedule != null){
             return new Result(Code.GET_OK,schedule,"查询成功！");
         }
         return  new Result(Code.GET_ERR,null,"查询失败！");
+    }
+
+    @PutMapping("/join/{id}")
+    public Result judgeSchedule(@PathVariable Long id,@RequestHeader String Authorization){
+        Long userId = JwtUtil.getUserId(Authorization);
+        boolean check = scheduleService.judgeSchedule(id,userId);
+        if (check){
+            return new Result(Code.UPDATE_OK,null,"日程不冲突");
+        }
+        return new Result(Code.UPDATE_ERR,null,"日程冲突");
     }
 
 }

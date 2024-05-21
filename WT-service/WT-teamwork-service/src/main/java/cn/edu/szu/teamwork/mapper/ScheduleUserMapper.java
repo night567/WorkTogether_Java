@@ -4,6 +4,7 @@ import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ import java.util.List;
 public interface ScheduleUserMapper extends BaseMapper<ScheduleUser> {
     List<Long> selectScheduleIdByUserId(Long userId);
 
+    @Select("select user_id from wt_schedule_user where schedule_id = #{id} and is_deleted = 0")
+    List<String> selectUserIdByScheduleId(Long id);
 
 }
 

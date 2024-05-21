@@ -8,6 +8,7 @@ import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import cn.edu.szu.teamwork.service.ScheduleService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -224,9 +225,37 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     }
 
     @Override
-    public Schedule selectScheduleById(Long id) {
+    public ScheduleDTO selectScheduleById(Long id) {
         Schedule schedule = scheduleMapper.selectById(id);
-        return schedule;
+        ScheduleDTO scheduleDTO = new ScheduleDTO();
+        BeanUtils.copyProperties(schedule,scheduleDTO);
+        scheduleDTO.setId(String.valueOf(schedule.getId()));
+        scheduleDTO.setGroupId(String.valueOf(schedule.getGroupId()));
+        scheduleDTO.setCreatorId(String.valueOf(schedule.getCreatorId()));
+
+        scheduleDTO.setUserIds(scheduleUserMapper.selectUserIdByScheduleId(id));
+        return scheduleDTO;
+    }
+
+    @Override
+    public boolean judgeSchedule(Long scheduleId, Long uid) {
+        List<Long> ids = scheduleUserMapper.selectScheduleIdByUserId(uid);
+        Schedule newSchedule = scheduleMapper.selectById(scheduleId);
+        List<Schedule> schedules = scheduleMapper.selectBatchIds(ids);
+        System.out.println(schedules);
+        if (schedules.isEmpty()){
+            return true;
+        }
+        for (Schedule schedule:schedules){
+            if (schedule.getStartTime().isAfter(newSchedule.getStartTime()) && schedule.getStartTime().isBefore(newSchedule.getEndTime())){
+                return false;
+            }
+            if (schedule.getEndTime().isAfter(newSchedule.getStartTime()) && schedule.getEndTime().isBefore(newSchedule.getEndTime())){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
