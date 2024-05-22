@@ -126,7 +126,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     }
     //获取个人日程
     @Override
-    public List<Schedule> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime,boolean flag) {
+    public List<ScheduleDTO> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime,boolean flag) {
         // 查询用户日程ID集合
         List<Long> scheduleIds = scheduleUserMapper.selectScheduleIdByUserId(userId);
 
@@ -137,19 +137,26 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
              start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
              end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
         }
-        List<Schedule> scheduleList = new ArrayList<>();
+        List<ScheduleDTO> scheduleList = new ArrayList<>();
+
+
         for(Long id : scheduleIds) {
             // 查询日程
             Schedule schedule = scheduleMapper.selectScheduleByIdAndGroupId(id, groupId);
+            ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(schedule.getId());
+            List<ScheduleUser> scheduleUsers=new ArrayList<>();
+            scheduleUsers.add(scheduleUser);
+            ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
+            scheduleDTO.setScheduleUsers(scheduleUsers);
 
             //判断获取全部还是时间区内的
             if(flag==true) {
                 // 判断日程在给定时间范围内
-                if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
-                    scheduleList.add(schedule);
+                if (schedule != null && isScheduleInTimeRange(scheduleDTO, start, end)) {
+                    scheduleList.add(scheduleDTO);
                 }
             }else {
-                scheduleList.add(schedule);
+                scheduleList.add(scheduleDTO);
             }
         }
             return scheduleList;
@@ -160,9 +167,9 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     // 判断日程是否在给定时间范围内的辅助方法
     @Override
-    public boolean isScheduleInTimeRange(Schedule schedule, LocalDateTime startTime, LocalDateTime endTime) {
-        LocalDateTime scheduleStartTime = schedule.getStartTime();
-        LocalDateTime scheduleEndTime = schedule.getEndTime();
+    public boolean isScheduleInTimeRange(ScheduleDTO scheduleDTO, LocalDateTime startTime, LocalDateTime endTime) {
+        LocalDateTime scheduleStartTime = scheduleDTO.getStartTime();
+        LocalDateTime scheduleEndTime = scheduleDTO.getEndTime();
 
         // 日程开始时间晚于给定时间范围的结束时间，或者日程结束时间早于给定时间范围的开始时间，则日程不在时间范围内
         return !scheduleStartTime.isAfter(endTime) && !scheduleEndTime.isBefore(startTime);
@@ -170,7 +177,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     //获取团队日程集合
     @Override
-    public List<Schedule> selectScheduleByGroupId(Long groupId,String startTime,String endTime,boolean flag) {
+    public List<ScheduleDTO> selectScheduleByGroupId(Long groupId,String startTime,String endTime,boolean flag) {
         // 解析字符串形式的时间为 LocalDateTime 对象
         LocalDateTime start=null;
         LocalDateTime end=null;
@@ -180,17 +187,39 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         }
         //获取团队全部日程
         List<Schedule> schedules = scheduleMapper.selectScheduleByGroupId(groupId);
-        //定义符合时间的日程
-        List<Schedule> scheduleList=new ArrayList<>();
+        List<ScheduleDTO> schedulesDTOs=new ArrayList<>();
         for(Schedule schedule:schedules){
+            ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
+            schedulesDTOs.add(scheduleDTO);
+        }
+        //获取日程参与者
+        for(ScheduleDTO scheduleDTO:schedulesDTOs){
+            List<ScheduleUser> scheduleUsers=new ArrayList<>();
+            String idAsString = scheduleDTO.getId();
+            try {
+                Long scheduleId = Long.parseLong(idAsString);
+                ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(scheduleId);
+                // 进一步处理 scheduleUser
+                scheduleUsers.add(scheduleUser);
+                scheduleDTO.setScheduleUsers(scheduleUsers);
+            } catch (NumberFormatException e) {
+                // 处理无法转换为 Long 类型的情况
+                throw e;
+            }
+
+        }
+
+        //定义符合时间的日程
+        List<ScheduleDTO> scheduleList=new ArrayList<>();
+        for(ScheduleDTO scheduleDTO:schedulesDTOs){
             if(flag==true) {
                 // 判断日程在给定时间范围内
-                if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
-                    scheduleList.add(schedule);
+                if (scheduleDTO != null && isScheduleInTimeRange(scheduleDTO, start, end)) {
+                    scheduleList.add(scheduleDTO);
                 }
             }
             else {
-                scheduleList.add(schedule);
+                scheduleList.add(scheduleDTO);
             }
         }
         return scheduleList;
@@ -198,7 +227,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     //获取不同类型日程集合
     @Override
-    public List<Schedule> selectScheduleByType(Long groupId, Long type,String startTime,String endTime,boolean flag) {
+    public List<ScheduleDTO> selectScheduleByType(Long groupId, Long type,String startTime,String endTime,boolean flag) {
         // 解析字符串形式的时间为 LocalDateTime 对象
         LocalDateTime start=null;
         LocalDateTime end=null;
@@ -208,16 +237,35 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         }
         //获取该类型全部日程
         List<Schedule> schedules = scheduleMapper.selectScheduleByType(groupId, type);
-        //定义符合时间的日程
-        List<Schedule> scheduleList=new ArrayList<>();
+        List<ScheduleDTO> schedulesDTOs=new ArrayList<>();
         for(Schedule schedule:schedules){
+            ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
+            schedulesDTOs.add(scheduleDTO);
+        }
+        for(ScheduleDTO scheduleDTO:schedulesDTOs){
+            List<ScheduleUser> scheduleUsers=new ArrayList<>();
+            String idAsString = scheduleDTO.getId();
+            try {
+                Long scheduleId = Long.parseLong(idAsString);
+                ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(scheduleId);
+                // 进一步处理 scheduleUser
+                scheduleUsers.add(scheduleUser);
+                scheduleDTO.setScheduleUsers(scheduleUsers);
+            } catch (NumberFormatException e) {
+                // 处理无法转换为 Long 类型的情况
+                throw e;
+            }
+        }
+        //定义符合时间的日程
+        List<ScheduleDTO> scheduleList=new ArrayList<>();
+        for(ScheduleDTO scheduleDTO:schedulesDTOs){
             if(flag==true){
                 // 判断日程在给定时间范围内
-                if (schedule != null && isScheduleInTimeRange(schedule, start, end)) {
-                    scheduleList.add(schedule);
+                if (scheduleDTO != null && isScheduleInTimeRange(scheduleDTO, start, end)) {
+                    scheduleList.add(scheduleDTO);
                 }
             }else {
-                scheduleList.add(schedule);
+                scheduleList.add(scheduleDTO);
             }
 
         }

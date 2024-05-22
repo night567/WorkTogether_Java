@@ -7,7 +7,6 @@ import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.service.ScheduleService;
 import cn.hutool.jwt.JWTUtil;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class ScheduleController {
     //获取个人日程（时间区内）
     @GetMapping("/user")
     private Result selectUserSchedule(@RequestParam Long groupId, @RequestParam Long userId, @RequestParam String startTime, @RequestParam String endTime){
-        List<Schedule> schedules = scheduleService.selectUserSchedule(groupId, userId, startTime, endTime,true);
+        List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, userId, startTime, endTime,true);
         if(schedules==null||schedules.isEmpty())
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");
@@ -71,7 +70,7 @@ public class ScheduleController {
     //获取团队日程（时间区内）
     @GetMapping("/group")
     private Result selectGroupSchedule(@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime){
-        List<Schedule> schedules = scheduleService.selectScheduleByGroupId(groupId, startTime, endTime,true);
+        List<ScheduleDTO> schedules = scheduleService.selectScheduleByGroupId(groupId, startTime, endTime,true);
         if(schedules==null||schedules.isEmpty())
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");
@@ -79,7 +78,7 @@ public class ScheduleController {
     //获取不同类型日程（时间区内）
     @GetMapping("/type")
     private Result selectScheduleByType(@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime,@RequestParam Long type){
-        List<Schedule> schedules = scheduleService.selectScheduleByType(groupId, type,startTime, endTime,true);
+        List<ScheduleDTO> schedules = scheduleService.selectScheduleByType(groupId, type,startTime, endTime,true);
         if(schedules==null||schedules.isEmpty())
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");
@@ -87,7 +86,7 @@ public class ScheduleController {
     //获取个人全部日程
     @GetMapping("/user/all")
     private Result selectUserScheduleAll(@RequestParam Long groupId, @RequestParam Long userId){
-        List<Schedule> schedules = scheduleService.selectUserSchedule(groupId, userId, null,null,false);
+        List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, userId, null,null,false);
         if(schedules==null||schedules.isEmpty())
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");
@@ -96,7 +95,7 @@ public class ScheduleController {
     //获取团队全部日程
     @GetMapping("/group/all")
     private Result selectGroupScheduleAll(@RequestParam Long groupId){
-        List<Schedule> schedules = scheduleService.selectScheduleByGroupId(groupId, null,null,false);
+        List<ScheduleDTO> schedules = scheduleService.selectScheduleByGroupId(groupId, null,null,false);
         if(schedules==null||schedules.isEmpty())
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");
@@ -104,7 +103,7 @@ public class ScheduleController {
     //获取不同类型全部日程
     @GetMapping("/type/all")
     private Result selectScheduleByTypeAll(@RequestParam Long groupId,@RequestParam Long type){
-        List<Schedule> schedules = scheduleService.selectScheduleByType(groupId, type,null,null,false);
+        List<ScheduleDTO> schedules = scheduleService.selectScheduleByType(groupId, type,null,null,false);
         if(schedules==null||schedules.isEmpty())
             return  new Result(Code.GET_ERR,schedules,"查询失败！");
         return  new Result(Code.GET_OK,schedules,"查询成功！");

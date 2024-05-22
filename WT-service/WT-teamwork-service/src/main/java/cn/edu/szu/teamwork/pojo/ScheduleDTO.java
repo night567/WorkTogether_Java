@@ -1,6 +1,7 @@
 package cn.edu.szu.teamwork.pojo;
 
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
+import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,11 +26,13 @@ public class ScheduleDTO {
     private LocalDateTime endTime; // 结束时间
     private Integer type; // 日程类型
     private String description; // 描述
+    private List<ScheduleUser> scheduleUsers; //参与者
 
     public ScheduleDTO(Schedule schedule) {
         this.id = schedule.getId().toString();
         this.groupId = schedule.getGroupId().toString();
-        this.creatorId = schedule.getCreatorId().toString();
+        if(schedule.getCreatorId()!=null)
+            this.creatorId = schedule.getCreatorId().toString();
         this.title = schedule.getTitle();
         this.startTime = schedule.getStartTime();
         this.endTime = schedule.getEndTime();
