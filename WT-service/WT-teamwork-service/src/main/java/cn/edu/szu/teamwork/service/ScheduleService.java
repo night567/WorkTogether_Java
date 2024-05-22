@@ -28,7 +28,7 @@ public interface ScheduleService extends IService<Schedule> {
 
     ScheduleDTO selectScheduleById(Long id);
 
-    List<ScheduleUser> selectScheduleMemberList(Long id);
+    List<ScheduleUser> selectScheduleMemberList(Long id, Integer type);
 
     boolean judgeSchedule(Long scheduleId, Long uid);
 

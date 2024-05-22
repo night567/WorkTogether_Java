@@ -282,9 +282,10 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     }
 
     @Override
-    public List<ScheduleUser> selectScheduleMemberList(Long id) {
+    public List<ScheduleUser> selectScheduleMemberList(Long id, Integer type) {
         LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ScheduleUser::getScheduleId, id);
+        lqw.eq(ScheduleUser::getJoinStatus, type);
         return scheduleUserMapper.selectList(lqw);
     }
 
