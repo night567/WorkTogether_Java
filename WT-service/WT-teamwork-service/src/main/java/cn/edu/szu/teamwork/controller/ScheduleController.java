@@ -121,6 +121,15 @@ public class ScheduleController {
         return new Result(Code.GET_ERR, null, "查询失败！");
     }
 
+    @GetMapping("/member/{id}")
+    public Result selectScheduleMember(@PathVariable Long id) {
+        List<ScheduleUser> scheduleUsers = scheduleService.selectScheduleMemberList(id);
+        if (scheduleUsers != null && !scheduleUsers.isEmpty()) {
+            return new Result(Code.GET_OK, scheduleUsers, "查询成功！");
+        }
+        return new Result(Code.GET_ERR, null, "查询失败！");
+    }
+
     @PutMapping("/join/{id}/{force}")
     public Result judgeSchedule(@PathVariable Long id, @RequestHeader String Authorization, @PathVariable Integer force) {
         Long userId = JwtUtil.getUserId(Authorization);
