@@ -1,6 +1,8 @@
 package cn.edu.szu.teamwork.mapper;
 
+import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
+import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,6 +19,8 @@ public interface ScheduleMapper extends BaseMapper<Schedule> {
     Schedule selectScheduleByIdAndGroupId(Long Id, Long groupId);
     List<Schedule> selectScheduleByGroupId(Long groupId);
     List<Schedule> selectScheduleByType(Long groupId,Long type);
+
+    List<ScheduleUser> selectScheduleUserByGroupId(Long groupId);
 
 }
 

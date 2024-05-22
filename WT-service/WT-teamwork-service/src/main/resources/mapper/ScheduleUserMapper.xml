@@ -22,4 +22,10 @@
         from wt_teamwork.wt_schedule_user
         where user_id = #{userId} and is_deleted=0
     </select>
+
+    <select id="selectUserByScheduleId" resultType="cn.edu.szu.teamwork.pojo.domain.ScheduleUser" parameterType="java.lang.Long">
+        select *
+        from wt_teamwork.wt_schedule_user
+        where schedule_id = #{ScheduleId} and is_deleted=0
+    </select>
 </mapper>

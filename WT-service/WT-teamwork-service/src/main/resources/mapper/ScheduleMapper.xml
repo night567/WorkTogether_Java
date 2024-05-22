@@ -39,4 +39,10 @@
         from wt_teamwork.wt_schedule
         where is_deleted=0 and group_id=#{groupId} and type=#{type}
     </select>
+
+    <select id="selectScheduleUserByGroupId" resultType="java.util.List" parameterType="java.lang.Long">
+        select su.*
+        from wt_teamwork.wt_schedule s,wt_teamwork.wt_schedule su
+        where s.is_deleted=0 and s.group_id=#{groupId} and s.id=su.schedule_id
+    </select>
 </mapper>
