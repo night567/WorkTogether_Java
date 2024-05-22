@@ -141,13 +141,10 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         }
         List<ScheduleDTO> scheduleList = new ArrayList<>();
 
-
         for (Long id : scheduleIds) {
             // 查询日程
             Schedule schedule = scheduleMapper.selectScheduleByIdAndGroupId(id, groupId);
-            ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(schedule.getId());
-            List<ScheduleUser> scheduleUsers = new ArrayList<>();
-            scheduleUsers.add(scheduleUser);
+            List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(schedule.getId());
             ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
             scheduleDTO.setScheduleUsers(scheduleUsers);
 
@@ -196,13 +193,12 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         }
         //获取日程参与者
         for (ScheduleDTO scheduleDTO : schedulesDTOs) {
-            List<ScheduleUser> scheduleUsers = new ArrayList<>();
+
             String idAsString = scheduleDTO.getId();
             try {
                 Long scheduleId = Long.parseLong(idAsString);
-                ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(scheduleId);
+                List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(scheduleId);
                 // 进一步处理 scheduleUser
-                scheduleUsers.add(scheduleUser);
                 scheduleDTO.setScheduleUsers(scheduleUsers);
             } catch (NumberFormatException e) {
                 // 处理无法转换为 Long 类型的情况
@@ -244,13 +240,12 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
             schedulesDTOs.add(scheduleDTO);
         }
         for (ScheduleDTO scheduleDTO : schedulesDTOs) {
-            List<ScheduleUser> scheduleUsers = new ArrayList<>();
+
             String idAsString = scheduleDTO.getId();
             try {
                 Long scheduleId = Long.parseLong(idAsString);
-                ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(scheduleId);
+                List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(scheduleId);
                 // 进一步处理 scheduleUser
-                scheduleUsers.add(scheduleUser);
                 scheduleDTO.setScheduleUsers(scheduleUsers);
             } catch (NumberFormatException e) {
                 // 处理无法转换为 Long 类型的情况
