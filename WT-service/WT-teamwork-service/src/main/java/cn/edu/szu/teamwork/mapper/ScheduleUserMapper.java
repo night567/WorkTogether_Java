@@ -20,7 +20,7 @@ public interface ScheduleUserMapper extends BaseMapper<ScheduleUser> {
 
     @Select("select user_id from wt_schedule_user where schedule_id = #{id} and is_deleted = 0")
     List<String> selectUserIdByScheduleId(Long id);
-    List<ScheduleUser> selectUsersByScheduleId(Long ScheduleId);
+    ScheduleUser selectUserByScheduleId(Long ScheduleId);
 }
 
 

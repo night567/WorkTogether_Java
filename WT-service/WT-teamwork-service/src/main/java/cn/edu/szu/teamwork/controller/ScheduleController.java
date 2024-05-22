@@ -59,8 +59,7 @@ public class ScheduleController {
 
     //获取个人日程（时间区内）
     @GetMapping("/user")
-    private Result selectUserSchedule(@RequestHeader("Authorization") String token,@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime) {
-        Long userId = JwtUtil.getUserId(token);
+    private Result selectUserSchedule(@RequestParam Long groupId, @RequestParam Long userId, @RequestParam String startTime, @RequestParam String endTime) {
         List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, userId, startTime, endTime, true);
         if (schedules == null || schedules.isEmpty())
             return new Result(Code.GET_ERR, schedules, "查询失败！");
@@ -87,8 +86,7 @@ public class ScheduleController {
 
     //获取个人全部日程
     @GetMapping("/user/all")
-    private Result selectUserScheduleAll(@RequestHeader("Authorization") String token,@RequestParam Long groupId) {
-        Long userId = JwtUtil.getUserId(token);
+    private Result selectUserScheduleAll(@RequestParam Long groupId, @RequestParam Long userId) {
         List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, userId, null, null, false);
         if (schedules == null || schedules.isEmpty())
             return new Result(Code.GET_ERR, schedules, "查询失败！");
