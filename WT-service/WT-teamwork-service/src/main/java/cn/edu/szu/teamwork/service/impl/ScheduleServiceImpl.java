@@ -257,6 +257,17 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
         return true;
     }
+
+    @Override
+    public boolean joinSchedule(Long scheduleId, Long uid) {
+        ScheduleUser scheduleUser = new ScheduleUser();
+        scheduleUser.setScheduleId(scheduleId);
+        scheduleUser.setUserId(uid);
+        scheduleUser.setJoinStatus(0);
+        scheduleUser.setIsDeleted(false);
+        scheduleUserMapper.insert(scheduleUser);
+        return false;
+    }
 }
 
 

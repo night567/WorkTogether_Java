@@ -120,12 +120,17 @@ public class ScheduleController {
         return  new Result(Code.GET_ERR,null,"查询失败！");
     }
 
-    @PutMapping("/join/{id}")
-    public Result judgeSchedule(@PathVariable Long id,@RequestHeader String Authorization){
+    @PutMapping("/join/{id}/{force}")
+    public Result judgeSchedule(@PathVariable Long id,@RequestHeader String Authorization,@PathVariable Integer force){
         Long userId = JwtUtil.getUserId(Authorization);
         boolean check = scheduleService.judgeSchedule(id,userId);
+        if (force == 1){
+            scheduleService.joinSchedule(id,userId);
+            return new Result(Code.UPDATE_OK,null,"日程不冲突，已经加入日程");
+        }
         if (check){
-            return new Result(Code.UPDATE_OK,null,"日程不冲突");
+            scheduleService.joinSchedule(id,userId);
+            return new Result(Code.UPDATE_OK,null,"日程不冲突，已经加入日程");
         }
         return new Result(Code.UPDATE_ERR,null,"日程冲突");
     }
