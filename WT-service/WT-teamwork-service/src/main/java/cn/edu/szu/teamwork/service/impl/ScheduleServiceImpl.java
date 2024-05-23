@@ -197,7 +197,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
             String idAsString = scheduleDTO.getId();
             try {
                 Long scheduleId = Long.parseLong(idAsString);
-                List<ScheduleUser> scheduleUsers= scheduleUserMapper.selectUsersByScheduleId(scheduleId);
+                List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(scheduleId);
                 // 进一步处理 scheduleUser
 
                 scheduleDTO.setScheduleUsers(scheduleUsers);
@@ -312,14 +312,20 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     }
 
     @Override
+    @Transactional
     public boolean joinSchedule(Long scheduleId, Long uid) {
-        ScheduleUser scheduleUser = new ScheduleUser();
-        scheduleUser.setScheduleId(scheduleId);
-        scheduleUser.setUserId(uid);
-        scheduleUser.setJoinStatus(0);
-        scheduleUser.setIsDeleted(false);
-        scheduleUserMapper.insert(scheduleUser);
-        return false;
+        // 查数据库对象(检验请求正确)
+        LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ScheduleUser::getScheduleId, scheduleId);
+        lqw.eq(ScheduleUser::getUserId, uid);
+        ScheduleUser scheduleUser = scheduleUserMapper.selectOne(lqw);
+        if (scheduleUser == null) {
+            return false;
+        }
+
+        scheduleUser.setJoinStatus(1);
+        scheduleUserMapper.updateById(scheduleUser);
+        return true;
     }
 
     @Override
