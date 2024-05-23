@@ -306,6 +306,12 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         return true;
     }
 
+    /**
+     * 加入日程---强制
+     * @param scheduleId
+     * @param uid
+     * @return
+     */
     @Override
     public boolean joinSchedule(Long scheduleId, Long uid) {
         ScheduleUser scheduleUser = new ScheduleUser();
