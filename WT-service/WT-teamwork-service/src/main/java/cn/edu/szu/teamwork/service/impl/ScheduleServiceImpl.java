@@ -68,6 +68,16 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     @Override
     @Transactional
+    public boolean delSchedule(String id) {
+        scheduleMapper.deleteById(id);
+        LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ScheduleUser::getScheduleId, id);
+        scheduleUserMapper.delete(lqw);
+        return true;
+    }
+
+    @Override
+    @Transactional
     public boolean updateSchedule(ScheduleDTO scheduleDTO) {
         // 创建日程
         Schedule schedule = Schedule.builder()
@@ -145,6 +155,9 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         for (Long id : scheduleIds) {
             // 查询日程
             Schedule schedule = scheduleMapper.selectScheduleByIdAndGroupId(id, groupId);
+            if (schedule == null) {
+                continue;
+            }
             List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(schedule.getId());
             ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
             scheduleDTO.setScheduleUsers(scheduleUsers);
@@ -299,11 +312,12 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         if (schedules.isEmpty()) {
             return true;
         }
+        LocalDateTime newScheduleStartTime = newSchedule.getStartTime();
+        LocalDateTime newScheduleEndTime = newSchedule.getEndTime();
         for (Schedule schedule : schedules) {
-            if (schedule.getStartTime().isAfter(newSchedule.getStartTime()) && schedule.getStartTime().isBefore(newSchedule.getEndTime())) {
-                return false;
-            }
-            if (schedule.getEndTime().isAfter(newSchedule.getStartTime()) && schedule.getEndTime().isBefore(newSchedule.getEndTime())) {
+            LocalDateTime startTime = schedule.getStartTime();
+            LocalDateTime endTime = schedule.getEndTime();
+            if (newScheduleStartTime.isBefore(endTime) && newScheduleEndTime.isAfter(startTime)) {
                 return false;
             }
         }

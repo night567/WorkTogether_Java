@@ -37,7 +37,7 @@ public class ScheduleController {
 
     @DeleteMapping("/{id}")
     private Result deleteSchedule(@PathVariable String id) {
-        boolean isDeleted = scheduleService.removeById(id);
+        boolean isDeleted = scheduleService.delSchedule(id);
         if (isDeleted) {
             return new Result(Code.DELETE_OK, true, "删除成功");
         }
