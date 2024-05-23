@@ -66,13 +66,23 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         return true;
     }
 
+    /**
+     * 删除指定ID的调度信息及其关联的用户调度信息。
+     *
+     * @param id 调度信息的唯一标识符。
+     * @return 始终返回true，表示删除成功。
+     */
     @Override
     @Transactional
     public boolean delSchedule(String id) {
+        // 删除指定ID的调度信息
         scheduleMapper.deleteById(id);
+
+        // 构建查询包装器，删除与该调度信息关联的所有用户调度关系
         LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ScheduleUser::getScheduleId, id);
         scheduleUserMapper.delete(lqw);
+
         return true;
     }
 
