@@ -12,8 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.format.DateTimeFormatter;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,6 +63,16 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
             }
         }
 
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean delSchedule(String id) {
+        scheduleMapper.deleteById(id);
+        LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ScheduleUser::getScheduleId, id);
+        scheduleUserMapper.delete(lqw);
         return true;
     }
 
@@ -124,45 +135,47 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
         return true;
     }
+
     //获取个人日程
     @Override
-    public List<ScheduleDTO> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime,boolean flag) {
+    public List<ScheduleDTO> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime, boolean flag) {
         // 查询用户日程ID集合
         List<Long> scheduleIds = scheduleUserMapper.selectScheduleIdByUserId(userId);
 
         // 解析字符串形式的时间为 LocalDateTime 对象
-        LocalDateTime start=null;
-        LocalDateTime end=null;
-        if(flag==true) {
-             start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
-             end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (flag == true) {
+            start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
+            end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
         }
         List<ScheduleDTO> scheduleList = new ArrayList<>();
 
 
-        for(Long id : scheduleIds) {
+        for (Long id : scheduleIds) {
             // 查询日程
             Schedule schedule = scheduleMapper.selectScheduleByIdAndGroupId(id, groupId);
-            ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(schedule.getId());
-            List<ScheduleUser> scheduleUsers=new ArrayList<>();
-            scheduleUsers.add(scheduleUser);
+            if (schedule == null) {
+                continue;
+            }
+            List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(schedule.getId());
             ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
             scheduleDTO.setScheduleUsers(scheduleUsers);
 
             //判断获取全部还是时间区内的
-            if(flag==true) {
+            if (flag == true) {
                 // 判断日程在给定时间范围内
                 if (schedule != null && isScheduleInTimeRange(scheduleDTO, start, end)) {
                     scheduleList.add(scheduleDTO);
                 }
-            }else {
+            } else {
                 scheduleList.add(scheduleDTO);
             }
         }
-            return scheduleList;
+        return scheduleList;
 
 
-        }
+    }
 
 
     // 判断日程是否在给定时间范围内的辅助方法
@@ -177,30 +190,29 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     //获取团队日程集合
     @Override
-    public List<ScheduleDTO> selectScheduleByGroupId(Long groupId,String startTime,String endTime,boolean flag) {
+    public List<ScheduleDTO> selectScheduleByGroupId(Long groupId, String startTime, String endTime, boolean flag) {
         // 解析字符串形式的时间为 LocalDateTime 对象
-        LocalDateTime start=null;
-        LocalDateTime end=null;
-        if(flag==true) {
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (flag == true) {
             start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
             end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
         }
         //获取团队全部日程
         List<Schedule> schedules = scheduleMapper.selectScheduleByGroupId(groupId);
-        List<ScheduleDTO> schedulesDTOs=new ArrayList<>();
-        for(Schedule schedule:schedules){
+        List<ScheduleDTO> schedulesDTOs = new ArrayList<>();
+        for (Schedule schedule : schedules) {
             ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
             schedulesDTOs.add(scheduleDTO);
         }
         //获取日程参与者
-        for(ScheduleDTO scheduleDTO:schedulesDTOs){
-            List<ScheduleUser> scheduleUsers=new ArrayList<>();
+        for (ScheduleDTO scheduleDTO : schedulesDTOs) {
             String idAsString = scheduleDTO.getId();
             try {
                 Long scheduleId = Long.parseLong(idAsString);
-                ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(scheduleId);
+                List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(scheduleId);
                 // 进一步处理 scheduleUser
-                scheduleUsers.add(scheduleUser);
+
                 scheduleDTO.setScheduleUsers(scheduleUsers);
             } catch (NumberFormatException e) {
                 // 处理无法转换为 Long 类型的情况
@@ -210,15 +222,14 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         }
 
         //定义符合时间的日程
-        List<ScheduleDTO> scheduleList=new ArrayList<>();
-        for(ScheduleDTO scheduleDTO:schedulesDTOs){
-            if(flag==true) {
+        List<ScheduleDTO> scheduleList = new ArrayList<>();
+        for (ScheduleDTO scheduleDTO : schedulesDTOs) {
+            if (flag == true) {
                 // 判断日程在给定时间范围内
                 if (scheduleDTO != null && isScheduleInTimeRange(scheduleDTO, start, end)) {
                     scheduleList.add(scheduleDTO);
                 }
-            }
-            else {
+            } else {
                 scheduleList.add(scheduleDTO);
             }
         }
@@ -227,29 +238,28 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     //获取不同类型日程集合
     @Override
-    public List<ScheduleDTO> selectScheduleByType(Long groupId, Long type,String startTime,String endTime,boolean flag) {
+    public List<ScheduleDTO> selectScheduleByType(Long groupId, Long type, String startTime, String endTime, boolean flag) {
         // 解析字符串形式的时间为 LocalDateTime 对象
-        LocalDateTime start=null;
-        LocalDateTime end=null;
-        if(flag==true) {
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (flag == true) {
             start = LocalDateTime.parse(startTime, DATE_TIME_FORMATTER);
             end = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
         }
         //获取该类型全部日程
         List<Schedule> schedules = scheduleMapper.selectScheduleByType(groupId, type);
-        List<ScheduleDTO> schedulesDTOs=new ArrayList<>();
-        for(Schedule schedule:schedules){
+        List<ScheduleDTO> schedulesDTOs = new ArrayList<>();
+        for (Schedule schedule : schedules) {
             ScheduleDTO scheduleDTO = new ScheduleDTO(schedule);
             schedulesDTOs.add(scheduleDTO);
         }
-        for(ScheduleDTO scheduleDTO:schedulesDTOs){
-            List<ScheduleUser> scheduleUsers=new ArrayList<>();
+        for (ScheduleDTO scheduleDTO : schedulesDTOs) {
+
             String idAsString = scheduleDTO.getId();
             try {
                 Long scheduleId = Long.parseLong(idAsString);
-                ScheduleUser scheduleUser = scheduleUserMapper.selectUserByScheduleId(scheduleId);
+                List<ScheduleUser> scheduleUsers = scheduleUserMapper.selectUsersByScheduleId(scheduleId);
                 // 进一步处理 scheduleUser
-                scheduleUsers.add(scheduleUser);
                 scheduleDTO.setScheduleUsers(scheduleUsers);
             } catch (NumberFormatException e) {
                 // 处理无法转换为 Long 类型的情况
@@ -257,14 +267,14 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
             }
         }
         //定义符合时间的日程
-        List<ScheduleDTO> scheduleList=new ArrayList<>();
-        for(ScheduleDTO scheduleDTO:schedulesDTOs){
-            if(flag==true){
+        List<ScheduleDTO> scheduleList = new ArrayList<>();
+        for (ScheduleDTO scheduleDTO : schedulesDTOs) {
+            if (flag == true) {
                 // 判断日程在给定时间范围内
                 if (scheduleDTO != null && isScheduleInTimeRange(scheduleDTO, start, end)) {
                     scheduleList.add(scheduleDTO);
                 }
-            }else {
+            } else {
                 scheduleList.add(scheduleDTO);
             }
 
@@ -276,7 +286,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     public ScheduleDTO selectScheduleById(Long id) {
         Schedule schedule = scheduleMapper.selectById(id);
         ScheduleDTO scheduleDTO = new ScheduleDTO();
-        BeanUtils.copyProperties(schedule,scheduleDTO);
+        BeanUtils.copyProperties(schedule, scheduleDTO);
         scheduleDTO.setId(String.valueOf(schedule.getId()));
         scheduleDTO.setGroupId(String.valueOf(schedule.getGroupId()));
         scheduleDTO.setCreatorId(String.valueOf(schedule.getCreatorId()));
@@ -286,19 +296,28 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     }
 
     @Override
+    public List<ScheduleUser> selectScheduleMemberList(Long id, Integer type) {
+        LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ScheduleUser::getScheduleId, id);
+        lqw.eq(ScheduleUser::getJoinStatus, type);
+        return scheduleUserMapper.selectList(lqw);
+    }
+
+    @Override
     public boolean judgeSchedule(Long scheduleId, Long uid) {
         List<Long> ids = scheduleUserMapper.selectScheduleIdByUserId(uid);
         Schedule newSchedule = scheduleMapper.selectById(scheduleId);
         List<Schedule> schedules = scheduleMapper.selectBatchIds(ids);
         System.out.println(schedules);
-        if (schedules.isEmpty()){
+        if (schedules.isEmpty()) {
             return true;
         }
-        for (Schedule schedule:schedules){
-            if (schedule.getStartTime().isAfter(newSchedule.getStartTime()) && schedule.getStartTime().isBefore(newSchedule.getEndTime())){
-                return false;
-            }
-            if (schedule.getEndTime().isAfter(newSchedule.getStartTime()) && schedule.getEndTime().isBefore(newSchedule.getEndTime())){
+        LocalDateTime newScheduleStartTime = newSchedule.getStartTime();
+        LocalDateTime newScheduleEndTime = newSchedule.getEndTime();
+        for (Schedule schedule : schedules) {
+            LocalDateTime startTime = schedule.getStartTime();
+            LocalDateTime endTime = schedule.getEndTime();
+            if (newScheduleStartTime.isBefore(endTime) && newScheduleEndTime.isAfter(startTime)) {
                 return false;
             }
         }
@@ -313,14 +332,50 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
      * @return
      */
     @Override
+    @Transactional
     public boolean joinSchedule(Long scheduleId, Long uid) {
-        ScheduleUser scheduleUser = new ScheduleUser();
-        scheduleUser.setScheduleId(scheduleId);
-        scheduleUser.setUserId(uid);
-        scheduleUser.setJoinStatus(0);
-        scheduleUser.setIsDeleted(false);
-        scheduleUserMapper.insert(scheduleUser);
-        return false;
+        // 查数据库对象(检验请求正确)
+        LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ScheduleUser::getScheduleId, scheduleId);
+        lqw.eq(ScheduleUser::getUserId, uid);
+        ScheduleUser scheduleUser = scheduleUserMapper.selectOne(lqw);
+        if (scheduleUser == null) {
+            return false;
+        }
+
+        scheduleUser.setJoinStatus(1);
+        scheduleUserMapper.updateById(scheduleUser);
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean refuseOrTentativeSchedule(ScheduleUser scheduleUserDTO) {
+        Integer joinStatus = scheduleUserDTO.getJoinStatus();
+
+        // 查数据库对象(检验请求正确)
+        LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ScheduleUser::getScheduleId, scheduleUserDTO.getScheduleId());
+        lqw.eq(ScheduleUser::getUserId, scheduleUserDTO.getUserId());
+        ScheduleUser scheduleUser = scheduleUserMapper.selectOne(lqw);
+        if (scheduleUser == null) {
+            return false;
+        }
+
+        // 修改数据库
+        if (joinStatus == null) {
+            return false;
+        } else if (joinStatus == 0) {
+            scheduleUser.setJoinStatus(0);
+            scheduleUser.setRefuseReason(null);
+        } else if (joinStatus == 2) {
+            scheduleUser.setJoinStatus(2);
+            scheduleUser.setRefuseReason(scheduleUserDTO.getRefuseReason());
+        } else {
+            return false;
+        }
+        scheduleUserMapper.updateById(scheduleUser);
+        return true;
     }
 }
 
