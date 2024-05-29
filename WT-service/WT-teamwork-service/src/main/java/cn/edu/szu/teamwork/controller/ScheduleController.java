@@ -67,6 +67,15 @@ public class ScheduleController {
         return new Result(Code.GET_OK, schedules, "查询成功！");
     }
 
+    //获取团队成员日程（时间区内）
+    @GetMapping("/member")
+    private Result selectMemberSchedule(@RequestParam  Long id,@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime) {
+        List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, id, startTime, endTime, true);
+        if (schedules == null || schedules.isEmpty())
+            return new Result(Code.GET_ERR, schedules, "查询失败！");
+        return new Result(Code.GET_OK, schedules, "查询成功！");
+    }
+
     //获取团队日程（时间区内）
     @GetMapping("/group")
     private Result selectGroupSchedule(@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime) {
