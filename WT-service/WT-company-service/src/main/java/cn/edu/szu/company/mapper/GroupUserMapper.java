@@ -35,6 +35,9 @@ public interface GroupUserMapper extends BaseMapper<GroupUser> {
     @Select("select id from wt_type where type = #{position}" )
     Long selectPositionId(String position);
 
+    @Select("select type from wt_type where id=#{id}")
+    String selectPositionById(Long id);
+
 }
 
 

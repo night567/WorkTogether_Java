@@ -5,6 +5,7 @@ import cn.edu.szu.company.mapper.CompanyUserMapper;
 import cn.edu.szu.company.mapper.GroupMapper;
 import cn.edu.szu.company.mapper.GroupUserMapper;
 import cn.edu.szu.company.pojo.GroupDTO;
+import cn.edu.szu.company.pojo.GroupUserDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.*;
 import cn.edu.szu.company.service.GroupService;
@@ -86,7 +87,7 @@ public class GroupServiceImpl implements GroupService {
 
         // 将团队信息和团队成员信息插入数据库
         groupMapper.insert(group);
-        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false, 2L));
+        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false, 2L,null,null));
 
         return true;
     }
@@ -344,6 +345,21 @@ public class GroupServiceImpl implements GroupService {
     public List<String> getPosition() {
 
         return groupUserMapper.selectPosition();
+    }
+
+    @Override
+    public GroupUserDTO getMemberInfo(Long memberId) {
+        //获取成员
+        GroupUser groupUser = groupUserMapper.selectById(memberId);
+        //获取对应的用户信息
+        UserDTO user = userClient.getUserById(groupUser.getUserId());
+        //获取所在部门名称
+        String deptName= companyUserMapper.selectDeptName(groupUser.getUserId());
+        //获取职位
+        String job = groupUserMapper.selectPositionById(groupUser.getType());
+        //获得完整成员信息
+        GroupUserDTO groupUserDTO = new GroupUserDTO(groupUser,user,deptName,job);
+        return groupUserDTO;
     }
 
 

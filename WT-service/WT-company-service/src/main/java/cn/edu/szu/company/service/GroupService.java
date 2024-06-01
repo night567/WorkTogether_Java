@@ -1,6 +1,7 @@
 package cn.edu.szu.company.service;
 
 import cn.edu.szu.company.pojo.GroupDTO;
+import cn.edu.szu.company.pojo.GroupUserDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
@@ -39,4 +40,5 @@ public interface GroupService {
     boolean updateMember(UserGroupRequest request);
 
     List<String> getPosition();
+    GroupUserDTO getMemberInfo(Long memberId);
 }

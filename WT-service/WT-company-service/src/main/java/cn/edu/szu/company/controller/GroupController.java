@@ -4,6 +4,7 @@ import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.company.pojo.GroupDTO;
+import cn.edu.szu.company.pojo.GroupUserDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
@@ -229,5 +230,13 @@ public class GroupController {
         }
 
         return new Result(Code.DELETE_ERR, null, "删除失败");
+    }
+
+    @GetMapping("/memberInfo")
+    public Result getMemberInfoById(@RequestParam Long memberId){
+        GroupUserDTO memberInfo = groupService.getMemberInfo(memberId);
+        if(memberInfo==null)
+            return new Result(Code.GET_ERR,null,"查询失败");
+        return new Result(Code.GET_OK,memberInfo,"查询成功");
     }
 }

@@ -38,4 +38,10 @@ public class GroupUser implements Serializable {
 
     @TableField(value = "type")
     private Long type;
+
+    @TableField(value = " location")
+    private String location; //工作地址
+
+    @TableField(value = "description")
+    private String description; //个人介绍
 }
