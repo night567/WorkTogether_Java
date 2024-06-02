@@ -1,5 +1,6 @@
 package cn.edu.szu.company.service.impl;
 
+import cn.edu.szu.common.utils.PinyinUtil;
 import cn.edu.szu.company.mapper.CompanyMapper;
 import cn.edu.szu.company.mapper.CompanyUserMapper;
 import cn.edu.szu.company.mapper.GroupMapper;
@@ -15,14 +16,18 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.Collator;
+import java.util.*;
 
 /**
  * @author zgr24
@@ -347,6 +352,7 @@ public class GroupServiceImpl implements GroupService {
         return groupUserMapper.selectPosition();
     }
 
+    //获取成员信息
     @Override
     public GroupUserDTO getMemberInfo(Long memberId) {
         //获取成员
@@ -361,6 +367,59 @@ public class GroupServiceImpl implements GroupService {
         GroupUserDTO groupUserDTO = new GroupUserDTO(groupUser,user,deptName,job);
         return groupUserDTO;
     }
+
+    //获取所有成员信息
+    @Override
+    public Map<String,List<GroupUserDTO>> getMembers(Long userId,Long groupId) throws BadHanyuPinyinOutputFormatCombination {
+        //定义成员列表
+        Map<String,List<GroupUserDTO>> memberMap=new LinkedHashMap<>();
+        //获取成员ID集合
+        List<Long> memberIds = groupUserMapper.selectMemberIdsByGroupId(groupId);
+        //定义成员信息集合
+        List<GroupUserDTO> groupUserDTOs=new ArrayList<>();
+        //获取成员信息集合
+        for (Long id:memberIds){
+            GroupUserDTO memberInfo = getMemberInfo(id);
+            if(memberInfo==null)
+                continue;
+            groupUserDTOs.add(memberInfo);
+        }
+        //获取本人成员Id
+        List<Long> myId = groupUserMapper.selectMyselfIdsByUserId(userId);
+
+        // 中文字符拼音排序比较器
+        Collator collator = Collator.getInstance(Locale.CHINESE);
+
+        // 按名字排序
+        groupUserDTOs.sort((o1, o2) -> {
+            String name1 = o1.getName();
+            String name2 = o2.getName();
+            return collator.compare(name1, name2);
+        });
+
+        boolean flag;
+        // 按照首字母分组
+        for (GroupUserDTO userDTO : groupUserDTOs) {
+            flag=false;
+            for(Long id:myId) {
+                if (userDTO.getId() == id) {
+                    memberMap.computeIfAbsent("myself", k -> new ArrayList<>()).add(userDTO);
+                    flag=true;
+                    break;
+                }
+            }
+           if (!flag) {
+               String name = userDTO.getName();
+               String firstLetter = PinyinUtil.getFirstLetter(name);
+               memberMap.computeIfAbsent(firstLetter, k -> new ArrayList<>()).add(userDTO);
+           }
+        }
+
+        return memberMap;
+    }
+
+
+
 
 
 }

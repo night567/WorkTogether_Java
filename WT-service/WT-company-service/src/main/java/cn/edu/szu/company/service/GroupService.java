@@ -5,9 +5,11 @@ import cn.edu.szu.company.pojo.GroupUserDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zgr24
@@ -41,4 +43,6 @@ public interface GroupService {
 
     List<String> getPosition();
     GroupUserDTO getMemberInfo(Long memberId);
+    Map<String,List<GroupUserDTO>> getMembers(Long userId,Long groupId) throws BadHanyuPinyinOutputFormatCombination;
+
 }

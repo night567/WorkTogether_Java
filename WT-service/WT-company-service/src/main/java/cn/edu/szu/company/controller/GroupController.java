@@ -10,6 +10,7 @@ import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import cn.edu.szu.company.service.GroupService;
 import cn.hutool.core.io.FileUtil;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/group")
@@ -238,5 +240,19 @@ public class GroupController {
         if(memberInfo==null)
             return new Result(Code.GET_ERR,null,"查询失败");
         return new Result(Code.GET_OK,memberInfo,"查询成功");
+    }
+
+    @GetMapping("/members")
+    public Result getMembers(@RequestHeader("Authorization") String token,@RequestParam Long groupId){
+        Long userId = JwtUtil.getUserId(token);
+        Map<String, List<GroupUserDTO>> members = null;
+        try {
+            members = groupService.getMembers(userId, groupId);
+        } catch (BadHanyuPinyinOutputFormatCombination e) {
+            return new Result(Code.GET_ERR,null,"查询失败");
+        }
+        if(members==null)
+            return new Result(Code.GET_ERR,null,"查询失败");
+        return new Result(Code.GET_OK,members,"查询成功");
     }
 }

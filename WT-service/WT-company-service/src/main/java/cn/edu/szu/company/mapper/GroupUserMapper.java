@@ -38,6 +38,12 @@ public interface GroupUserMapper extends BaseMapper<GroupUser> {
     @Select("select type from wt_type where id=#{id}")
     String selectPositionById(Long id);
 
+    @Select("select id from wt_group_user where group_id=#{groupId}")
+    List<Long> selectMemberIdsByGroupId(Long groupId);
+
+    @Select("select id from wt_group_user where user_id=#{userId}")
+    List<Long> selectMyselfIdsByUserId(Long userId);
+
 }
 
 

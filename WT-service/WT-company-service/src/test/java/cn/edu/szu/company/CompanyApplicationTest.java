@@ -5,6 +5,7 @@ import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.service.CompanyService;
 import cn.edu.szu.company.service.DepartmentService;
 import cn.edu.szu.company.service.GroupService;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,5 +48,11 @@ public class CompanyApplicationTest {
     void test3() {
         List<Group> groupList = groupService.selectMyGroup(1L, 1L);
         groupList.forEach(System.out::println);
+    }
+
+    @Test
+    void test4() throws BadHanyuPinyinOutputFormatCombination {
+        String s = groupService.getFirstLetter("啊哈");
+        System.out.println(s);
     }
 }
