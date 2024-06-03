@@ -16,7 +16,7 @@ public interface MessageService extends IService<Message> {
 
     List<MessageDTO> getMassage(Long userId, Long groupId, Integer pageNum, Integer pageSize);
 
-    List<MessageDTO> getMessageWithIsRead(Long userId, MessageDTO messageDTO, Integer pageNum, Integer PageSize);
+    List<MessageDTO> getMessageWithIsRead(Long userId, Long groupId, Boolean isRead, Integer pageNum, Integer PageSize);
 
     List<MessageDTO> getMessageWithHandleLater(Long userId, Long groupId, Integer pageNum, Integer PageSize);
 }

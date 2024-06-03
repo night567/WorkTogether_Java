@@ -75,10 +75,10 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     }
 
     @Override
-    public List<MessageDTO> getMessageWithIsRead(Long userId, MessageDTO messageDTO, Integer pageNum, Integer PageSize) {
+    public List<MessageDTO> getMessageWithIsRead(Long userId, Long groupId, Boolean isRead, Integer pageNum, Integer PageSize) {
         // 获取消息列表（分页查询）
         IPage<MessageDTO> page = messageUserMapper.getMessageByUidAndGidAndReadOrNot(
-                Page.of(pageNum, PageSize), userId, messageDTO.getGroupId(), messageDTO.getIsRead());
+                Page.of(pageNum, PageSize), userId, groupId, isRead);
         List<MessageDTO> messageList = page.getRecords();
 
         // 填入用户信息
