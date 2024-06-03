@@ -3,6 +3,7 @@ package cn.edu.szu.teamwork.mapper;
 import cn.edu.szu.teamwork.pojo.MessageDTO;
 import cn.edu.szu.teamwork.pojo.domain.MessageUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,7 +19,11 @@ import java.util.Set;
 public interface MessageUserMapper extends BaseMapper<MessageUser> {
     List<MessageDTO> getMessageByIds(Set<String> ids);
 
-    List<MessageDTO> getMessageByUidAndGid(Long uid, Long gid);
+    IPage<MessageDTO> getMessageByUidAndGid(IPage<MessageDTO> page, Long userId, Long groupId);
+
+    IPage<MessageDTO> getMessageByUidAndGidAndReadOrNot(IPage<MessageDTO> page, Long userId, Long groupId, Boolean isRead);
+
+    IPage<MessageDTO> getMessageByUidAndGidWhereHandleLater(IPage<MessageDTO> page, Long userId, Long groupId);
 }
 
 

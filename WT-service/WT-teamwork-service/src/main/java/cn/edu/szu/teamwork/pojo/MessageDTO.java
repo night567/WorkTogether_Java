@@ -14,6 +14,9 @@ public class MessageDTO {
     private Long id; // ID
 
     @JsonSerialize(using = ToStringSerializer.class)
+    private Long groupId; // 所属团队ID
+
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId; // 执行操作的用户ID
 
     private UserDTO user; // 执行操作的用户详细信息

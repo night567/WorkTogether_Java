@@ -8,6 +8,8 @@ import cn.edu.szu.teamwork.pojo.MessageDTO;
 import cn.edu.szu.teamwork.pojo.domain.Message;
 import cn.edu.szu.teamwork.pojo.domain.MessageUser;
 import cn.edu.szu.teamwork.service.MessageService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,9 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-
-import static cn.edu.szu.common.utils.RedisConstants.FEED_KEY;
 
 /**
  * @author zgr24
@@ -51,20 +50,57 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
             messageUserMapper.insert(messageUser);
 
             // 将用户接收的邮件保存到Redis
-            String key = FEED_KEY + groupId + ":" + userId;
-            stringRedisTemplate.opsForZSet().add(key, messageUser.getId().toString(), System.currentTimeMillis());
+//            String key = FEED_KEY + groupId + ":" + userId;
+//            stringRedisTemplate.opsForZSet().add(key, messageUser.getId().toString(), System.currentTimeMillis());
         }
     }
 
     @Override
-    public List<MessageDTO> getMassage(Long userId, Long groupId, Integer page, Integer size) {
-        String key = FEED_KEY + groupId + ":" + userId;
-        long start = (long) (page - 1) * size;
-        long end = start + size - 1;
+    public List<MessageDTO> getMassage(Long userId, Long groupId, Integer pageNum, Integer PageSize) {
+//        String key = FEED_KEY + groupId + ":" + userId;
+//        long start = (long) (pageNum - 1) * PageSize;
+//        long end = start + PageSize - 1;
+//
+//        Set<String> messageIds = stringRedisTemplate.opsForZSet().range(key, start, end);
+//        List<MessageDTO> messageList = messageUserMapper.getMessageByIds(messageIds);
+        // 获取消息列表（分页查询）
+        IPage<MessageDTO> page = messageUserMapper.getMessageByUidAndGid(
+                Page.of(pageNum, PageSize), userId, groupId);
+        List<MessageDTO> messageList = page.getRecords();
 
-        Set<String> messageIds = stringRedisTemplate.opsForZSet().range(key, start, end);
-        List<MessageDTO> messageList = messageUserMapper.getMessageByIds(messageIds);
+        // 填入用户信息
+        setUserForMessageList(messageList);
 
+        return messageList;
+    }
+
+    @Override
+    public List<MessageDTO> getMessageWithIsRead(Long userId, MessageDTO messageDTO, Integer pageNum, Integer PageSize) {
+        // 获取消息列表（分页查询）
+        IPage<MessageDTO> page = messageUserMapper.getMessageByUidAndGidAndReadOrNot(
+                Page.of(pageNum, PageSize), userId, messageDTO.getGroupId(), messageDTO.getIsRead());
+        List<MessageDTO> messageList = page.getRecords();
+
+        // 填入用户信息
+        setUserForMessageList(messageList);
+
+        return messageList;
+    }
+
+    @Override
+    public List<MessageDTO> getMessageWithHandleLater(Long userId, Long groupId, Integer pageNum, Integer PageSize) {
+        // 获取消息列表（分页查询）
+        IPage<MessageDTO> page = messageUserMapper.getMessageByUidAndGidWhereHandleLater(
+                Page.of(pageNum, PageSize), userId, groupId);
+        List<MessageDTO> messageList = page.getRecords();
+
+        // 填入用户信息
+        setUserForMessageList(messageList);
+
+        return messageList;
+    }
+
+    private void setUserForMessageList(List<MessageDTO> messageList) {
         for (MessageDTO messageDTO : messageList) {
             Long uid = messageDTO.getUserId();
             UserDTO user = userClient.getUserById(uid);
@@ -72,8 +108,6 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
                 messageDTO.setUser(user);
             }
         }
-
-        return messageList;
     }
 }
 

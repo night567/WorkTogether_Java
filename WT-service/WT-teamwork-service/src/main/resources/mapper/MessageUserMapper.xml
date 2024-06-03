@@ -17,18 +17,24 @@
         is_read,handle_later
     </sql>
 
-    <select id="getMessageByIds" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
-        SELECT mu.id AS id,
-        mu.user_id AS userId,
-        mu.is_read AS isRead,
+    <sql id="MessageDTO">
+        mu.id           AS id,
+        mu.is_read      AS isRead,
         mu.handle_later AS handleLater,
-        m.context AS context,
-        m.schedule_id AS scheduleId,
-        m.type AS type,
-        m.create_time AS createTime,
-        s.id AS scheduleId,
-        s.title AS scheduleTitle,
-        s.type AS scheduleType
+        m.group_id      AS groupId,
+        mu.user_id      AS userId,
+        m.context       AS context,
+        m.schedule_id   AS scheduleId,
+        m.type          AS type,
+        m.create_time   AS createTime,
+        s.id            AS scheduleId,
+        s.title         AS scheduleTitle,
+        s.type          AS scheduleType
+    </sql>
+
+    <select id="getMessageByIds" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
+        SELECT
+        <include refid="MessageDTO"/>
         FROM wt_teamwork.wt_message_user mu
         INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
         INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
@@ -40,22 +46,37 @@
     </select>
 
     <select id="getMessageByUidAndGid" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
-        SELECT mu.id           AS id,
-               mu.user_id      AS userId,
-               mu.is_read      AS isRead,
-               mu.handle_later AS handleLater,
-               m.context       AS context,
-               m.schedule_id   AS scheduleId,
-               m.type          AS type,
-               m.create_time   AS createTime,
-               s.id            AS scheduleId,
-               s.title         AS scheduleTitle,
-               s.type          AS scheduleType
+        SELECT
+        <include refid="MessageDTO"/>
         FROM wt_teamwork.wt_message_user mu
-                 INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
-                 INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
+        INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
+        INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
         WHERE mu.user_id = #{userId}
-          AND m.group_id = #{groupId}
+        AND m.group_id = #{groupId}
+        ORDER BY m.create_time DESC
+    </select>
+
+    <select id="getMessageByUidAndGidAndReadOrNot" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
+        SELECT
+        <include refid="MessageDTO"/>
+        FROM wt_teamwork.wt_message_user mu
+        INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
+        INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
+        WHERE mu.user_id = #{userId}
+        AND m.group_id = #{groupId}
+        AND mu.is_read = #{isRead}
+        ORDER BY m.create_time DESC
+    </select>
+
+    <select id="getMessageByUidAndGidWhereHandleLater" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
+        SELECT
+        <include refid="MessageDTO"/>
+        FROM wt_teamwork.wt_message_user mu
+        INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
+        INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
+        WHERE mu.user_id = #{userId}
+        AND m.group_id = #{groupId}
+        AND mu.handle_later = 1
         ORDER BY m.create_time DESC
     </select>
 </mapper>

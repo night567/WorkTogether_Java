@@ -29,4 +29,30 @@ public class MessageController {
         }
         return new Result(Code.GET_ERR, Collections.emptyList(), "获取消息失败");
     }
+
+    @GetMapping("/isRead")
+    public Result getMessageWithIsRead(@RequestHeader("Authorization") String token,
+                                       @RequestBody MessageDTO messageDTO,
+                                       @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                       @RequestParam(value = "size", defaultValue = "100") Integer size) {
+        Long userId = JwtUtil.getUserId(token);
+        List<MessageDTO> messageList = messageService.getMessageWithIsRead(userId, messageDTO, page, size);
+        if (messageList != null) {
+            return new Result(Code.GET_OK, messageList, "获取消息成功");
+        }
+        return new Result(Code.GET_ERR, Collections.emptyList(), "获取消息失败");
+    }
+
+    @GetMapping("/handleLater/{groupId}")
+    public Result getMessageWithHandleLater(@RequestHeader("Authorization") String token,
+                                            @PathVariable Long groupId,
+                                            @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                            @RequestParam(value = "size", defaultValue = "100") Integer size) {
+        Long userId = JwtUtil.getUserId(token);
+        List<MessageDTO> messageList = messageService.getMessageWithHandleLater(userId, groupId, page, size);
+        if (messageList != null) {
+            return new Result(Code.GET_OK, messageList, "获取消息成功");
+        }
+        return new Result(Code.GET_ERR, Collections.emptyList(), "获取消息失败");
+    }
 }

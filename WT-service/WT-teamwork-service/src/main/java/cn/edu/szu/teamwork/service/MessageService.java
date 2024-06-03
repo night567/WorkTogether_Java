@@ -14,5 +14,9 @@ import java.util.List;
 public interface MessageService extends IService<Message> {
     void sandMessageAsync(Message message, List<Long> userIds);
 
-    List<MessageDTO> getMassage(Long userId, Long groupId, Integer page, Integer size);
+    List<MessageDTO> getMassage(Long userId, Long groupId, Integer pageNum, Integer pageSize);
+
+    List<MessageDTO> getMessageWithIsRead(Long userId, MessageDTO messageDTO, Integer pageNum, Integer PageSize);
+
+    List<MessageDTO> getMessageWithHandleLater(Long userId, Long groupId, Integer pageNum, Integer PageSize);
 }
