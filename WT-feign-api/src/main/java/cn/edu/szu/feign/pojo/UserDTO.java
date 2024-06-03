@@ -1,6 +1,8 @@
 package cn.edu.szu.feign.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,6 +10,7 @@ import java.util.Date;
 
 @Data
 public class UserDTO implements Serializable {
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     private String email; // 邮箱

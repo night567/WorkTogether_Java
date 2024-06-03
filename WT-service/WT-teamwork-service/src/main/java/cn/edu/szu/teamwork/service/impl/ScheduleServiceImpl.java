@@ -70,6 +70,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         // 发送邀请消息
         Message message = new Message();
         message.setGroupId(Long.valueOf(scheduleDTO.getGroupId()));
+        message.setType(0);
         message.setUserId(Long.valueOf(scheduleDTO.getCreatorId()));
         message.setContext("邀请你参加日程");
         message.setScheduleId(scheduleId);
