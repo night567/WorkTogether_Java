@@ -8,6 +8,7 @@ import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import cn.edu.szu.teamwork.service.MessageService;
 import cn.edu.szu.teamwork.service.ScheduleService;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -431,29 +433,44 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     @Transactional
     public boolean refuseOrTentativeSchedule(ScheduleUser scheduleUserDTO) {
         Integer joinStatus = scheduleUserDTO.getJoinStatus();
+        Long scheduleId = scheduleUserDTO.getScheduleId();
+        Long userId = scheduleUserDTO.getUserId();
 
         // 查数据库对象(检验请求正确)
         LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(ScheduleUser::getScheduleId, scheduleUserDTO.getScheduleId());
-        lqw.eq(ScheduleUser::getUserId, scheduleUserDTO.getUserId());
+        lqw.eq(ScheduleUser::getScheduleId, scheduleId);
+        lqw.eq(ScheduleUser::getUserId, userId);
         ScheduleUser scheduleUser = scheduleUserMapper.selectOne(lqw);
         if (scheduleUser == null) {
             return false;
         }
+        Schedule schedule = scheduleMapper.selectById(scheduleId);
 
         // 修改数据库
+        Message message = Message.builder()
+                .groupId(schedule.getGroupId())
+                .userId(userId)
+                .scheduleId(scheduleId)
+                .type(0).build();
         if (joinStatus == null) {
             return false;
         } else if (joinStatus == 0) {
             scheduleUser.setJoinStatus(0);
             scheduleUser.setRefuseReason(null);
+            message.setContext("将日程的参与状态改为：待定");
         } else if (joinStatus == 2) {
             scheduleUser.setJoinStatus(2);
-            scheduleUser.setRefuseReason(scheduleUserDTO.getRefuseReason());
+            String refuseReason = scheduleUserDTO.getRefuseReason();
+            if (StrUtil.isBlank(refuseReason)) {
+                refuseReason = "未填写原因";
+            }
+            scheduleUser.setRefuseReason(refuseReason);
+            message.setContext("拒绝了日程，原因：" + refuseReason);
         } else {
             return false;
         }
         scheduleUserMapper.updateById(scheduleUser);
+        messageService.sandMessageAsync(message, Collections.singletonList(schedule.getCreatorId()));
         return true;
     }
 }
