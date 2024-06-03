@@ -255,4 +255,25 @@ public class GroupController {
             return new Result(Code.GET_ERR,null,"查询失败");
         return new Result(Code.GET_OK,members,"查询成功");
     }
+
+    @PutMapping("update/memberInfo")
+    public Result updateMemberGroupInfo(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String name, @RequestParam String phone, @RequestParam String avatar,
+            @RequestParam String location, @RequestParam String introduction,@RequestParam Long groupId){
+        Long userId = JwtUtil.getUserId(token);
+        Long myIds = groupService.selectMyselfIdsByUserId(userId,groupId);
+        GroupUserDTO groupUserDTO = new GroupUserDTO();
+        groupUserDTO.setName(name);
+        groupUserDTO.setPhone(phone);
+        groupUserDTO.setAvatar(avatar);
+        groupUserDTO.setAddress(location);
+        groupUserDTO.setIntroduction(introduction);
+        groupUserDTO.setId(myIds);
+        boolean b = groupService.updateMemberGroupInfo(groupUserDTO, userId);
+        if (b)
+            return new Result(Code.UPDATE_OK,null,"修改成功");
+        return new Result(Code.UPDATE_ERR,null,"修改失败");
+
+    }
 }

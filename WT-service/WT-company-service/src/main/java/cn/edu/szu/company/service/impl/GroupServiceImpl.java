@@ -385,7 +385,7 @@ public class GroupServiceImpl implements GroupService {
             groupUserDTOs.add(memberInfo);
         }
         //获取本人成员Id
-        List<Long> myId = groupUserMapper.selectMyselfIdsByUserId(userId);
+        Long myId = groupUserMapper.selectMyselfIdsByUserId(userId,groupId);
 
         // 中文字符拼音排序比较器
         Collator collator = Collator.getInstance(Locale.CHINESE);
@@ -397,29 +397,36 @@ public class GroupServiceImpl implements GroupService {
             return collator.compare(name1, name2);
         });
 
-        boolean flag;
+
         // 按照首字母分组
         for (GroupUserDTO userDTO : groupUserDTOs) {
-            flag=false;
-            for(Long id:myId) {
-                if (userDTO.getId() == id) {
+                if (userDTO.getId() == myId) {
                     memberMap.computeIfAbsent("myself", k -> new ArrayList<>()).add(userDTO);
-                    flag=true;
-                    break;
+                    continue;
                 }
-            }
-           if (!flag) {
+
                String name = userDTO.getName();
                String firstLetter = PinyinUtil.getFirstLetter(name);
                memberMap.computeIfAbsent(firstLetter, k -> new ArrayList<>()).add(userDTO);
-           }
+
         }
 
         return memberMap;
     }
 
+    @Override
+    public boolean updateMemberGroupInfo(GroupUserDTO groupUserDTO,Long userId) {
+        boolean flag1 = userClient.updateUserInfo(groupUserDTO.getName(), groupUserDTO.getPhone(), groupUserDTO.getAvatar(), userId);
+        boolean flag2 = groupUserMapper.updateMemberGroupInfo(groupUserDTO.getAddress(), groupUserDTO.getIntroduction(), groupUserDTO.getId())>0;
+        if(flag1&&flag2)
+            return true;
+        return false;
+    }
 
-
+    @Override
+    public Long selectMyselfIdsByUserId(Long userId,Long groupId) {
+        return groupUserMapper.selectMyselfIdsByUserId(userId,groupId);
+    }
 
 
 }

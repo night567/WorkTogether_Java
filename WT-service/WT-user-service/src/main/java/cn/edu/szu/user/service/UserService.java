@@ -19,4 +19,5 @@ public interface UserService {
     List<User> getUserByCompany(Long id);
 
     boolean updateById(User user);
+    boolean updateUserInfo(String name,String phone,String avatar,Long userId);
 }

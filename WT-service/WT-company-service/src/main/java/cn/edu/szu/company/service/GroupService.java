@@ -45,4 +45,7 @@ public interface GroupService {
     GroupUserDTO getMemberInfo(Long memberId);
     Map<String,List<GroupUserDTO>> getMembers(Long userId,Long groupId) throws BadHanyuPinyinOutputFormatCombination;
 
+    boolean updateMemberGroupInfo(GroupUserDTO groupUserDTO,Long userId);
+
+    Long selectMyselfIdsByUserId(Long userId,Long groupId);
 }

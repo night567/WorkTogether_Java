@@ -1,5 +1,6 @@
 package cn.edu.szu.company.mapper;
 
+import cn.edu.szu.company.pojo.GroupUserDTO;
 import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.GroupUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -41,8 +42,13 @@ public interface GroupUserMapper extends BaseMapper<GroupUser> {
     @Select("select id from wt_group_user where group_id=#{groupId}")
     List<Long> selectMemberIdsByGroupId(Long groupId);
 
-    @Select("select id from wt_group_user where user_id=#{userId}")
-    List<Long> selectMyselfIdsByUserId(Long userId);
+    @Select("select id from wt_group_user where user_id=#{userId} and group_id=#{groupId}")
+    Long selectMyselfIdsByUserId(Long userId,Long groupId);
+
+    @Update("UPDATE wt_group_user set location = #{address},description=#{introduction} where id  = #{groupUserId}")
+    int updateMemberGroupInfo(String address,String introduction,Long groupUserId);
+
+
 
 }
 

@@ -3,6 +3,7 @@ package cn.edu.szu.user.mapper;
 import cn.edu.szu.user.pojo.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @author zgr24
@@ -12,6 +13,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
+    @Update("UPDATE wt_user set name = #{name},phone=#{phone},avatar=#{avatar} where id  = #{userId}")
+    int updateUserInfo(String name,String phone,String avatar,Long userId);
 }
 
 

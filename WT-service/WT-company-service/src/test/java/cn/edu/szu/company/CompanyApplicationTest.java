@@ -1,5 +1,6 @@
 package cn.edu.szu.company;
 
+import cn.edu.szu.common.utils.PinyinUtil;
 import cn.edu.szu.company.pojo.domain.Company;
 import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.service.CompanyService;
@@ -52,7 +53,7 @@ public class CompanyApplicationTest {
 
     @Test
     void test4() throws BadHanyuPinyinOutputFormatCombination {
-        String s = groupService.getFirstLetter("啊哈");
+        String s = PinyinUtil.getFirstLetter("啊哈");
         System.out.println(s);
     }
 }
