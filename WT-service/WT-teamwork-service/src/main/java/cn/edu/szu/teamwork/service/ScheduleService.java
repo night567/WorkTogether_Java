@@ -16,7 +16,7 @@ import java.util.List;
 public interface ScheduleService extends IService<Schedule> {
     boolean createSchedule(ScheduleDTO scheduleDTO);
 
-    boolean delSchedule(String id);
+    boolean delSchedule(String id, Long uid);
 
     boolean updateSchedule(ScheduleDTO scheduleDTO);
 

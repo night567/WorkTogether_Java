@@ -9,6 +9,8 @@ import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import cn.edu.szu.teamwork.service.MessageService;
 import cn.edu.szu.teamwork.service.ScheduleService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,12 +70,13 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         }
 
         // 发送邀请消息
-        Message message = new Message();
-        message.setGroupId(Long.valueOf(scheduleDTO.getGroupId()));
-        message.setType(0);
-        message.setUserId(Long.valueOf(scheduleDTO.getCreatorId()));
-        message.setContext("邀请你参加日程");
-        message.setScheduleId(scheduleId);
+        Message message = Message.builder()
+                .groupId(Long.valueOf(scheduleDTO.getGroupId()))
+                .userId(Long.valueOf(scheduleDTO.getCreatorId()))
+                .context("邀请你参加日程")
+                .scheduleId(scheduleId)
+                .type(0).build();
+
         messageService.sandMessageAsync(message, userIds);
 
         return true;
@@ -87,13 +90,29 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
      */
     @Override
     @Transactional
-    public boolean delSchedule(String id) {
-        // 删除指定ID的调度信息
+    public boolean delSchedule(String id, Long uid) {
+        // 删除指定ID的日程信息
+        Schedule schedule = scheduleMapper.selectById(id);
+        if (schedule == null || !schedule.getCreatorId().equals(uid)) {
+            // 只能由创建者删除日程
+            return false;
+        }
         scheduleMapper.deleteById(id);
 
         // 构建查询包装器，删除与该调度信息关联的所有用户调度关系
         LambdaQueryWrapper<ScheduleUser> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ScheduleUser::getScheduleId, id);
+        // 发送删除日程消息
+        List<Long> ids = scheduleUserMapper.selectList(lqw)
+                .stream().map(ScheduleUser::getUserId).collect(Collectors.toList());
+        Message message = Message.builder()
+                .groupId(schedule.getGroupId())
+                .userId(schedule.getCreatorId())
+                .context("删除了日程")
+                .scheduleId(schedule.getId())
+                .type(0).build();
+        messageService.sandMessageAsync(message, ids);
+
         scheduleUserMapper.delete(lqw);
 
         return true;
@@ -102,15 +121,13 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     @Override
     @Transactional
     public boolean updateSchedule(ScheduleDTO scheduleDTO) {
-        // 创建日程
-        Schedule schedule = Schedule.builder()
-                .id(Long.valueOf(scheduleDTO.getId()))
-                .title(scheduleDTO.getTitle())
-                .startTime(scheduleDTO.getStartTime())
-                .endTime(scheduleDTO.getEndTime())
-                .type(scheduleDTO.getType())
-                .description(scheduleDTO.getDescription())
-                .build();
+        // 构建日程
+        Schedule schedule = scheduleMapper.selectById(scheduleDTO.getId());
+        schedule.setTitle(scheduleDTO.getTitle());
+        schedule.setStartTime(scheduleDTO.getStartTime());
+        schedule.setEndTime(scheduleDTO.getEndTime());
+        schedule.setType(scheduleDTO.getType());
+        schedule.setDescription(scheduleDTO.getDescription());
         if (scheduleMapper.updateById(schedule) <= 0) {
             throw new RuntimeException("更新日程失败");
         }
@@ -135,25 +152,64 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         ArrayList<Long> delUserList = new ArrayList<>(userList);
         delUserList.removeAll(userIds);
 
-        // 新增用户
-        for (Long userId : addUserList) {
-            ScheduleUser scheduleUser = new ScheduleUser();
-            scheduleUser.setScheduleId(scheduleId);
-            scheduleUser.setUserId(userId);
-            scheduleUser.setJoinStatus(0);
-            if (scheduleUserMapper.insert(scheduleUser) <= 0) {
-                throw new RuntimeException("创建参与人失败");
+        // 需要更新状态的用户列表
+        ArrayList<Long> updateUserList = new ArrayList<>(userList);
+        updateUserList.retainAll(userIds);
+
+
+        if (!addUserList.isEmpty()) {
+            // 新增用户
+            for (Long userId : addUserList) {
+                ScheduleUser scheduleUser = new ScheduleUser();
+                scheduleUser.setScheduleId(scheduleId);
+                scheduleUser.setUserId(userId);
+                scheduleUser.setJoinStatus(0);
+                if (scheduleUserMapper.insert(scheduleUser) <= 0) {
+                    throw new RuntimeException("创建参与人失败");
+                }
             }
+
+            // 对新增的用户发送邀请消息
+            Message inviteMessage = Message.builder()
+                    .groupId(schedule.getGroupId())
+                    .userId(schedule.getCreatorId())
+                    .context("邀请你参加日程")
+                    .scheduleId(scheduleId)
+                    .type(0).build();
+            messageService.sandMessageAsync(inviteMessage, addUserList);
         }
 
-        // 删除用户
-        for (Long userId : delUserList) {
+        if (!delUserList.isEmpty()) {
+            // 删除用户
             int deleted = scheduleUserMapper.delete(new LambdaQueryWrapper<ScheduleUser>()
                     .eq(ScheduleUser::getScheduleId, scheduleId)
-                    .eq(ScheduleUser::getUserId, userId));
-            if (deleted <= 0) {
-                throw new RuntimeException("删除参与人失败");
-            }
+                    .in(ScheduleUser::getUserId, delUserList));
+
+            // 发送移出日程消息
+            Message delMessage = Message.builder()
+                    .groupId(schedule.getGroupId())
+                    .userId(schedule.getCreatorId())
+                    .context("将你移出了日程")
+                    .scheduleId(scheduleId)
+                    .type(0).build();
+            messageService.sandMessageAsync(delMessage, delUserList);
+        }
+
+        if (!updateUserList.isEmpty()) {
+            // 更新用户参与状态
+            LambdaUpdateWrapper<ScheduleUser> updateWrapper = Wrappers.<ScheduleUser>lambdaUpdate()
+                    .set(ScheduleUser::getJoinStatus, 0)
+                    .in(ScheduleUser::getUserId, updateUserList);
+            scheduleUserMapper.update(null, updateWrapper);
+
+            // 发出更新日程消息
+            Message message = Message.builder()
+                    .groupId(schedule.getGroupId())
+                    .userId(schedule.getCreatorId())
+                    .context("修改了日程，并且将你的日程参与状态改为：待定")
+                    .scheduleId(scheduleId)
+                    .type(0).build();
+            messageService.sandMessageAsync(message, updateUserList);
         }
 
         return true;

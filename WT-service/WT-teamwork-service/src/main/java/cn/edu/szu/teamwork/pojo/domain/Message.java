@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,6 +17,9 @@ import java.time.LocalDateTime;
  * @TableName wt_message
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName(value = "wt_message")
 public class Message implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -36,4 +42,12 @@ public class Message implements Serializable {
 
     @TableField(value = "create_time")
     private LocalDateTime createTime; // 消息发送时间
+
+    public Message(Long groupId, Long userId, String context, Long scheduleId, Integer type) {
+        this.groupId = groupId;
+        this.userId = userId;
+        this.context = context;
+        this.scheduleId = scheduleId;
+        this.type = type;
+    }
 }

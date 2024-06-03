@@ -36,8 +36,9 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{id}")
-    private Result deleteSchedule(@PathVariable String id) {
-        boolean isDeleted = scheduleService.delSchedule(id);
+    private Result deleteSchedule(@PathVariable String id, @RequestHeader("Authorization") String token) {
+        Long userId = JwtUtil.getUserId(token);
+        boolean isDeleted = scheduleService.delSchedule(id, userId);
         if (isDeleted) {
             return new Result(Code.DELETE_OK, true, "删除成功");
         }
@@ -53,6 +54,7 @@ public class ScheduleController {
             }
             return new Result(Code.UPDATE_ERR, false, "更新失败");
         } catch (Exception e) {
+            e.printStackTrace();
             return new Result(Code.UPDATE_ERR, false, e.getMessage());
         }
     }
