@@ -3,8 +3,10 @@ package cn.edu.szu.teamwork.service.impl;
 import cn.edu.szu.teamwork.mapper.ScheduleMapper;
 import cn.edu.szu.teamwork.mapper.ScheduleUserMapper;
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
+import cn.edu.szu.teamwork.pojo.domain.Message;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
+import cn.edu.szu.teamwork.service.MessageService;
 import cn.edu.szu.teamwork.service.ScheduleService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,6 +32,8 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     private ScheduleMapper scheduleMapper;
     @Autowired
     private ScheduleUserMapper scheduleUserMapper;
+    @Autowired
+    private MessageService messageService;
     // 日期时间格式
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -52,16 +56,24 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
         // 构建参与人数据库
         Long scheduleId = schedule.getId();
-        List<String> userIds = scheduleDTO.getUserIds();
-        for (String userId : userIds) {
+        List<Long> userIds = scheduleDTO.getUserIds().stream().map(Long::valueOf).collect(Collectors.toList());
+        for (Long userId : userIds) {
             ScheduleUser scheduleUser = new ScheduleUser();
             scheduleUser.setScheduleId(scheduleId);
-            scheduleUser.setUserId(Long.valueOf(userId));
+            scheduleUser.setUserId(userId);
             scheduleUser.setJoinStatus(0);
             if (scheduleUserMapper.insert(scheduleUser) <= 0) {
                 throw new RuntimeException("创建参与人失败");
             }
         }
+
+        // 发送邀请消息
+        Message message = new Message();
+        message.setGroupId(Long.valueOf(scheduleDTO.getGroupId()));
+        message.setUserId(Long.valueOf(scheduleDTO.getCreatorId()));
+        message.setContext("邀请你参加日程");
+        message.setScheduleId(scheduleId);
+        messageService.sandMessageAsync(message, userIds);
 
         return true;
     }

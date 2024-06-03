@@ -1,5 +1,6 @@
 package cn.edu.szu.feign.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,7 +20,9 @@ public class UserDTO implements Serializable {
 
     private String avatar; // 头像
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastLoginTime; // 最后登录时间
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime; // 创建时间
 }

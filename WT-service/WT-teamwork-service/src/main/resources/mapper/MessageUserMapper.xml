@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.szu.teamwork.mapper.MessageUserMapper">
+
+    <resultMap id="BaseResultMap" type="cn.edu.szu.teamwork.pojo.domain.MessageUser">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="messageId" column="message_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="isRead" column="is_read" jdbcType="BIT"/>
+        <result property="handleLater" column="handle_later" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,message_id,user_id,
+        is_read,handle_later
+    </sql>
+
+    <select id="getMessageByIds" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
+        SELECT mu.id AS id,
+        mu.user_id AS userId,
+        mu.is_read AS isRead,
+        mu.handle_later AS handleLater,
+        m.context AS context,
+        m.schedule_id AS scheduleId,
+        m.type AS type,
+        m.create_time AS createTime,
+        s.id AS scheduleId,
+        s.title AS scheduleTitle,
+        s.type AS scheduleType
+        FROM wt_teamwork.wt_message_user mu
+        INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
+        INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
+        WHERE mu.id IN
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        ORDER BY m.create_time DESC
+    </select>
+
+    <select id="getMessageByUidAndGid" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
+        SELECT mu.id           AS id,
+               mu.user_id      AS userId,
+               mu.is_read      AS isRead,
+               mu.handle_later AS handleLater,
+               m.context       AS context,
+               m.schedule_id   AS scheduleId,
+               m.type          AS type,
+               m.create_time   AS createTime,
+               s.id            AS scheduleId,
+               s.title         AS scheduleTitle,
+               s.type          AS scheduleType
+        FROM wt_teamwork.wt_message_user mu
+                 INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
+                 INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
+        WHERE mu.user_id = #{userId}
+          AND m.group_id = #{groupId}
+        ORDER BY m.create_time DESC
+    </select>
+</mapper>
