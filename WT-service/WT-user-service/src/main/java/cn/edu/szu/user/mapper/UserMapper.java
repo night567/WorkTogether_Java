@@ -13,11 +13,10 @@ import org.apache.ibatis.annotations.Update;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    @Update("UPDATE wt_user set name = #{name},phone=#{phone} where id  = #{userId}")
-    int updateUserInfo(String name,String phone,Long userId);
+    @Update("UPDATE wt_user set name = #{name},phone=#{phone},avatar=#{avatar} where id  = #{userId}")
+    int updateUserInfo(String name,String phone,Long userId,String avatar);
 
-    @Update("UPDATE wt_user set avatar=#{avatar} where id  = #{userId}")
-    int updateUserImage(String avatar,Long userId);
+
 }
 
 

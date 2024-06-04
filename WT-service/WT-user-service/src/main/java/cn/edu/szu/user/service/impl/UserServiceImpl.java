@@ -185,12 +185,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUserInfo(String name, String phone, Long userId) {
-        return userMapper.updateUserInfo(name,phone,userId)>0;
+    public boolean updateUserInfo(String name, String phone, Long userId,String avatar) {
+        return userMapper.updateUserInfo(name,phone,userId,avatar)>0;
     }
 
-    @Override
-    public boolean updateUserImage(String avatar,Long userId) {
-        return userMapper.updateUserImage(avatar,userId)>0;
-    }
+
 }

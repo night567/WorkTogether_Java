@@ -417,7 +417,7 @@ public class GroupServiceImpl implements GroupService {
     //编辑个人信息
     @Override
     public boolean updateMemberGroupInfo(GroupUserDTO groupUserDTO,Long userId) {
-        boolean flag1 = userClient.updateUserInfo(groupUserDTO.getName(), groupUserDTO.getPhone(), userId);
+        boolean flag1 = userClient.updateUserInfo(groupUserDTO.getName(), groupUserDTO.getPhone(), userId,groupUserDTO.getAvatar());
         boolean flag2 = groupUserMapper.updateMemberGroupInfo(groupUserDTO.getAddress(), groupUserDTO.getIntroduction(), groupUserDTO.getId())>0;
         if(flag1&&flag2)
             return true;
