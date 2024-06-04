@@ -33,32 +33,35 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     private MessageUserMapper messageUserMapper;
     @Autowired
     private UserClient userClient;
+
     @Override
-    public String setMsgToIsRead(Long id,Long uid){
+    public String setMsgToIsRead(Long id, Long uid) {
         MessageUser msgUser = messageUserMapper.selectById(id);
-        if(!msgUser.getUserId().equals(uid)){
+        if (!msgUser.getUserId().equals(uid)) {
             return "信息错误，无法修改";
         }
         msgUser.setIsRead(true);
         int cnt = messageUserMapper.updateById(msgUser);
-        if (cnt > 0){
+        if (cnt > 0) {
             return "更新成功";
         }
         return "更新失败";
     }
+
     @Override
-    public String setMsgToLater(Long id,Long uid){
+    public String setMsgToLater(Long id, Long uid) {
         MessageUser msgUser = messageUserMapper.selectById(id);
-        if(!msgUser.getUserId().equals(uid)){
+        if (!msgUser.getUserId().equals(uid)) {
             return "信息错误，无法修改";
         }
         msgUser.setHandleLater(true);
         int cnt = messageUserMapper.updateById(msgUser);
-        if (cnt > 0){
+        if (cnt > 0) {
             return "更新成功";
         }
         return "更新失败";
     }
+
     @Override
     @Async // 声明异步方法
     @Transactional
@@ -66,45 +69,21 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         // 保存消息到数据库和Redis
         save(message);
 
-        Long groupId = message.getGroupId();
         Long messageId = message.getId();
         for (Long userId : userIds) {
             MessageUser messageUser = new MessageUser();
             messageUser.setMessageId(messageId);
             messageUser.setUserId(userId);
             messageUserMapper.insert(messageUser);
-
-            // 将用户接收的邮件保存到Redis
-//            String key = FEED_KEY + groupId + ":" + userId;
-//            stringRedisTemplate.opsForZSet().add(key, messageUser.getId().toString(), System.currentTimeMillis());
         }
     }
 
     @Override
-    public List<MessageDTO> getMessage(Long userId, MessageDTO message, Integer pageNum, Integer pageSize) {
+    public List<MessageDTO> getMassage(Long userId, Long groupId, Boolean isRead, Boolean handleLater, Integer pageNum, Integer pageSize) {
         // 获取消息列表（分页查询）
         IPage<MessageDTO> page = messageUserMapper.getMessage(
-                Page.of(pageNum, pageSize), userId, message.getGroupId(),
-                message.getIsRead(), message.getHandleLater());
-        List<MessageDTO> messageList = page.getRecords();
-
-        // 填入用户信息
-        setUserForMessageList(messageList);
-
-        return messageList;
-    }
-
-    @Override
-    public List<MessageDTO> getAllMassage(Long userId, Long groupId, Integer pageNum, Integer pageSize) {
-//        String key = FEED_KEY + groupId + ":" + userId;
-//        long start = (long) (pageNum - 1) * PageSize;
-//        long end = start + PageSize - 1;
-//
-//        Set<String> messageIds = stringRedisTemplate.opsForZSet().range(key, start, end);
-//        List<MessageDTO> messageList = messageUserMapper.getMessageByIds(messageIds);
-        // 获取消息列表（分页查询）
-        IPage<MessageDTO> page = messageUserMapper.getMessageByUidAndGid(
-                Page.of(pageNum, pageSize), userId, groupId);
+                Page.of(pageNum, pageSize), userId, groupId,
+                isRead, handleLater);
         List<MessageDTO> messageList = page.getRecords();
 
         // 填入用户信息
