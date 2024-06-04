@@ -97,8 +97,8 @@ public class UserController {
         return new Result(Code.DELETE_OK, null, "移除成功");
     }
 
-    @PutMapping("/update/user")
-    public boolean updateUserInfo(@RequestParam String name,@RequestParam String phone,@RequestParam Long userId){
-        return  userService.updateUserInfo(name,phone,userId);
+    @PostMapping("/update/user")
+    public boolean updateUserInfo(@RequestParam String name,@RequestParam String phone,@RequestParam Long userId,@RequestParam String avatar){
+        return  userService.updateUserInfo(name,phone,userId,avatar);
     }
 }

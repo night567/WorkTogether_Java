@@ -19,7 +19,7 @@ public interface UserService {
     List<User> getUserByCompany(Long id);
 
     boolean updateById(User user);
-    boolean updateUserInfo(String name,String phone,Long userId);
+    boolean updateUserInfo(String name,String phone,Long userId,String avatar);
 
-    boolean  updateUserImage(String avatar,Long userId);
+
 }

@@ -9,6 +9,7 @@ import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import cn.edu.szu.company.service.GroupService;
+import cn.edu.szu.company.service.impl.COSClientUtil;
 import cn.edu.szu.feign.client.UserClient;
 import cn.hutool.core.io.FileUtil;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
@@ -260,29 +261,36 @@ public class GroupController {
     }
 
     //编辑个人信息
-    @PutMapping("update/memberInfo")
+    @PostMapping("update/memberInfo")
     public Result updateMemberGroupInfo(
             @RequestHeader("Authorization") String token,
             @RequestParam String name, @RequestParam String phone,
-            @RequestParam String location, @RequestParam String introduction,@RequestParam String groupId){
+            @RequestParam String location, @RequestParam String introduction,@RequestParam String groupId,@RequestBody MultipartFile image){
         Long userId = JwtUtil.getUserId(token);
         Long myIds = groupService.selectMyselfIdsByUserId(userId, new Long(groupId));
+        String url;
+        try {
+            url = COSClientUtil.sendToTencentCOS(image);
+        } catch (IOException e) {
+            throw new RuntimeException("上传失败");
+        }
+        //获取原信息
+        GroupUserDTO groupUserDTO = groupService.getMemberInfo(myIds);
         //修改信息
-        GroupUserDTO groupUserDTO = new GroupUserDTO();
-        if (name != null) {
+        if (name != null&&!name.equals("")) {
             groupUserDTO.setName(name);
         }
-        if (phone != null) {
+        if (phone != null&&!phone.equals("")) {
             groupUserDTO.setPhone(phone);
         }
-        if (location != null) {
+        if (location != null&&!location.equals("")) {
             groupUserDTO.setAddress(location);
         }
-        if (introduction != null) {
+        if (introduction != null&&!introduction.equals("")) {
             groupUserDTO.setIntroduction(introduction);
         }
-        if (myIds != null) {
-            groupUserDTO.setId(myIds);
+        if (url!=null){
+            groupUserDTO.setAvatar(url);
         }
 
         boolean b = groupService.updateMemberGroupInfo(groupUserDTO, userId);

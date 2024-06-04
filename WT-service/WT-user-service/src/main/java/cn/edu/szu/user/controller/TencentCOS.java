@@ -14,24 +14,17 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/user")
 public class TencentCOS {
-    @Autowired
-    private UserService userService;
 
-    @PutMapping("/uploadImage")
-    public Result uploadImage(@RequestParam("image") MultipartFile file, @RequestHeader("Authorization") String token) {
-        Long userId = JwtUtil.getUserId(token);
+    @PostMapping("/uploadImage")
+    public Result uploadImage(@RequestParam MultipartFile file) {
         String url;
-        boolean b;
         try {
             url = COSClientUtil.sendToTencentCOS(file);
-            b = userService.updateUserImage(url,userId);
         } catch (IOException e) {
             throw new RuntimeException("上传失败");
         }
-        if(b){
-            return new Result(Code.SAVE_OK, url, "上传成功");
-        }
-        return new Result(Code.SAVE_ERR, null, "上传失败");
+        return new Result(Code.SAVE_OK, url, "上传成功");
+
     }
 
 
