@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @FeignClient(name = "user-service")
 public interface UserClient {
@@ -17,5 +18,8 @@ public interface UserClient {
     Long getUserByMail(@PathVariable String email);
 
     @PutMapping("api/user/update/user")
-    boolean updateUserInfo(@RequestParam String name, @RequestParam String phone, @RequestParam String avatar, @RequestParam Long userId);
+    boolean updateUserInfo(@RequestParam String name, @RequestParam String phone, @RequestParam Long userId);
+
+    @PutMapping("api/user/uploadImage")
+    Result uploadImage(@RequestParam("image") MultipartFile file);
 }

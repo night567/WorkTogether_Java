@@ -98,7 +98,7 @@ public class UserController {
     }
 
     @PutMapping("/update/user")
-    public boolean updateUserInfo(@RequestParam String name,@RequestParam String phone,@RequestParam String avatar,@RequestParam Long userId){
-        return  userService.updateUserInfo(name,phone,avatar,userId);
+    public boolean updateUserInfo(@RequestParam String name,@RequestParam String phone,@RequestParam Long userId){
+        return  userService.updateUserInfo(name,phone,userId);
     }
 }

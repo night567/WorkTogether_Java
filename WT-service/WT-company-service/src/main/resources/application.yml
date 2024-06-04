@@ -6,6 +6,12 @@ logging:
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
 spring:
+  servlet:
+     multipart:
+        enabled: true
+        max-file-size: 10MB
+        max-request-size: 10MB
+
   dataSource:
     url: jdbc:mysql://47.120.13.87:3306/wt_company?useSSL=false
     username: root

@@ -9,6 +9,7 @@ import cn.edu.szu.company.pojo.MemberDTO;
 import cn.edu.szu.company.pojo.domain.Group;
 import cn.edu.szu.company.pojo.domain.UserGroupRequest;
 import cn.edu.szu.company.service.GroupService;
+import cn.edu.szu.feign.client.UserClient;
 import cn.hutool.core.io.FileUtil;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.apache.poi.ss.usermodel.Row;
@@ -38,6 +39,8 @@ import java.util.Map;
 public class GroupController {
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private UserClient userClient;
 
     @PostMapping("/createGroup")
     public Result createGroup(@RequestHeader("companyId") Long companyId, @RequestBody GroupDTO groupDTO) {
@@ -256,20 +259,32 @@ public class GroupController {
         return new Result(Code.GET_OK,members,"查询成功");
     }
 
+    //编辑个人信息
     @PutMapping("update/memberInfo")
     public Result updateMemberGroupInfo(
             @RequestHeader("Authorization") String token,
-            @RequestParam String name, @RequestParam String phone, @RequestParam String avatar,
-            @RequestParam String location, @RequestParam String introduction,@RequestParam Long groupId){
+            @RequestParam String name, @RequestParam String phone,
+            @RequestParam String location, @RequestParam String introduction,@RequestParam String groupId){
         Long userId = JwtUtil.getUserId(token);
-        Long myIds = groupService.selectMyselfIdsByUserId(userId,groupId);
+        Long myIds = groupService.selectMyselfIdsByUserId(userId, new Long(groupId));
+        //修改信息
         GroupUserDTO groupUserDTO = new GroupUserDTO();
-        groupUserDTO.setName(name);
-        groupUserDTO.setPhone(phone);
-        groupUserDTO.setAvatar(avatar);
-        groupUserDTO.setAddress(location);
-        groupUserDTO.setIntroduction(introduction);
-        groupUserDTO.setId(myIds);
+        if (name != null) {
+            groupUserDTO.setName(name);
+        }
+        if (phone != null) {
+            groupUserDTO.setPhone(phone);
+        }
+        if (location != null) {
+            groupUserDTO.setAddress(location);
+        }
+        if (introduction != null) {
+            groupUserDTO.setIntroduction(introduction);
+        }
+        if (myIds != null) {
+            groupUserDTO.setId(myIds);
+        }
+
         boolean b = groupService.updateMemberGroupInfo(groupUserDTO, userId);
         if (b)
             return new Result(Code.UPDATE_OK,null,"修改成功");
