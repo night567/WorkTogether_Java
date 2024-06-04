@@ -19,13 +19,11 @@ import java.util.Set;
 public interface MessageUserMapper extends BaseMapper<MessageUser> {
     List<MessageDTO> getMessageByIds(Set<String> ids);
 
+    IPage<MessageDTO> getMessage(IPage<MessageDTO> page, Long userId, Long groupId, Boolean isRead, Boolean handleLater);
+
     IPage<MessageDTO> getMessageByUidAndGid(IPage<MessageDTO> page, Long userId, Long groupId);
 
     IPage<MessageDTO> getMessageByUidAndGidAndReadOrNot(IPage<MessageDTO> page, Long userId, Long groupId, Boolean isRead);
 
     IPage<MessageDTO> getMessageByUidAndGidWhereHandleLater(IPage<MessageDTO> page, Long userId, Long groupId);
 }
-
-
-
-

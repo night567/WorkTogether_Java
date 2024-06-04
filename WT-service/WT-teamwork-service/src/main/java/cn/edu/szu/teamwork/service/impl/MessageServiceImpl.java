@@ -56,7 +56,21 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     }
 
     @Override
-    public List<MessageDTO> getMassage(Long userId, Long groupId, Integer pageNum, Integer PageSize) {
+    public List<MessageDTO> getMessage(Long userId, MessageDTO message, Integer pageNum, Integer pageSize) {
+        // 获取消息列表（分页查询）
+        IPage<MessageDTO> page = messageUserMapper.getMessage(
+                Page.of(pageNum, pageSize), userId, message.getGroupId(),
+                message.getIsRead(), message.getHandleLater());
+        List<MessageDTO> messageList = page.getRecords();
+
+        // 填入用户信息
+        setUserForMessageList(messageList);
+
+        return messageList;
+    }
+
+    @Override
+    public List<MessageDTO> getAllMassage(Long userId, Long groupId, Integer pageNum, Integer pageSize) {
 //        String key = FEED_KEY + groupId + ":" + userId;
 //        long start = (long) (pageNum - 1) * PageSize;
 //        long end = start + PageSize - 1;
@@ -65,7 +79,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
 //        List<MessageDTO> messageList = messageUserMapper.getMessageByIds(messageIds);
         // 获取消息列表（分页查询）
         IPage<MessageDTO> page = messageUserMapper.getMessageByUidAndGid(
-                Page.of(pageNum, PageSize), userId, groupId);
+                Page.of(pageNum, pageSize), userId, groupId);
         List<MessageDTO> messageList = page.getRecords();
 
         // 填入用户信息

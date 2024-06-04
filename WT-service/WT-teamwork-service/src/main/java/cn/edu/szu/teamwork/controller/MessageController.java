@@ -17,13 +17,26 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("/{groupId}")
+    @GetMapping
     public Result getMessage(@RequestHeader("Authorization") String token,
-                             @PathVariable Long groupId,
+                             @RequestBody MessageDTO message,
                              @RequestParam(value = "page", defaultValue = "0") Integer page,
                              @RequestParam(value = "size", defaultValue = "100") Integer size) {
         Long userId = JwtUtil.getUserId(token);
-        List<MessageDTO> messageList = messageService.getMassage(userId, groupId, page, size);
+        List<MessageDTO> messageList = messageService.getMessage(userId, message, page, size);
+        if (messageList != null) {
+            return new Result(Code.GET_OK, messageList, "获取消息成功");
+        }
+        return new Result(Code.GET_ERR, Collections.emptyList(), "获取消息失败");
+    }
+
+    @GetMapping("/{groupId}")
+    public Result getAllMessage(@RequestHeader("Authorization") String token,
+                                @PathVariable Long groupId,
+                                @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                @RequestParam(value = "size", defaultValue = "100") Integer size) {
+        Long userId = JwtUtil.getUserId(token);
+        List<MessageDTO> messageList = messageService.getAllMassage(userId, groupId, page, size);
         if (messageList != null) {
             return new Result(Code.GET_OK, messageList, "获取消息成功");
         }

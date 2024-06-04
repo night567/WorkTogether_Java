@@ -45,6 +45,23 @@
         ORDER BY m.create_time DESC
     </select>
 
+    <select id="getMessage" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
+        SELECT
+        <include refid="MessageDTO"/>
+        FROM wt_teamwork.wt_message_user mu
+        INNER JOIN wt_teamwork.wt_message m ON mu.message_id = m.id
+        INNER JOIN wt_teamwork.wt_schedule s ON m.schedule_id = s.id
+        WHERE mu.user_id = #{userId}
+        AND m.group_id = #{groupId}
+        <if test="isRead != null">
+            AND mu.is_read = #{isRead}
+        </if>
+        <if test="handleLater != null">
+            AND mu.handle_later = #{handleLater}
+        </if>
+        ORDER BY m.create_time DESC
+    </select>
+
     <select id="getMessageByUidAndGid" resultType="cn.edu.szu.teamwork.pojo.MessageDTO">
         SELECT
         <include refid="MessageDTO"/>
