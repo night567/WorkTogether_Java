@@ -27,7 +27,6 @@ public class UserController {
     public Result createAccount(@RequestBody LoginDTO loginDTO) {
         return userService.createAccount(loginDTO);
     }
-
     @PostMapping("/login")
     public Result login(@RequestBody LoginDTO loginDTO) {
         return userService.login(loginDTO);

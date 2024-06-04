@@ -18,6 +18,13 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>5.6.213</version>
+        </dependency>
+
+
         <!-- springboot 集成邮件依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
