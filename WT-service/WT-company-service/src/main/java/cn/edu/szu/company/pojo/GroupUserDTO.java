@@ -1,8 +1,9 @@
 package cn.edu.szu.company.pojo;
 
-import cn.edu.szu.company.pojo.domain.CompanyUser;
 import cn.edu.szu.company.pojo.domain.GroupUser;
 import cn.edu.szu.feign.pojo.UserDTO;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupUserDTO {
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private String name; //姓名
     private String phone; //手机
@@ -21,16 +23,16 @@ public class GroupUserDTO {
     private String address; //工作地址
     private String introduction; //个人介绍
 
-    public GroupUserDTO(GroupUser groupUser, UserDTO userDTO, String deptName,String job){
-        this.id=groupUser.getId();
-        this.name=userDTO.getName();
-        this.phone=userDTO.getPhone();
-        this.email=userDTO.getEmail();
-        this.avatar=userDTO.getAvatar();
-        this.deptName=deptName;
-        this.introduction=groupUser.getDescription();
-        this.address=groupUser.getLocation();
-        this.job=job;
+    public GroupUserDTO(GroupUser groupUser, UserDTO userDTO, String deptName, String job) {
+        this.id = groupUser.getId();
+        this.name = userDTO.getName();
+        this.phone = userDTO.getPhone();
+        this.email = userDTO.getEmail();
+        this.avatar = userDTO.getAvatar();
+        this.deptName = deptName;
+        this.introduction = groupUser.getDescription();
+        this.address = groupUser.getLocation();
+        this.job = job;
     }
 }
 
