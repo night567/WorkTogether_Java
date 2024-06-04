@@ -4,6 +4,7 @@ import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.teamwork.pojo.MessageDTO;
+import cn.edu.szu.teamwork.pojo.MyDTO;
 import cn.edu.szu.teamwork.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +43,29 @@ public class MessageController {
         return new Result(Code.UPDATE_OK, null, msg);
     }
 
+    @PutMapping("/toIsRead/ByIds")
+    public Result setMsgToIsReadByIds(@RequestBody MyDTO ids, @RequestHeader("Authorization") String token) {
+        Long userId = JwtUtil.getUserId(token);
+        String msg = messageService.setMsgToIsReadByIds(ids.getIdList(), userId);
+        if (msg.equals("信息错误，无法修改")) {
+            return new Result(Code.UPDATE_ERR, null, msg);
+        }
+        return new Result(Code.UPDATE_OK, null, msg);
+    }
+
     @PutMapping("/toLater/{id}")
     public Result setMsgToLater(@PathVariable Long id, @RequestHeader("Authorization") String token) {
         Long userId = JwtUtil.getUserId(token);
         String msg = messageService.setMsgToLater(id, userId);
+        if (msg.equals("信息错误，无法修改")) {
+            return new Result(Code.UPDATE_ERR, null, msg);
+        }
+        return new Result(Code.UPDATE_OK, null, msg);
+    }
+    @PutMapping("/toLater/ByIds")
+    public Result setMsgToLaterByIds(@RequestBody MyDTO ids, @RequestHeader("Authorization") String token) {
+        Long userId = JwtUtil.getUserId(token);
+        String msg = messageService.setMsgToLaterByIds(ids.getIdList(), userId);
         if (msg.equals("信息错误，无法修改")) {
             return new Result(Code.UPDATE_ERR, null, msg);
         }

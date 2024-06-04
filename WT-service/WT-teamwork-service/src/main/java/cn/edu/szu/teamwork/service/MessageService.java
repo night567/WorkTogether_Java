@@ -21,6 +21,7 @@ public interface MessageService extends IService<Message> {
     List<MessageDTO> getMessageWithHandleLater(Long userId, Long groupId, Integer pageNum, Integer PageSize);
 
     String setMsgToIsRead(Long id, Long uid);
-
+    String setMsgToIsReadByIds(List<Long >ids, Long uid);
+    String setMsgToLaterByIds(List<Long >ids, Long uid);
     String setMsgToLater(Long id, Long uid);
 }

@@ -49,6 +49,20 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     }
 
     @Override
+    public String setMsgToIsReadByIds(List<Long> ids, Long uid) {
+        List<MessageUser> messageUsers = messageUserMapper.selectBatchIds(ids);
+        for (MessageUser msgu: messageUsers){
+            msgu.setIsRead(true);
+            if (!msgu.getUserId().equals(uid)) {
+                return "信息错误，无法修改";
+            }
+//            @TODO  改为xml的修改
+            messageUserMapper.updateById(msgu);
+        }
+        return "更新成功";
+    }
+
+    @Override
     public String setMsgToLater(Long id, Long uid) {
         MessageUser msgUser = messageUserMapper.selectById(id);
         if (!msgUser.getUserId().equals(uid)) {
@@ -61,7 +75,19 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         }
         return "更新失败";
     }
-
+    @Override
+    public String setMsgToLaterByIds(List<Long> ids, Long uid) {
+        List<MessageUser> messageUsers = messageUserMapper.selectBatchIds(ids);
+        for (MessageUser msgu: messageUsers){
+            msgu.setHandleLater(true);
+            if (!msgu.getUserId().equals(uid)) {
+                return "信息错误，无法修改";
+            }
+//            @TODO  改为xml的修改
+            messageUserMapper.updateById(msgu);
+        }
+        return "更新成功";
+    }
     @Override
     @Async // 声明异步方法
     @Transactional
