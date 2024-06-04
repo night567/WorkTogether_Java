@@ -33,7 +33,32 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     private MessageUserMapper messageUserMapper;
     @Autowired
     private UserClient userClient;
-
+    @Override
+    public String setMsgToIsRead(Long id,Long uid){
+        MessageUser msgUser = messageUserMapper.selectById(id);
+        if(!msgUser.getUserId().equals(uid)){
+            return "信息错误，无法修改";
+        }
+        msgUser.setIsRead(true);
+        int cnt = messageUserMapper.updateById(msgUser);
+        if (cnt > 0){
+            return "更新成功";
+        }
+        return "更新失败";
+    }
+    @Override
+    public String setMsgToLater(Long id,Long uid){
+        MessageUser msgUser = messageUserMapper.selectById(id);
+        if(!msgUser.getUserId().equals(uid)){
+            return "信息错误，无法修改";
+        }
+        msgUser.setHandleLater(true);
+        int cnt = messageUserMapper.updateById(msgUser);
+        if (cnt > 0){
+            return "更新成功";
+        }
+        return "更新失败";
+    }
     @Override
     @Async // 声明异步方法
     @Transactional
