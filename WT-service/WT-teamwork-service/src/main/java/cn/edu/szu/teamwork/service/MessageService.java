@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 /**
- * @author zgr24
+ * @author zgr24 ywf
  * @description 针对表【wt_message(消息)】的数据库操作Service
  * @createDate 2024-06-02 17:08:48
  */
@@ -19,4 +19,7 @@ public interface MessageService extends IService<Message> {
     List<MessageDTO> getMessageWithIsRead(Long userId, Long groupId, Boolean isRead, Integer pageNum, Integer PageSize);
 
     List<MessageDTO> getMessageWithHandleLater(Long userId, Long groupId, Integer pageNum, Integer PageSize);
+
+    String setMsgToIsRead(Long id,Long uid);
+    String setMsgToLater(Long id,Long uid);
 }
