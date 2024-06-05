@@ -53,19 +53,27 @@ public class MessageController {
         return new Result(Code.UPDATE_OK, null, msg);
     }
 
-    @PutMapping("/toLater/{id}")
-    public Result setMsgToLater(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    @PutMapping("/toLater/{id}/{b}")
+    public Result setMsgToLater(@PathVariable Long id, @PathVariable int b,@RequestHeader("Authorization") String token) {
         Long userId = JwtUtil.getUserId(token);
-        String msg = messageService.setMsgToLater(id, userId);
+        boolean check = false;
+        if (b == 1){
+            check = true;
+        }
+        String msg = messageService.setMsgToLater(id, userId,check);
         if (msg.equals("信息错误，无法修改")) {
             return new Result(Code.UPDATE_ERR, null, msg);
         }
         return new Result(Code.UPDATE_OK, null, msg);
     }
-    @PutMapping("/toLater/ByIds")
-    public Result setMsgToLaterByIds(@RequestBody MyDTO ids, @RequestHeader("Authorization") String token) {
+    @PutMapping("/toLater/ByIds/{b}")
+    public Result setMsgToLaterByIds(@RequestBody MyDTO ids,@PathVariable int b, @RequestHeader("Authorization") String token) {
         Long userId = JwtUtil.getUserId(token);
-        String msg = messageService.setMsgToLaterByIds(ids.getIdList(), userId);
+        boolean check = false;
+        if (b == 1){
+            check = true;
+        }
+        String msg = messageService.setMsgToLaterByIds(ids.getIdList(), userId,check);
         if (msg.equals("信息错误，无法修改")) {
             return new Result(Code.UPDATE_ERR, null, msg);
         }

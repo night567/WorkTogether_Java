@@ -22,6 +22,6 @@ public interface MessageService extends IService<Message> {
 
     String setMsgToIsRead(Long id, Long uid);
     String setMsgToIsReadByIds(List<Long >ids, Long uid);
-    String setMsgToLaterByIds(List<Long >ids, Long uid);
-    String setMsgToLater(Long id, Long uid);
+    String setMsgToLaterByIds(List<Long >ids, Long uid,boolean b);
+    String setMsgToLater(Long id, Long uid,boolean b);
 }

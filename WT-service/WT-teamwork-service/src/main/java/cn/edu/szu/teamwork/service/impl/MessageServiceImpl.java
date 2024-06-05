@@ -63,12 +63,12 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     }
 
     @Override
-    public String setMsgToLater(Long id, Long uid) {
+    public String setMsgToLater(Long id, Long uid,boolean b) {
         MessageUser msgUser = messageUserMapper.selectById(id);
         if (!msgUser.getUserId().equals(uid)) {
             return "信息错误，无法修改";
         }
-        msgUser.setHandleLater(true);
+        msgUser.setHandleLater(b);
         int cnt = messageUserMapper.updateById(msgUser);
         if (cnt > 0) {
             return "更新成功";
@@ -76,10 +76,10 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         return "更新失败";
     }
     @Override
-    public String setMsgToLaterByIds(List<Long> ids, Long uid) {
+    public String setMsgToLaterByIds(List<Long> ids, Long uid,boolean b) {
         List<MessageUser> messageUsers = messageUserMapper.selectBatchIds(ids);
         for (MessageUser msgu: messageUsers){
-            msgu.setHandleLater(true);
+            msgu.setHandleLater(b);
             if (!msgu.getUserId().equals(uid)) {
                 return "信息错误，无法修改";
             }
