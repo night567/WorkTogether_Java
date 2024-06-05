@@ -20,7 +20,7 @@ public interface ScheduleService extends IService<Schedule> {
 
     boolean delSchedule(String id, Long uid);
 
-    boolean updateSchedule(ScheduleDTO scheduleDTO);
+    boolean updateSchedule(Long uid, ScheduleDTO scheduleDTO);
 
     List<ScheduleDTO> selectUserSchedule(Long groupId, Long userId, String startTime, String endTime, boolean flag);
 

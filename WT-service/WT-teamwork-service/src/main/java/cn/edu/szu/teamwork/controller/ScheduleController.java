@@ -50,9 +50,10 @@ public class ScheduleController {
     }
 
     @PutMapping
-    private Result updateSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+    private Result updateSchedule(@RequestHeader("Authorization") String token, @RequestBody ScheduleDTO scheduleDTO) {
+        Long uid = JwtUtil.getUserId(token);
         try {
-            boolean isUpdated = scheduleService.updateSchedule(scheduleDTO);
+            boolean isUpdated = scheduleService.updateSchedule(uid, scheduleDTO);
             if (isUpdated) {
                 return new Result(Code.UPDATE_OK, true, "更新成功");
             }
@@ -65,7 +66,7 @@ public class ScheduleController {
 
     //获取个人日程（时间区内）
     @GetMapping("/user")
-    private Result selectUserSchedule(@RequestHeader("Authorization")String token,@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime) {
+    private Result selectUserSchedule(@RequestHeader("Authorization") String token, @RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime) {
         Long userId = JwtUtil.getUserId(token);
         List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, userId, startTime, endTime, true);
         if (schedules == null || schedules.isEmpty())
@@ -75,9 +76,10 @@ public class ScheduleController {
 
     //获取团队成员全部日程
     @GetMapping("/member")
-    private Result selectMemberSchedule(@RequestParam  String id,@RequestParam String groupId) {
+    private Result selectMemberSchedule(@RequestParam String id, @RequestParam String groupId) {
+        System.out.println("id:" + id + "groupId:" + groupId);
         Long uid = companyClient.selectUIDByGroupUserId(new Long(id));
-        List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(new Long(groupId), new Long(uid), null,null, false);
+        List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(new Long(groupId), new Long(uid), null, null, false);
         if (schedules == null || schedules.isEmpty())
             return new Result(Code.GET_ERR, schedules, "查询失败！");
         return new Result(Code.GET_OK, schedules, "查询成功！");
@@ -103,7 +105,7 @@ public class ScheduleController {
 
     //获取个人全部日程
     @GetMapping("/user/all")
-    private Result selectUserScheduleAll(@RequestHeader("Authorization")String token,@RequestParam Long groupId) {
+    private Result selectUserScheduleAll(@RequestHeader("Authorization") String token, @RequestParam Long groupId) {
         Long userId = JwtUtil.getUserId(token);
         List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, userId, null, null, false);
         if (schedules == null || schedules.isEmpty())
@@ -176,10 +178,10 @@ public class ScheduleController {
 
     //根据日程ID获取完整日程
     @GetMapping("/getScheduleInfoByid")
-    public Result getScheduleInfoByid(@RequestParam String scheduleId){
+    public Result getScheduleInfoByid(@RequestParam String scheduleId) {
         ScheduleInfoDTO scheduleInfoDTO = scheduleService.selectScheduleInfoByScheduleId(new Long(scheduleId));
-        if(scheduleInfoDTO!=null)
-            return  new Result(Code.GET_OK,scheduleInfoDTO,"获取成功");
-        return  new Result(Code.GET_ERR,null,"获取失败");
+        if (scheduleInfoDTO != null)
+            return new Result(Code.GET_OK, scheduleInfoDTO, "获取成功");
+        return new Result(Code.GET_ERR, null, "获取失败");
     }
 }
