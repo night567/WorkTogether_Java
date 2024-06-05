@@ -5,6 +5,7 @@ import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
+import cn.edu.szu.teamwork.pojo.ScheduleInfoDTO;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import cn.edu.szu.teamwork.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,5 +172,14 @@ public class ScheduleController {
             return new Result(Code.UPDATE_OK, null, "修改状态成功");
         }
         return new Result(Code.UPDATE_ERR, null, "修改状态失败");
+    }
+
+    //根据日程ID获取完整日程
+    @GetMapping("/getScheduleInfoByid")
+    public Result getScheduleInfoByid(@RequestParam String scheduleId){
+        ScheduleInfoDTO scheduleInfoDTO = scheduleService.selectScheduleInfoByScheduleId(new Long(scheduleId));
+        if(scheduleInfoDTO!=null)
+            return  new Result(Code.GET_OK,scheduleInfoDTO,"获取成功");
+        return  new Result(Code.GET_ERR,null,"获取失败");
     }
 }

@@ -1,5 +1,6 @@
 package cn.edu.szu.teamwork.mapper;
 
+import cn.edu.szu.teamwork.pojo.ScheduleUserInfo;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -21,6 +22,11 @@ public interface ScheduleUserMapper extends BaseMapper<ScheduleUser> {
     @Select("select user_id from wt_schedule_user where schedule_id = #{id} and is_deleted = 0")
     List<String> selectUserIdByScheduleId(Long id);
     List<ScheduleUser> selectUsersByScheduleId(Long ScheduleId);
+
+    @Select("select * from wt_schedule_user where schedule_id = #{ScheduleId} and is_deleted = 0")
+    List<ScheduleUserInfo> selectUsersInfoByScheduleId(Long ScheduleId);
+
+
 }
 
 
