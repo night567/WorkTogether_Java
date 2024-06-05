@@ -287,7 +287,7 @@ public class GroupController {
         if (introduction != null&&!introduction.equals("")) {
             groupUserDTO.setIntroduction(introduction);
         }
-        if (url!=null&&image!=null&&image.equals("")){
+        if (url!=null&&image!=null&&!image.equals("")){
             groupUserDTO.setAvatar(url);
         }
 
