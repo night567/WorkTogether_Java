@@ -16,4 +16,5 @@ public class MemberDTO {
     private String groupName; // 团队名称
     private String position; // 职位
     private Date joinTime;//加入时间
+    private String avatar;//头像
 }

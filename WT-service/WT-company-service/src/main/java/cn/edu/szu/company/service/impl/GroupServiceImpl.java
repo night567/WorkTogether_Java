@@ -273,6 +273,7 @@ public class GroupServiceImpl implements GroupService {
             memberDTO.setDeptName(companyUserMapper.selectDeptName(user.getId()));
             memberDTO.setName(user.getName());
             memberDTO.setEmail(user.getEmail());
+            memberDTO.setAvatar(user.getAvatar());
 //            memberDTO.setPosition("职员");
         }
         System.out.println(memberDTOS);
