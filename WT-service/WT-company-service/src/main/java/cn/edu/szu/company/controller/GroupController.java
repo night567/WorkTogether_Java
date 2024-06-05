@@ -266,11 +266,13 @@ public class GroupController {
             @RequestParam String location, @RequestParam String introduction,@RequestParam String groupId,@RequestBody MultipartFile image){
         Long userId = JwtUtil.getUserId(token);
         Long myIds = groupService.selectMyselfIdsByUserId(userId, new Long(groupId));
-        String url;
-        try {
-            url = COSClientUtil.sendToTencentCOS(image);
-        } catch (IOException e) {
-            throw new RuntimeException("上传失败");
+        String url=null;
+        if (image != null && !image.isEmpty()) {
+            try {
+                url = COSClientUtil.sendToTencentCOS(image);
+            } catch (IOException e) {
+               image=null;
+            }
         }
         //获取原信息
         GroupUserDTO groupUserDTO = groupService.getMemberInfo(myIds);
@@ -287,7 +289,7 @@ public class GroupController {
         if (introduction != null&&!introduction.equals("")) {
             groupUserDTO.setIntroduction(introduction);
         }
-        if (url!=null&&image!=null&&!image.equals("")){
+        if (url!=null&&image!=null&&!image.isEmpty()){
             groupUserDTO.setAvatar(url);
         }
 
