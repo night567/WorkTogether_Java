@@ -22,7 +22,7 @@
         mu.is_read      AS isRead,
         mu.handle_later AS handleLater,
         m.group_id      AS groupId,
-        mu.user_id      AS userId,
+        m.user_id      AS userId,
         m.context       AS context,
         m.schedule_id   AS scheduleId,
         m.type          AS type,

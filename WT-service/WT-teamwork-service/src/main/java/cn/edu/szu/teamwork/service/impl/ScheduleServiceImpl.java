@@ -1,8 +1,12 @@
 package cn.edu.szu.teamwork.service.impl;
 
+import cn.edu.szu.feign.client.UserClient;
+import cn.edu.szu.feign.pojo.UserDTO;
 import cn.edu.szu.teamwork.mapper.ScheduleMapper;
 import cn.edu.szu.teamwork.mapper.ScheduleUserMapper;
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
+import cn.edu.szu.teamwork.pojo.ScheduleInfoDTO;
+import cn.edu.szu.teamwork.pojo.ScheduleUserInfo;
 import cn.edu.szu.teamwork.pojo.domain.Message;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
@@ -38,6 +42,8 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
     private ScheduleUserMapper scheduleUserMapper;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private UserClient userClient;
     // 日期时间格式
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -472,6 +478,24 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
         scheduleUserMapper.updateById(scheduleUser);
         messageService.sandMessageAsync(message, Collections.singletonList(schedule.getCreatorId()));
         return true;
+    }
+
+    @Override
+    public ScheduleInfoDTO selectScheduleInfoByScheduleId(Long ScheduleId) {
+        //获取日程参与者信息
+        List<ScheduleUserInfo> scheduleUserInfos = scheduleUserMapper.selectUsersInfoByScheduleId(ScheduleId);
+        for(ScheduleUserInfo s:scheduleUserInfos){
+            UserDTO userById = userClient.getUserById(s.getUserId());
+            s.setName(userById.getName());
+            s.setAvatar(userById.getAvatar());
+        }
+        //获取日程信息
+        Schedule schedule = scheduleMapper.selectById(ScheduleId);
+        //获取完整的日程
+        ScheduleInfoDTO scheduleInfoDTO = new ScheduleInfoDTO(schedule);
+        scheduleInfoDTO.setScheduleUsers(scheduleUserInfos);
+        return  scheduleInfoDTO;
+
     }
 }
 

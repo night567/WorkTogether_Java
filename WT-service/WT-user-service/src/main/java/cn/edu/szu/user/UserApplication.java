@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 @SpringBootApplication()
-@EnableWebMvc
 @EnableFeignClients(basePackages = {"cn.edu.szu.feign.client"})
 public class UserApplication {
     public static void main(String[] args) {

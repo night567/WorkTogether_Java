@@ -1,6 +1,8 @@
 package cn.edu.szu.teamwork.service;
 
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
+import cn.edu.szu.teamwork.pojo.ScheduleInfoDTO;
+import cn.edu.szu.teamwork.pojo.ScheduleUserInfo;
 import cn.edu.szu.teamwork.pojo.domain.Schedule;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -37,4 +39,6 @@ public interface ScheduleService extends IService<Schedule> {
     boolean joinSchedule(Long scheduleId, Long uid);
 
     boolean refuseOrTentativeSchedule(ScheduleUser scheduleUserDTO);
+
+    ScheduleInfoDTO selectScheduleInfoByScheduleId(Long ScheduleId);
 }

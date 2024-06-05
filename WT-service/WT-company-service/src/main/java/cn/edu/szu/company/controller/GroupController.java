@@ -40,8 +40,6 @@ import java.util.Map;
 public class GroupController {
     @Autowired
     private GroupService groupService;
-    @Autowired
-    private UserClient userClient;
 
     @PostMapping("/createGroup")
     public Result createGroup(@RequestHeader("companyId") Long companyId, @RequestBody GroupDTO groupDTO) {
@@ -268,11 +266,13 @@ public class GroupController {
             @RequestParam String location, @RequestParam String introduction,@RequestParam String groupId,@RequestBody MultipartFile image){
         Long userId = JwtUtil.getUserId(token);
         Long myIds = groupService.selectMyselfIdsByUserId(userId, new Long(groupId));
-        String url;
-        try {
-            url = COSClientUtil.sendToTencentCOS(image);
-        } catch (IOException e) {
-            throw new RuntimeException("上传失败");
+        String url=null;
+        if (image != null && !image.isEmpty()) {
+            try {
+                url = COSClientUtil.sendToTencentCOS(image);
+            } catch (IOException e) {
+               image=null;
+            }
         }
         //获取原信息
         GroupUserDTO groupUserDTO = groupService.getMemberInfo(myIds);
@@ -289,7 +289,7 @@ public class GroupController {
         if (introduction != null&&!introduction.equals("")) {
             groupUserDTO.setIntroduction(introduction);
         }
-        if (url!=null){
+        if (url!=null&&image!=null&&!image.isEmpty()){
             groupUserDTO.setAvatar(url);
         }
 
@@ -299,4 +299,10 @@ public class GroupController {
         return new Result(Code.UPDATE_ERR,null,"修改失败");
 
     }
+    @GetMapping("/getUidByGroupUserId")
+     public Long selectUIDByGroupUserId(@RequestParam  Long guid){
+      return  groupService.selectUIDByGroupUserId(guid);
+    }
+
+
 }
