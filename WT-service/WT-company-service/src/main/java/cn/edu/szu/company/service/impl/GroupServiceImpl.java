@@ -401,7 +401,7 @@ public class GroupServiceImpl implements GroupService {
 
         // 按照首字母分组
         for (GroupUserDTO userDTO : groupUserDTOs) {
-                if (userDTO.getId() == myId) {
+                if (userDTO.getId().equals(myId.toString())) {
                     memberMap.computeIfAbsent("myself", k -> new ArrayList<>()).add(userDTO);
                     continue;
                 }

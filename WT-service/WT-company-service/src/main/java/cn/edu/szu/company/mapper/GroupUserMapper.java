@@ -46,7 +46,7 @@ public interface GroupUserMapper extends BaseMapper<GroupUser> {
     Long selectMyselfIdsByUserId(Long userId,Long groupId);
 
     @Update("UPDATE wt_group_user set location = #{address},description=#{introduction} where id  = #{groupUserId}")
-    int updateMemberGroupInfo(String address,String introduction,Long groupUserId);
+    int updateMemberGroupInfo(String address,String introduction,String groupUserId);
 
     @Select("select user_id from wt_group_user where id=#{guid}")
     Long selectUIDByGroupUserId(Long guid);
