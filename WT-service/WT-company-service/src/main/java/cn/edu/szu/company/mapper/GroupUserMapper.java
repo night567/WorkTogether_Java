@@ -42,7 +42,7 @@ public interface GroupUserMapper extends BaseMapper<GroupUser> {
     @Select("select id from wt_group_user where group_id=#{groupId}")
     List<Long> selectMemberIdsByGroupId(Long groupId);
 
-    @Select("select id from wt_group_user where user_id=#{userId} and group_id=#{groupId}")
+    @Select("select id from wt_group_user where user_id=#{userId} and group_id=#{groupId} and is_deleted = 0")
     Long selectMyselfIdsByUserId(Long userId,Long groupId);
 
     @Update("UPDATE wt_group_user set location = #{address},description=#{introduction} where id  = #{groupUserId}")

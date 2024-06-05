@@ -128,9 +128,12 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper, Schedule> i
 
     @Override
     @Transactional
-    public boolean updateSchedule(ScheduleDTO scheduleDTO) {
+    public boolean updateSchedule(Long uid, ScheduleDTO scheduleDTO) {
         // 构建日程
         Schedule schedule = scheduleMapper.selectById(scheduleDTO.getId());
+        if (schedule == null || !schedule.getCreatorId().equals(uid)) {
+            return false;
+        }
         schedule.setTitle(scheduleDTO.getTitle());
         schedule.setStartTime(scheduleDTO.getStartTime());
         schedule.setEndTime(scheduleDTO.getEndTime());
