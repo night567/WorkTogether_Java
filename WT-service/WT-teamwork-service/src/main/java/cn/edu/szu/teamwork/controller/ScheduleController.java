@@ -3,6 +3,7 @@ package cn.edu.szu.teamwork.controller;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
+import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.teamwork.pojo.ScheduleDTO;
 import cn.edu.szu.teamwork.pojo.domain.ScheduleUser;
 import cn.edu.szu.teamwork.service.ScheduleService;
@@ -16,6 +17,8 @@ import java.util.List;
 public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
+    @Autowired
+    private CompanyClient companyClient;
 
     @PostMapping
     private Result createSchedule(@RequestHeader("Authorization") String token, @RequestBody ScheduleDTO scheduleDTO) {
@@ -69,10 +72,11 @@ public class ScheduleController {
         return new Result(Code.GET_OK, schedules, "查询成功！");
     }
 
-    //获取团队成员日程（时间区内）
+    //获取团队成员全部日程
     @GetMapping("/member")
-    private Result selectMemberSchedule(@RequestParam  Long id,@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime) {
-        List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(groupId, id, startTime, endTime, true);
+    private Result selectMemberSchedule(@RequestParam  String id,@RequestParam String groupId) {
+        Long uid = companyClient.selectUIDByGroupUserId(new Long(id));
+        List<ScheduleDTO> schedules = scheduleService.selectUserSchedule(new Long(groupId), new Long(uid), null,null, false);
         if (schedules == null || schedules.isEmpty())
             return new Result(Code.GET_ERR, schedules, "查询失败！");
         return new Result(Code.GET_OK, schedules, "查询成功！");
@@ -81,7 +85,7 @@ public class ScheduleController {
     //获取团队日程（时间区内）
     @GetMapping("/group")
     private Result selectGroupSchedule(@RequestParam Long groupId, @RequestParam String startTime, @RequestParam String endTime) {
-        List<ScheduleDTO> schedules = scheduleService.selectScheduleByGroupId(groupId, startTime, endTime, true);
+        List<ScheduleDTO> schedules = scheduleService.selectScheduleByGroupId(groupId, startTime, endTime, false);
         if (schedules == null || schedules.isEmpty())
             return new Result(Code.GET_ERR, schedules, "查询失败！");
         return new Result(Code.GET_OK, schedules, "查询成功！");

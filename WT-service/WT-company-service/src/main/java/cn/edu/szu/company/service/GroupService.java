@@ -48,4 +48,5 @@ public interface GroupService {
     boolean updateMemberGroupInfo(GroupUserDTO groupUserDTO,Long userId);
 
     Long selectMyselfIdsByUserId(Long userId,Long groupId);
+    Long selectUIDByGroupUserId(Long guid);
 }

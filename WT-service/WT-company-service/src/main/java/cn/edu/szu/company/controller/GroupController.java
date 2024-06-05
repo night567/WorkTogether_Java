@@ -40,8 +40,6 @@ import java.util.Map;
 public class GroupController {
     @Autowired
     private GroupService groupService;
-    @Autowired
-    private UserClient userClient;
 
     @PostMapping("/createGroup")
     public Result createGroup(@RequestHeader("companyId") Long companyId, @RequestBody GroupDTO groupDTO) {
@@ -299,4 +297,10 @@ public class GroupController {
         return new Result(Code.UPDATE_ERR,null,"修改失败");
 
     }
+    @GetMapping("/getUidByGroupUserId")
+     public Long selectUIDByGroupUserId(@RequestParam  Long guid){
+      return  groupService.selectUIDByGroupUserId(guid);
+    }
+
+
 }

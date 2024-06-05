@@ -429,6 +429,11 @@ public class GroupServiceImpl implements GroupService {
         return groupUserMapper.selectMyselfIdsByUserId(userId,groupId);
     }
 
+    @Override
+    public Long selectUIDByGroupUserId(Long guid) {
+        return groupUserMapper.selectUIDByGroupUserId(guid);
+    }
+
 
 }
 
