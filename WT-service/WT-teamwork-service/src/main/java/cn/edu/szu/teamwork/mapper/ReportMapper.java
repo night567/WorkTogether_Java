@@ -3,18 +3,12 @@ package cn.edu.szu.teamwork.mapper;
 import cn.edu.szu.teamwork.pojo.domain.Report;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
-/**
- * @author zgr24
- * @description 针对表【wt_report(简报)】的数据库操作Mapper
- * @createDate 2024-06-16 16:27:47
- * @Entity cn.edu.szu.teamwork.pojo.domain.Report
- */
+import java.util.List;
+
 @Mapper
 public interface ReportMapper extends BaseMapper<Report> {
-
+    @Select("select * from wt_report where user_id=#{userId}")
+    List<Report> getMyReports(String userId);
 }
-
-
-
-
