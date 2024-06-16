@@ -10,4 +10,5 @@ public class RedisConstants {
     public static final String INVITE_CODE_KEY = "invite:code:";
     public static final Long INVITE_CODE_TTL = 10L;
     public static final String FEED_KEY = "feed:";
+    public static final String USER_REPORT_KEY = "report:";
 }

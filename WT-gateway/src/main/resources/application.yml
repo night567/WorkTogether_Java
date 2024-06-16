@@ -33,7 +33,7 @@ spring:
         - id: teamwork-service
           uri: lb://teamwork-service
           predicates:
-            - Path=/api/schedule/**,/api/message/**
+            - Path=/api/schedule/**,/api/message/**,/api/report/**
       globalcors: # 跨域设置
         corsConfigurations:
           '[/**]':
