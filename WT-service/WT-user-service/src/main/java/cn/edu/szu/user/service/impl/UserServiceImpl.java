@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
                 CopyOptions.create()
                         .setIgnoreNullValue(true)
                         .setFieldValueEditor((fieldName, fieldValue) -> {
-                            if(fieldValue != null) {
+                            if (fieldValue != null) {
                                 return fieldValue.toString();
                             } else {
                                 return null;
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
                 CopyOptions.create()
                         .setIgnoreNullValue(true)
                         .setFieldValueEditor((fieldName, fieldValue) -> {
-                            if(fieldValue != null) {
+                            if (fieldValue != null) {
                                 return fieldValue.toString();
                             } else {
                                 return null;
@@ -171,9 +171,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUserByCompany(Long id) {
-        List<Long> user_ids = companyClient.selectUserIdsByCID(id);
-        return userMapper.selectBatchIds(user_ids);
+    public List<User> getUserByCompany(Long id, Integer pageNum, Integer pageSize) {
+        List<Long> user_ids = companyClient.selectUserIdsByCIDWithPage(id, pageNum, pageSize);
+        if (user_ids != null && !user_ids.isEmpty()) {
+            return userMapper.selectBatchIds(user_ids);
+        }
+        return Collections.emptyList();
     }
 
     @Override
@@ -185,8 +188,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUserInfo(String name, String phone, Long userId,String avatar) {
-        return userMapper.updateUserInfo(name,phone,userId,avatar)>0;
+    public boolean updateUserInfo(String name, String phone, Long userId, String avatar) {
+        return userMapper.updateUserInfo(name, phone, userId, avatar) > 0;
     }
 
 

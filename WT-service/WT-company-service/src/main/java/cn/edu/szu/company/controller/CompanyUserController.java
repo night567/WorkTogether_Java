@@ -31,11 +31,20 @@ public class CompanyUserController {
         return userIds;
     }
 
+    @GetMapping("/selectUserIdsByCIDWithPage")
+    public List<Long> selectUserIdsByCIDWithPage(
+            @RequestParam("companyId") Long companyId,
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "100") Integer pageSize
+    ) {
+        return companyUserService.selectUserIdsByCompanyIdWithPage(companyId, pageNum, pageSize);
+    }
+
     @GetMapping("/deleteMember")
-    public boolean deleteMember(@RequestParam Long memberId,@RequestParam Long companyId) {
+    public boolean deleteMember(@RequestParam Long memberId, @RequestParam Long companyId) {
         System.out.println("???");
-        System.out.println(memberId +"    " +companyId);
-        boolean b = companyUserService.setMemberAsDeleted(memberId,companyId);
+        System.out.println(memberId + "    " + companyId);
+        boolean b = companyUserService.setMemberAsDeleted(memberId, companyId);
         return b;
     }
 

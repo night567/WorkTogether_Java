@@ -9,7 +9,6 @@ import cn.edu.szu.user.pojo.domain.User;
 import cn.edu.szu.user.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +26,7 @@ public class UserController {
     public Result createAccount(@RequestBody LoginDTO loginDTO) {
         return userService.createAccount(loginDTO);
     }
+
     @PostMapping("/login")
     public Result login(@RequestBody LoginDTO loginDTO) {
         return userService.login(loginDTO);
@@ -41,22 +41,28 @@ public class UserController {
             return new Result(Code.GET_ERR, null, "获取失败");
         }
     }
+
     @GetMapping("/findIdByEmail/{email}")
     public Long getIdByEmail(@PathVariable String email) {
         User user = userService.getUserByEmail(email);
-        if (user == null){
+        if (user == null) {
             return null;
         }
         return user.getId();
     }
+
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id) {
         return userService.getById(id);
     }
 
     @GetMapping("/company/{id}")
-    public Result getUserByCompany(@PathVariable Long id) {
-        List<User> users = userService.getUserByCompany(id);
+    public Result getUserByCompany(
+            @PathVariable Long id,
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "100") Integer pageSize
+    ) {
+        List<User> users = userService.getUserByCompany(id, pageNum, pageSize);
         if (users != null) {
             return new Result(Code.GET_OK, users, "获取成功");
         } else {
@@ -74,9 +80,9 @@ public class UserController {
     }
 
     @DeleteMapping("/delete_member")
-    public Result deleteMember(@Param(value = "ids") String ids,@RequestHeader("companyId") Long companyId) {
+    public Result deleteMember(@Param(value = "ids") String ids, @RequestHeader("companyId") Long companyId) {
 
-        boolean flag = companyClient.setMemberAsDeleted(Long.valueOf(ids.trim()),companyId);
+        boolean flag = companyClient.setMemberAsDeleted(Long.valueOf(ids.trim()), companyId);
         if (!flag) {
             return new Result(Code.DELETE_ERR, null, "移除失败");
         }
@@ -85,10 +91,10 @@ public class UserController {
     }
 
     @DeleteMapping("/delete_members")
-    public Result deleteMembers(@RequestParam List<Long> ids,@RequestHeader("companyId") Long companyId) {
+    public Result deleteMembers(@RequestParam List<Long> ids, @RequestHeader("companyId") Long companyId) {
         System.out.println(ids);
-        for (Long id : ids){
-            boolean flag = companyClient.setMemberAsDeleted(id,companyId);
+        for (Long id : ids) {
+            boolean flag = companyClient.setMemberAsDeleted(id, companyId);
             if (!flag) {
                 return new Result(Code.DELETE_ERR, null, "移除失败");
             }
@@ -98,7 +104,7 @@ public class UserController {
     }
 
     @PostMapping("/update/user")
-    public boolean updateUserInfo(@RequestParam String name,@RequestParam String phone,@RequestParam Long userId,@RequestParam String avatar){
-        return  userService.updateUserInfo(name,phone,userId,avatar);
+    public boolean updateUserInfo(@RequestParam String name, @RequestParam String phone, @RequestParam Long userId, @RequestParam String avatar) {
+        return userService.updateUserInfo(name, phone, userId, avatar);
     }
 }

@@ -2,19 +2,20 @@ package cn.edu.szu.company.service.impl;
 
 import cn.edu.szu.common.utils.JwtUtil;
 import cn.edu.szu.company.mapper.CompanyUserMapper;
-import cn.edu.szu.company.pojo.domain.CompanyUser;
 import cn.edu.szu.company.pojo.MemberDTO;
+import cn.edu.szu.company.pojo.domain.CompanyUser;
 import cn.edu.szu.company.service.CompanyUserService;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.feign.pojo.UserDTO;
-import org.springframework.beans.BeanUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static cn.edu.szu.common.utils.RedisConstants.INVITE_CODE_KEY;
 
@@ -33,6 +34,18 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         return companyUserMapper.selectUserIdsByCompanyId(companyId);
     }
 
+    @Override
+    public List<Long> selectUserIdsByCompanyIdWithPage(Long companyId, Integer pageNum, Integer pageSize) {
+        Page<CompanyUser> page = Page.of(pageNum, pageSize);
+        LambdaQueryWrapper<CompanyUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(CompanyUser::getCompanyId, companyId);
+
+        Page<CompanyUser> companyUserPage = companyUserMapper.selectPage(page, lqw);
+        List<Long> ids = page.getRecords().stream()
+                .map(CompanyUser::getUserId)
+                .collect(Collectors.toList());
+        return ids;
+    }
 
     @Override
     public List<MemberDTO> getAllMember(Long companyId) {
@@ -41,7 +54,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 
         for (MemberDTO member : companyUsers) {
             System.out.println(member);
-            UserDTO user = userClient.getUserById(Long.valueOf(member.getId()) );
+            UserDTO user = userClient.getUserById(Long.valueOf(member.getId()));
             System.out.println(user);
             if (user != null) {
                 member.setName(user.getName());
@@ -55,8 +68,8 @@ public class CompanyUserServiceImpl implements CompanyUserService {
     }
 
     @Override
-    public boolean setMemberAsDeleted(Long memberId,Long companyId) {
-        return companyUserMapper.setMemberAsDeleted(memberId,companyId);
+    public boolean setMemberAsDeleted(Long memberId, Long companyId) {
+        return companyUserMapper.setMemberAsDeleted(memberId, companyId);
     }
 
     @Override

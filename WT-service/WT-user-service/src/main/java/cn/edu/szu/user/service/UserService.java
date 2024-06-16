@@ -16,10 +16,9 @@ public interface UserService {
 
     UserDTO getById(Long id);
 
-    List<User> getUserByCompany(Long id);
+    List<User> getUserByCompany(Long id, Integer pageNum, Integer pageSize);
 
     boolean updateById(User user);
-    boolean updateUserInfo(String name,String phone,Long userId,String avatar);
 
-
+    boolean updateUserInfo(String name, String phone, Long userId, String avatar);
 }
