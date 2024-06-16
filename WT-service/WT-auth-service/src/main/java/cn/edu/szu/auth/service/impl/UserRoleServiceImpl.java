@@ -1,24 +1,27 @@
 package cn.edu.szu.auth.service.impl;
 
-import cn.edu.szu.auth.domain.*;
+import cn.edu.szu.auth.domain.UserRole;
+import cn.edu.szu.auth.domain.UserRoleListDTO;
 import cn.edu.szu.auth.mapper.AuthResourceMapper;
+import cn.edu.szu.auth.mapper.UserRoleMapper;
+import cn.edu.szu.auth.service.UserRoleService;
 import cn.edu.szu.feign.pojo.CheckAuthDTO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.edu.szu.auth.service.UserRoleService;
-import cn.edu.szu.auth.mapper.UserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
-* @author zgr24
-* @description 针对表【wt_auth_user_role(角色分配账号角色绑定)】的数据库操作Service实现
-* @createDate 2024-03-27 17:16:32
-*/
+ * @author zgr24
+ * @description 针对表【wt_auth_user_role(角色分配账号角色绑定)】的数据库操作Service实现
+ * @createDate 2024-03-27 17:16:32
+ */
 @Service
 @Transactional
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
@@ -29,21 +32,39 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private AuthResourceMapper authResourceMapper;
 
     @Override
+    @Transactional
     public boolean saveRoleToUser(UserRoleListDTO userRoleList) {
         Long userId = userRoleList.getUserId();
-        LambdaQueryWrapper<UserRole> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(UserRole::getUserId, userId);
-        userRoleMapper.delete(lqw);
-
         Long createUser = userRoleList.getCreateUser();
-        userRoleList.getRoleIds().stream()
-                .map(id -> UserRole.builder()
-                        .userId(userId)
-                        .roleId(id)
-                        .createUser(createUser)
-                        .createTime(LocalDateTime.now())
-                        .build())
-                .forEach(userRoleMapper::insert);
+        List<Long> newRoleIds = userRoleList.getRoleIds();
+        // 取得已有的角色
+        List<Long> oldRoleIds = query().eq("user_id", userId).list()
+                .stream()
+                .map(UserRole::getRoleId)
+                .collect(Collectors.toList());
+
+        // 删除需要去除的角色
+        List<Long> deleteRoleIds = new ArrayList<>(oldRoleIds);
+        deleteRoleIds.removeAll(newRoleIds);
+        if (!deleteRoleIds.isEmpty()) {
+            remove(new LambdaQueryWrapper<UserRole>().in(UserRole::getRoleId, deleteRoleIds));
+        }
+
+        // 添加新增的角色
+        List<Long> addRoleIds = new ArrayList<>(newRoleIds);
+        addRoleIds.removeAll(oldRoleIds);
+        if (!addRoleIds.isEmpty()) {
+            List<UserRole> addUserRole = addRoleIds.stream()
+                    .map(id -> UserRole.builder()
+                            .userId(userId)
+                            .roleId(id)
+                            .createUser(createUser)
+                            .createTime(LocalDateTime.now())
+                            .build())
+                    .collect(Collectors.toList());
+            saveBatch(addUserRole);
+        }
+
         return true;
     }
 

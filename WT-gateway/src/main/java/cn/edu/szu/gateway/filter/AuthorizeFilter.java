@@ -45,7 +45,8 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
             "/api/email",
             "/api/user/createUser",
             "/api/user/login",
-            "/api/company_user/getCompanyInfo"
+            "/api/company_user/getCompanyInfo",
+            "/"
     );
 
     @Override

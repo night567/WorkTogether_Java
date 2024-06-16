@@ -1,15 +1,13 @@
 package cn.edu.szu.auth.controller;
 
-import cn.edu.szu.feign.pojo.CheckAuthDTO;
 import cn.edu.szu.auth.domain.UserRoleListDTO;
 import cn.edu.szu.auth.service.UserRoleService;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
+import cn.edu.szu.common.utils.JwtUtil;
+import cn.edu.szu.feign.pojo.CheckAuthDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 给用户赋予角色接口
@@ -20,8 +18,10 @@ public class UserRoleController {
     @Autowired
     private UserRoleService userRoleService;
 
-    @PostMapping()
-    public Result saveRoleToUser(@RequestBody UserRoleListDTO userRoleList) {
+    @PutMapping()
+    public Result saveRoleToUser(@RequestHeader("Authorization") String token, @RequestBody UserRoleListDTO userRoleList) {
+        Long userId = JwtUtil.getUserId(token);
+        userRoleList.setCreateUser(userId);
         boolean bool = userRoleService.saveRoleToUser(userRoleList);
         if (!bool) {
             return new Result(Code.SAVE_ERR, false, "保存失败");
