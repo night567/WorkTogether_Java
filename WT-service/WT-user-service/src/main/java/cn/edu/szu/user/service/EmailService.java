@@ -12,4 +12,5 @@ public interface EmailService {
     boolean sendInviteCode(String email, Long companyId);
 
     void sendCodeEmail(String email, String code);
+    void sendCodeEmailByMQ(String email, String code);
 }

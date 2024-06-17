@@ -6,6 +6,18 @@ logging:
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
 spring:
+  rabbitmq:
+    host: 47.120.13.87 # 主机名 http://47.120.13.87:15672/
+    port: 5672 # 端口
+    virtual-host: / # 虚拟主机
+    username: worktogether # 用户名
+    password: 123321 # 密码
+#  rabbitmq:
+#    host: 192.168.150.101 # 主机名
+#    port: 15672 # 端口
+#    virtual-host: / # 虚拟主机
+#    username: itcast # 用户名
+#    password: 123321 # 密码
   datasource:
     url: jdbc:mysql://47.120.13.87:3306/wt_user?useSSL=false
     username: root

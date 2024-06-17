@@ -17,13 +17,8 @@ import java.util.List;
 public class CompanyApplicationTest {
     @Autowired
     private DepartmentService departmentService;
-    @Autowired
-    private CompanyService companyService;
-    @Autowired
-    private GroupService groupService;
-
     @Test
-    void test() {
+    void test(){
         String temp = "sdfsdfs\n" +
                 "sdfsdfsfsd\n" +
                 "sdfsdfsfff\n" +
@@ -35,20 +30,9 @@ public class CompanyApplicationTest {
     }
 
     @Test
-    void test1() {
+    void test1(){
         departmentService.selectDeptByID(1L);
-    }
 
-    @Test
-    void test2() {
-        List<Company> companyList = companyService.selectMyCompany(1L);
-        companyList.forEach(System.out::println);
-    }
-
-    @Test
-    void test3() {
-        List<Group> groupList = groupService.selectMyGroup(1L, 1L);
-        groupList.forEach(System.out::println);
     }
 
     @Test

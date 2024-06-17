@@ -21,7 +21,8 @@ public class EmailController {
     public Result sendRegistrationCode(@RequestBody LoginDTO request) {
         String code = emailService.generateRegistrationCode(request.getEmail());
         if (code != null) {
-            emailService.sendCodeEmail(request.getEmail(), code);
+            emailService.sendCodeEmailByMQ(request.getEmail(), code);
+            long end = System.currentTimeMillis();
             return new Result(Code.SAVE_OK, true, "发送成功");
         } else {
             return new Result(Code.SAVE_ERR, false, "发送失败,邮箱错误/账号已存在，请检查注册邮箱");

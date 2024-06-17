@@ -5,6 +5,7 @@ import cn.edu.szu.user.pojo.domain.User;
 import cn.edu.szu.user.service.EmailService;
 import cn.edu.szu.user.service.UserService;
 import cn.hutool.core.util.RandomUtil;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,6 +19,8 @@ import static cn.edu.szu.common.utils.RedisConstants.*;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -146,5 +149,12 @@ public class EmailServiceImpl implements EmailService {
         message.setText("您的验证码是：" + code);
         javaMailSender.send(message);
         System.out.println("发送成功");
+    }
+
+    @Override
+    public void sendCodeEmailByMQ(String email, String code) {
+        String exchangeName = "amq.fanout";
+        String msg = email+";"+code;
+        rabbitTemplate.convertAndSend(exchangeName,"test",msg);
     }
 }
