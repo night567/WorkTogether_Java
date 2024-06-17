@@ -21,6 +21,10 @@ public class UserController {
     @Autowired
     private CompanyClient companyClient;
 
+    @GetMapping("/getUserIdsByName/{name}")
+    public List<String> getIdsByName(@PathVariable String name){
+        return userService.getIdsByName(name);
+    }
 
     @PostMapping("/createUser")
     public Result createAccount(@RequestBody LoginDTO loginDTO) {

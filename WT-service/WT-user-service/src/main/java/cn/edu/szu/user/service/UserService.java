@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
     Result createAccount(LoginDTO loginDTO);
-
+    List<String> getIdsByName(String name);
     Result login(LoginDTO loginDTO);
 
     User getUserByEmail(String email);

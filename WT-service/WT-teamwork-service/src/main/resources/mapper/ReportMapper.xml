@@ -24,5 +24,22 @@
         text2,text3,text4,
         status,report_time
     </sql>
+    <select id="getReportByConditions" resultType="cn.edu.szu.teamwork.pojo.domain.Report">
+        SELECT *
+        FROM wt_report
+        WHERE 1=1
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="weekNum != null">
+            AND week_num = #{weekNum}
+        </if>
+        <if test="uid != null and uid.size() > 0">
+            AND user_id IN
+            <foreach item="item" index="index" collection="uid" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
 
 </mapper>

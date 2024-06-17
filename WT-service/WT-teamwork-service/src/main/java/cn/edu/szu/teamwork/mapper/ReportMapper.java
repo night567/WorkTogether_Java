@@ -11,4 +11,7 @@ import java.util.List;
 public interface ReportMapper extends BaseMapper<Report> {
     @Select("select * from wt_report where user_id=#{userId}")
     List<Report> getMyReports(String userId);
+
+    List<Report> getReportByConditions(Integer status,Integer weekNum,List<String> uid);
+
 }

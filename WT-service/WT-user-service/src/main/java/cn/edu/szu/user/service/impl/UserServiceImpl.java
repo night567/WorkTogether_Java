@@ -22,7 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static cn.edu.szu.common.utils.RedisConstants.*;
@@ -37,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private CompanyClient companyClient;
+
+
 
     @Override
     @Transactional
@@ -99,6 +105,11 @@ public class UserServiceImpl implements UserService {
         String token = JwtUtil.getToken(userLogin.getId());
         System.out.println(user + " " + token);
         return new Result(Code.SAVE_OK, token, "登录成功");
+    }
+
+    @Override
+    public List<String> getIdsByName(String name) {
+        return userMapper.selectIdsByName(name);
     }
 
     @Override

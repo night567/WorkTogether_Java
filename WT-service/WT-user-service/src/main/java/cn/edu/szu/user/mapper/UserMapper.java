@@ -3,7 +3,10 @@ package cn.edu.szu.user.mapper;
 import cn.edu.szu.user.pojo.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * @author zgr24
@@ -15,7 +18,8 @@ import org.apache.ibatis.annotations.Update;
 public interface UserMapper extends BaseMapper<User> {
     @Update("UPDATE wt_user set name = #{name},phone=#{phone},avatar=#{avatar} where id  = #{userId}")
     int updateUserInfo(String name,String phone,Long userId,String avatar);
-
+    @Select("select id from wt_user where name LIKE CONCAT('%', #{name}, '%')")
+    List<String> selectIdsByName(String name);
 
 }
 

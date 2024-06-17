@@ -3,10 +3,16 @@ package cn.edu.szu.teamwork.controller;
 import cn.edu.szu.common.pojo.Code;
 import cn.edu.szu.common.pojo.Result;
 import cn.edu.szu.common.utils.JwtUtil;
+import cn.edu.szu.teamwork.pojo.ReportCondition;
 import cn.edu.szu.teamwork.pojo.domain.Report;
 import cn.edu.szu.teamwork.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -32,4 +38,15 @@ public class ReportController {
             return new Result(Code.GET_ERR,null,"获取失败");
         return new Result(Code.GET_OK,myReports ,"获取成功");
     }
+
+    @GetMapping("/getReportByCondition")
+    public Result getReportByCondition(@RequestHeader("companyId") Long cid, @RequestBody ReportCondition condition){
+        List<Report> res = reportService.getReportByCondition(condition, cid);
+        if (res == null ){
+            return new Result(Code.GET_ERR,null ,"获取失败");
+        }
+        return new Result(Code.GET_OK,res ,"获取成功");
+    }
+
+
 }

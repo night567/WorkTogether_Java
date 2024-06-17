@@ -6,6 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @FeignClient(name = "user-service")
 public interface UserClient {
     @GetMapping("/api/user/{id}")
@@ -20,4 +22,6 @@ public interface UserClient {
     @PostMapping("api/user/uploadImage")
      Result uploadImage(@RequestParam MultipartFile file);
 
+    @GetMapping("/api/user/getUserIdsByName/{name}")
+    List<String> getIdsByName(@PathVariable String name);
 }
