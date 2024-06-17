@@ -49,7 +49,9 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         List<Long> deleteRoleIds = new ArrayList<>(oldRoleIds);
         deleteRoleIds.removeAll(newRoleIds);
         if (!deleteRoleIds.isEmpty()) {
-            remove(new LambdaQueryWrapper<UserRole>().in(UserRole::getRoleId, deleteRoleIds));
+            remove(new LambdaQueryWrapper<UserRole>()
+                    .eq(UserRole::getUserId, userId)
+                    .in(UserRole::getRoleId, deleteRoleIds));
         }
 
         // 添加新增的角色
