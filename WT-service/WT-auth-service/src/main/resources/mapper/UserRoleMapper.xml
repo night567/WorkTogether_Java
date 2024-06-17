@@ -27,4 +27,21 @@
           AND r.company_id = #{companyId}
           AND ra.authority_type = 'RESOURCE';
     </select>
+
+    <select id="getRolesByUserId" resultType="cn.edu.szu.auth.domain.AuthRole">
+        SELECT r.id,
+               r.name,
+               r.code,
+               r.describe,
+               r.company_id  AS companyId,
+               r.status,
+               r.readonly,
+               r.create_user AS createUser,
+               r.create_time AS createTime,
+               r.is_deleted
+        FROM wt_auth.wt_auth_user_role ur
+                 JOIN wt_auth.wt_auth_role r ON ur.role_id = r.id
+        WHERE ur.user_id = #{userId}
+          AND r.company_id = #{companyId}
+    </select>
 </mapper>

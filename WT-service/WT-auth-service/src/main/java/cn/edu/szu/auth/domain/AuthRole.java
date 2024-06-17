@@ -1,22 +1,25 @@
 package cn.edu.szu.auth.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 角色
  * @TableName wt_auth_role
  */
-@TableName(value ="wt_auth_role")
+@TableName(value = "wt_auth_role")
 @Data
 public class AuthRole implements Serializable {
     /**
-     * 
+     *
      */
-    @TableId(value = "id",type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -62,12 +65,11 @@ public class AuthRole implements Serializable {
     private Date createTime;
 
 
-
     @TableField(value = "company_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long companyId;
 
     @TableField(value = "is_deleted")
-    @TableLogic(value = "0",delval = "1")
+    @TableLogic(value = "0", delval = "1")
     private boolean isDeleted;
-
 }

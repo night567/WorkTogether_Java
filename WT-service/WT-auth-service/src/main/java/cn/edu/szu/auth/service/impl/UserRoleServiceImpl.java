@@ -1,5 +1,6 @@
 package cn.edu.szu.auth.service.impl;
 
+import cn.edu.szu.auth.domain.AuthRole;
 import cn.edu.szu.auth.domain.UserRole;
 import cn.edu.szu.auth.domain.UserRoleListDTO;
 import cn.edu.szu.auth.mapper.AuthResourceMapper;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +68,15 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         }
 
         return true;
+    }
+
+    @Override
+    public List<AuthRole> getRoleByUserId(Long userId, String companyId) {
+        List<AuthRole> roleList = userRoleMapper.getRolesByUserId(userId, companyId);
+        if (roleList == null) {
+            return Collections.emptyList();
+        }
+        return roleList;
     }
 
     @Override

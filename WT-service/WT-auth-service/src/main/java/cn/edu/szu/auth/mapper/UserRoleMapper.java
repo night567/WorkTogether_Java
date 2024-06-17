@@ -1,5 +1,6 @@
 package cn.edu.szu.auth.mapper;
 
+import cn.edu.szu.auth.domain.AuthRole;
 import cn.edu.szu.auth.domain.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -13,7 +14,9 @@ import java.util.List;
 * @Entity cn.edu.szu.auth.domain.AuthUserRole
 */
 public interface UserRoleMapper extends BaseMapper<UserRole> {
-    public List<String> getAllResourceIdsByUserId(Long id, Long companyId);
+    List<AuthRole> getRolesByUserId(Long userId, String companyId);
+
+    List<String> getAllResourceIdsByUserId(Long id, Long companyId);
 }
 
 

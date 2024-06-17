@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,12 +23,15 @@ import java.time.LocalDateTime;
 @TableName(value = "wt_report")
 public class Report {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @TableField(value = "user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId; //用户id
 
     @TableField(value = "reviewer_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long reviewerId; //评审人id
 
     @TableField(value = "year")
