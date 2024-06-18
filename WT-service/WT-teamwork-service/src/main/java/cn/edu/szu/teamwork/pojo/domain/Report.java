@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
@@ -56,5 +57,6 @@ public class Report {
     private Long status; //评审状态(0: 未评审，1：已评审)
 
     @TableField(value = "report_time")
+    @JsonFormat(pattern = "yyyy年MM月dd日 hh:mm", timezone = "GMT+8")
     private LocalDateTime reportTime; //提交时间
 }
