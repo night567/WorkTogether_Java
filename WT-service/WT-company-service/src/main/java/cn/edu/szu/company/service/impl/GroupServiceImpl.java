@@ -16,10 +16,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,7 +88,7 @@ public class GroupServiceImpl implements GroupService {
 
         // 将团队信息和团队成员信息插入数据库
         groupMapper.insert(group);
-        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false, 2L,null,null));
+        groupUserMapper.insert(new GroupUser(null, group.getManagerId(), group.getId(), new Date(), false, 2L, null, null));
 
         return true;
     }
@@ -361,32 +357,32 @@ public class GroupServiceImpl implements GroupService {
         //获取对应的用户信息
         UserDTO user = userClient.getUserById(groupUser.getUserId());
         //获取所在部门名称
-        String deptName= companyUserMapper.selectDeptName(groupUser.getUserId());
+        String deptName = companyUserMapper.selectDeptName(groupUser.getUserId());
         //获取职位
         String job = groupUserMapper.selectPositionById(groupUser.getType());
         //获得完整成员信息
-        GroupUserDTO groupUserDTO = new GroupUserDTO(groupUser,user,deptName,job);
+        GroupUserDTO groupUserDTO = new GroupUserDTO(groupUser, user, deptName, job);
         return groupUserDTO;
     }
 
     //获取所有成员信息
     @Override
-    public Map<String,List<GroupUserDTO>> getMembers(Long userId,Long groupId) throws BadHanyuPinyinOutputFormatCombination {
+    public Map<String, List<GroupUserDTO>> getMembers(Long userId, Long groupId) throws BadHanyuPinyinOutputFormatCombination {
         //定义成员列表
-        Map<String,List<GroupUserDTO>> memberMap=new LinkedHashMap<>();
+        Map<String, List<GroupUserDTO>> memberMap = new LinkedHashMap<>();
         //获取成员ID集合
         List<Long> memberIds = groupUserMapper.selectMemberIdsByGroupId(groupId);
         //定义成员信息集合
-        List<GroupUserDTO> groupUserDTOs=new ArrayList<>();
+        List<GroupUserDTO> groupUserDTOs = new ArrayList<>();
         //获取成员信息集合
-        for (Long id:memberIds){
+        for (Long id : memberIds) {
             GroupUserDTO memberInfo = getMemberInfo(id);
-            if(memberInfo==null)
+            if (memberInfo == null)
                 continue;
             groupUserDTOs.add(memberInfo);
         }
         //获取本人成员Id
-        Long myId = groupUserMapper.selectMyselfIdsByUserId(userId,groupId);
+        Long myId = groupUserMapper.selectMyselfIdsByUserId(userId, groupId);
 
         // 中文字符拼音排序比较器
         Collator collator = Collator.getInstance(Locale.CHINESE);
@@ -401,14 +397,14 @@ public class GroupServiceImpl implements GroupService {
 
         // 按照首字母分组
         for (GroupUserDTO userDTO : groupUserDTOs) {
-                if (userDTO.getId().equals(myId.toString())) {
-                    memberMap.computeIfAbsent("myself", k -> new ArrayList<>()).add(userDTO);
-                    continue;
-                }
+            if (userDTO.getId().equals(myId.toString())) {
+                memberMap.computeIfAbsent("myself", k -> new ArrayList<>()).add(userDTO);
+                continue;
+            }
 
-               String name = userDTO.getName();
-               String firstLetter = PinyinUtil.getFirstLetter(name);
-               memberMap.computeIfAbsent(firstLetter, k -> new ArrayList<>()).add(userDTO);
+            String name = userDTO.getName();
+            String firstLetter = PinyinUtil.getFirstLetter(name);
+            memberMap.computeIfAbsent(firstLetter, k -> new ArrayList<>()).add(userDTO);
 
         }
 
@@ -417,17 +413,17 @@ public class GroupServiceImpl implements GroupService {
 
     //编辑个人信息
     @Override
-    public boolean updateMemberGroupInfo(GroupUserDTO groupUserDTO,Long userId) {
-        boolean flag1 = userClient.updateUserInfo(groupUserDTO.getName(), groupUserDTO.getPhone(), userId,groupUserDTO.getAvatar());
-        boolean flag2 = groupUserMapper.updateMemberGroupInfo(groupUserDTO.getAddress(), groupUserDTO.getIntroduction(), groupUserDTO.getId())>0;
-        if(flag1&&flag2)
+    public boolean updateMemberGroupInfo(GroupUserDTO groupUserDTO, Long userId) {
+        boolean flag1 = userClient.updateUserInfo(groupUserDTO.getName(), groupUserDTO.getPhone(), userId, groupUserDTO.getAvatar());
+        boolean flag2 = groupUserMapper.updateMemberGroupInfo(groupUserDTO.getAddress(), groupUserDTO.getIntroduction(), groupUserDTO.getId()) > 0;
+        if (flag1 && flag2)
             return true;
         return false;
     }
 
     @Override
-    public Long selectMyselfIdsByUserId(Long userId,Long groupId) {
-        return groupUserMapper.selectMyselfIdsByUserId(userId,groupId);
+    public Long selectMyselfIdsByUserId(Long userId, Long groupId) {
+        return groupUserMapper.selectMyselfIdsByUserId(userId, groupId);
     }
 
     @Override
