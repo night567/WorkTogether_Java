@@ -19,6 +19,6 @@ public interface UserService {
     List<User> getUserByCompany(Long id, Integer pageNum, Integer pageSize);
 
     boolean updateById(User user);
-
+    String getAvatarById(String id);
     boolean updateUserInfo(String name, String phone, Long userId, String avatar);
 }

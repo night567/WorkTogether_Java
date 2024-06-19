@@ -20,7 +20,8 @@ public interface UserMapper extends BaseMapper<User> {
     int updateUserInfo(String name,String phone,Long userId,String avatar);
     @Select("select id from wt_user where name LIKE CONCAT('%', #{name}, '%')")
     List<String> selectIdsByName(String name);
-
+    @Select("select avatar from wt_user where id = #{id}")
+    String getAvatarById(String id);
 }
 
 

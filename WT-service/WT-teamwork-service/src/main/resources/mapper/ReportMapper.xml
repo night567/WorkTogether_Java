@@ -24,7 +24,7 @@
         text2,text3,text4,
         status,report_time
     </sql>
-    <select id="getReportByConditions" resultType="cn.edu.szu.teamwork.pojo.domain.Report">
+    <select id="getReportByConditions" resultType="cn.edu.szu.teamwork.pojo.ReportVO">
         SELECT *
         FROM wt_report
         WHERE 1=1

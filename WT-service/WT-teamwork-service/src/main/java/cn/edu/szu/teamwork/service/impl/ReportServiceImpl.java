@@ -4,6 +4,7 @@ import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.teamwork.mapper.ReportMapper;
 import cn.edu.szu.teamwork.pojo.ReportCondition;
+import cn.edu.szu.teamwork.pojo.ReportVO;
 import cn.edu.szu.teamwork.pojo.domain.Report;
 import cn.edu.szu.teamwork.service.ReportService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,7 +34,7 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> impleme
     }
 
     @Override
-    public List<Report> getReportByCondition(ReportCondition condition,Long cid) {
+    public List<ReportVO> getReportByCondition(ReportCondition condition, Long cid) {
         String test = condition.getName();
         // 假设你有以下列表:
         if (condition.getName() != null && !condition.getName().trim().equals("")){
@@ -49,10 +50,20 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> impleme
             if (idsByName.size() == 0){
                 idsByName.add("-1");
             }
-            List<Report> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), idsByName);
+            List<ReportVO> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), idsByName);
+            setReportVO(res);
             return res;
         }
-        List<Report> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), null);
+        List<ReportVO> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), null);
+        setReportVO(res);
         return res;
     }
+
+    private void setReportVO(List<ReportVO> res){
+        for (ReportVO vo: res){
+            String avatar = userClient.getAvatarById(String.valueOf(vo.getUserId()));
+            vo.setImgUrl(avatar);
+        }
+    }
+
 }

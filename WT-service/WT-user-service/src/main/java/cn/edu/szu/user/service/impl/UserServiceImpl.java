@@ -199,6 +199,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getAvatarById(String id) {
+        return userMapper.getAvatarById(id);
+    }
+
+    @Override
     public boolean updateUserInfo(String name, String phone, Long userId, String avatar) {
         return userMapper.updateUserInfo(name, phone, userId, avatar) > 0;
     }

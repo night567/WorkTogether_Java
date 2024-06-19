@@ -24,4 +24,7 @@ public interface UserClient {
 
     @GetMapping("/api/user/getUserIdsByName/{name}")
     List<String> getIdsByName(@PathVariable String name);
+    @GetMapping("/api/user/getAvatar/{uid}")
+    String getAvatarById(@PathVariable String uid);
+
 }
