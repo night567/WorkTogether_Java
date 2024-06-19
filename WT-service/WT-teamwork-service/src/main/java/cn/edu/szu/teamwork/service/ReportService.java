@@ -16,6 +16,6 @@ public interface ReportService extends IService<Report> {
 
     List<Report> getMyReports(String userId);
 
-    List<Report> getReportByCondition(ReportCondition condition, Long cid);
+
     List<ReportVO> getReportByCondition(ReportCondition condition, Long cid);
 }
