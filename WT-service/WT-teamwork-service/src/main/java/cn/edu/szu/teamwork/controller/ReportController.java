@@ -8,7 +8,14 @@ import cn.edu.szu.teamwork.pojo.ReportVO;
 import cn.edu.szu.teamwork.pojo.domain.Report;
 import cn.edu.szu.teamwork.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -58,7 +65,9 @@ public class ReportController {
     }
 
     @PostMapping("/getReportByCondition")
-    public Result getReportByCondition(@RequestHeader("companyId") Long cid, @RequestBody ReportCondition condition){
+    public Result getReportByCondition(@RequestHeader("companyId") Long cid,
+                                       @RequestHeader String Authorization, @RequestBody ReportCondition condition){
+        condition.setUserId(String.valueOf(JwtUtil.getUserId(Authorization)));
         List<ReportVO> res = reportService.getReportByCondition(condition, cid);
         if (res == null ){
             return new Result(Code.GET_ERR,null ,"获取失败");

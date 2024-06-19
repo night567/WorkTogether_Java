@@ -82,11 +82,11 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> impleme
             if (idsByName.size() == 0){
                 idsByName.add("-1");
             }
-            List<ReportVO> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), idsByName);
+            List<ReportVO> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), idsByName, condition.getUserId());
             setReportVO(res);
             return res;
         }
-        List<ReportVO> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), null);
+        List<ReportVO> res = reportMapper.getReportByConditions(condition.getStatus(), condition.getWeekNum(), null, condition.getUserId());
         setReportVO(res);
         return res;
     }

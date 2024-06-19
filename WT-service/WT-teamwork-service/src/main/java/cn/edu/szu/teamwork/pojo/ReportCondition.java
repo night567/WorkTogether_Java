@@ -11,4 +11,5 @@ public class ReportCondition {
     private Integer status;
     private Integer weekNum;
     private String name;
+    private String userId;
 }

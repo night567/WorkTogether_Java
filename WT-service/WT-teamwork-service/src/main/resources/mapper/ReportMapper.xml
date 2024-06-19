@@ -27,7 +27,7 @@
     <select id="getReportByConditions" resultType="cn.edu.szu.teamwork.pojo.ReportVO">
         SELECT *
         FROM wt_report
-        WHERE 1=1
+        WHERE 1=1 and user_id != #{userid}
         <if test="status != null">
             AND status = #{status}
         </if>
