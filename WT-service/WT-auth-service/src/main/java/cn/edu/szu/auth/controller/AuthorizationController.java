@@ -25,7 +25,8 @@ public class AuthorizationController {
      * @return
      */
     @PostMapping
-    public Result addRole(@RequestBody AuthRole role){
+    public Result addRole(@RequestBody AuthRole role,@RequestHeader String companyId){
+        role.setCompanyId(Long.valueOf(companyId));
         authRoleService.addRole(role);
         return new Result(Code.SAVE_OK,null,"成功添加角色");
     }
