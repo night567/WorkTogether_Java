@@ -5,6 +5,7 @@ import cn.edu.szu.teamwork.pojo.domain.Report;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -14,5 +15,8 @@ public interface ReportMapper extends BaseMapper<Report> {
     List<Report> getMyReports(String userId);
 
     List<ReportVO> getReportByConditions(Integer status, Integer weekNum, List<String> uid,String userid);
+
+    @Update("update  wt_report set status=1 where id=#{id} ")
+    Integer reviewReport(String id);
 
 }

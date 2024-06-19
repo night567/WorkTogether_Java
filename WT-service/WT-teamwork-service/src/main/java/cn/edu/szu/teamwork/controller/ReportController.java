@@ -75,5 +75,13 @@ public class ReportController {
         return new Result(Code.GET_OK,res ,"获取成功");
     }
 
+    @GetMapping("/reviewReport")
+    public Result reviewReport(@RequestParam String id ){
+        boolean b = reportService.reviewReport(id);
+        if(b)
+            return new Result(Code.UPDATE_OK,null ,"评审成功");
+        return new Result(Code.UPDATE_ERR,null ,"评审失败");
+    }
+
 
 }

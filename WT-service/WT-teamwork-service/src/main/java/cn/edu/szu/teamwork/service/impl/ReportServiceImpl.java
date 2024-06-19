@@ -91,6 +91,11 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> impleme
         return res;
     }
 
+    @Override
+    public boolean reviewReport(String id) {
+        return reportMapper.reviewReport(id)>0;
+    }
+
     private void setReportVO(List<ReportVO> res){
         for (ReportVO vo: res){
             String avatar = userClient.getAvatarById(String.valueOf(vo.getUserId()));

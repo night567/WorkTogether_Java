@@ -21,7 +21,7 @@ public class TestReport {
         list.add("1");
         list.add("2");
         List<ReportVO> reportByConditions =
-                mapper.getReportByConditions(null, null, list);
+                mapper.getReportByConditions(null, null, list,null);
         System.out.println(reportByConditions);
     }
 }

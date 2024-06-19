@@ -18,4 +18,5 @@ public interface ReportService extends IService<Report> {
 
 
     List<ReportVO> getReportByCondition(ReportCondition condition, Long cid);
+    boolean reviewReport(String id);
 }
