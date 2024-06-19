@@ -74,7 +74,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 
     @Override
     public boolean joinCompany(String token, String code) {
-        // 验证验证码有效期
+        // 验证邀请码有效性
         String key = INVITE_CODE_KEY + code;
         String cacheEmail = (String) stringRedisTemplate.opsForHash().get(key, "email");
         Long companyId = getCompanyIdByInviteCode(code);
@@ -83,9 +83,9 @@ public class CompanyUserServiceImpl implements CompanyUserService {
             System.out.println("验证码已过期");
             return false;
         }
-        stringRedisTemplate.delete(key);
+        stringRedisTemplate.delete(key); //删除已使用的验证码
 
-        //TODO：校验用户id
+        //校验邀请码是否属于该用户
         Long id = JwtUtil.getUserId(token);
         if (id == null) {
             System.out.println("用户id错误");
@@ -102,7 +102,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         CompanyUser companyUser = new CompanyUser();
         companyUser.setUserId(id);
         companyUser.setCompanyId(companyId);
-        companyUser.setDeptId(0L); // TODO:加入部门，暂时加入0L
+        companyUser.setDeptId(0L); // 加入部门0表示未加入部门
         companyUser.setStatus(true);
         companyUser.setJoinTime(new Date());
         companyUser.setIsDeleted(false);

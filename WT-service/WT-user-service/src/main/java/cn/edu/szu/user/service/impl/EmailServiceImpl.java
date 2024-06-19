@@ -135,7 +135,7 @@ public class EmailServiceImpl implements EmailService {
         stringRedisTemplate.expire(INVITE_CODE_KEY + code, INVITE_CODE_TTL, TimeUnit.MINUTES);
 
         //发送验证码
-        sendCodeEmail(email, code);
+        sendCodeEmailByMQ(email, code);
         return true;
     }
 

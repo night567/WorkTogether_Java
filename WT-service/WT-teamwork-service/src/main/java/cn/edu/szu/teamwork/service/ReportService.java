@@ -8,8 +8,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 public interface ReportService extends IService<Report> {
+    boolean submitReport(Report report);
+
+    boolean updateReport(Report report);
+
     Report getReportById(String id);
+
     List<Report> getMyReports(String userId);
 
+    List<Report> getReportByCondition(ReportCondition condition, Long cid);
     List<ReportVO> getReportByCondition(ReportCondition condition, Long cid);
 }
