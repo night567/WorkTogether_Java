@@ -7,12 +7,7 @@ import cn.edu.szu.teamwork.pojo.ReportCondition;
 import cn.edu.szu.teamwork.pojo.domain.Report;
 import cn.edu.szu.teamwork.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +16,28 @@ import java.util.List;
 public class ReportController {
     @Autowired
     private ReportService reportService;
+
+    @PostMapping
+    public Result submitReport(@RequestHeader("Authorization") String token, @RequestBody Report report) {
+        Long userId = JwtUtil.getUserId(token);
+        report.setUserId(userId);
+        boolean isSuccess = reportService.submitReport(report);
+        if (isSuccess) {
+            return new Result(Code.SAVE_OK, true, "提交成功");
+        }
+        return new Result(Code.SAVE_ERR, false, "提交失败");
+    }
+
+    @PutMapping
+    public Result updateReport(@RequestHeader("Authorization") String token, @RequestBody Report report) {
+        Long userId = JwtUtil.getUserId(token);
+        report.setUserId(userId);
+        boolean isSuccess = reportService.updateReport(report);
+        if (isSuccess) {
+            return new Result(Code.UPDATE_OK, true, "修改成功");
+        }
+        return new Result(Code.UPDATE_ERR, false, "修改失败");
+    }
 
     @GetMapping("/getReportById")
     public Result getReportById(@RequestParam String id){

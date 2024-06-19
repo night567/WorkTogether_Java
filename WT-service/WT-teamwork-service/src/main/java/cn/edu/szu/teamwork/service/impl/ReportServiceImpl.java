@@ -8,19 +8,51 @@ import cn.edu.szu.teamwork.pojo.domain.Report;
 import cn.edu.szu.teamwork.service.ReportService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.edu.szu.common.utils.RedisConstants.USER_REPORT_KEY;
+
 @Service
 public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> implements ReportService{
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private ReportMapper reportMapper;
     @Autowired
     UserClient userClient;
     @Autowired
     CompanyClient companyClient;
+
+    @Override
+    public boolean submitReport(Report report) {
+        // 保存数据到数据库
+        report.setStatus(0L);
+        report.setReportTime(LocalDateTime.now());
+        boolean saved = save(report);
+        if (!saved) {
+            return false;
+        }
+
+        // 记录提交信息到redis的bitmap中
+        String key = USER_REPORT_KEY + report.getUserId() + ":" + report.getYear();
+        stringRedisTemplate.opsForValue().setBit(key, report.getWeekNum(), true);
+
+        return true;
+    }
+
+    @Override
+    public boolean updateReport(Report report) {
+        report.setReportTime(LocalDateTime.now());
+        if (updateById(report)) {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public Report getReportById(String id) {
