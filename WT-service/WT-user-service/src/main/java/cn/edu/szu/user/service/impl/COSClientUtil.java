@@ -78,7 +78,8 @@ public class COSClientUtil {
 
 // 设置签名过期时间(可选), 若未进行设置则默认使用 ClientConfig 中的签名过期时间(1小时)
 // 这里设置签名在1000个小时后过期
-        Date expirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 1000);
+        Long time = Long.valueOf(1000 * 60 * 1000*1000);
+        Date expirationDate = new Date(System.currentTimeMillis() + time);
 
 // 填写本次请求的参数，需与实际请求相同，能够防止用户篡改此签名的 HTTP 请求的参数
         Map<String, String> params = new HashMap<String, String>();
