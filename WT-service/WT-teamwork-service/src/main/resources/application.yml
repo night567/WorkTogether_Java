@@ -6,6 +6,23 @@ logging:
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
 spring:
+  redisson:
+    redis-6379:
+      host: 127.0.0.1
+      port: 6379
+      password:
+    redis-6380:
+      host: 127.0.0.1
+      port: 6380
+      password:
+    redis-6381:
+      host: 127.0.0.1
+      port: 6378
+      password:
+    #超时时间为3s
+    timeout: 3000
+  main:
+    allow-circular-references: false
   datasource:
     url: jdbc:mysql://47.120.13.87:3306/wt_teamwork?useSSL=false
     username: root
@@ -13,6 +30,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   redis:
+
     host: 47.120.13.87
     port: 6379
     password: 123321

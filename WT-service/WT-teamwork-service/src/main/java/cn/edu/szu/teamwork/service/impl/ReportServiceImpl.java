@@ -3,11 +3,15 @@ package cn.edu.szu.teamwork.service.impl;
 import cn.edu.szu.feign.client.CompanyClient;
 import cn.edu.szu.feign.client.UserClient;
 import cn.edu.szu.teamwork.mapper.ReportMapper;
+import cn.edu.szu.teamwork.pojo.MyRedLock;
 import cn.edu.szu.teamwork.pojo.ReportCondition;
 import cn.edu.szu.teamwork.pojo.ReportVO;
 import cn.edu.szu.teamwork.pojo.domain.Report;
 import cn.edu.szu.teamwork.service.ReportService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.redisson.RedissonRedLock;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static cn.edu.szu.common.utils.RedisConstants.USER_REPORT_KEY;
 
@@ -28,6 +33,15 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> impleme
     UserClient userClient;
     @Autowired
     CompanyClient companyClient;
+
+    @Autowired
+    private RedissonClient redissonClient1;
+
+    @Autowired
+    private RedissonClient redissonClient2;
+
+    @Autowired
+    private RedissonClient redissonClient3;
 
     @Override
     public boolean submitReport(Report report) {
@@ -48,10 +62,27 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> impleme
 
     @Override
     public boolean updateReport(Report report) {
+        RLock lock1 = redissonClient1.getLock(String.valueOf(report.getId()));
+        RLock lock2 = redissonClient2.getLock(String.valueOf(report.getId()));
+        RLock lock3 = redissonClient3.getLock(String.valueOf(report.getId()));
+        //创建红锁 客户端
+        RedissonRedLock redLock = new MyRedLock(lock1, lock2, lock3);
         report.setReportTime(LocalDateTime.now());
-        if (updateById(report)) {
-            return true;
+        boolean isLockBoolean
+        try {
+            isLockBoolean = redLock.tryLock(1, 20, TimeUnit.SECONDS);
+            if (updateById(report)) {
+                return true;
+            }
+        } catch (InterruptedException e) {
+            System.err.printf("线程:"+Thread.currentThread().getId()+"发生异常,加锁失败");
+            throw new RuntimeException(e);
+        }finally {
+            // 无论如何，最后都要解锁
+            redLock.unlock();
         }
+
+
         return false;
     }
 
