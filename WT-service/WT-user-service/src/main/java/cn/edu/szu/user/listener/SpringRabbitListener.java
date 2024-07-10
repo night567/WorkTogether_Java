@@ -24,4 +24,10 @@ public class SpringRabbitListener {
         javaMailSender.send(message);
         System.out.println("发送成功");
     }
+    @RabbitListener(queues = "error_queue")
+    public void ErrorQueue(String msg) throws InterruptedException {//装的什么接收什么
+        System.out.println("邮箱服务器有误，请及时处理");
+//        TODO  存储日志到数据库，通知管理员
+
+    }
 }
