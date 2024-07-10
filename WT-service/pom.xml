@@ -31,6 +31,10 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>3.12.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
         <!-- 引用公共包 -->
         <dependency>
             <groupId>cn.edu.szu</groupId>
