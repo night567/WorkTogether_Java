@@ -68,7 +68,7 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper,Report> impleme
         //创建红锁 客户端
         RedissonRedLock redLock = new MyRedLock(lock1, lock2, lock3);
         report.setReportTime(LocalDateTime.now());
-        boolean isLockBoolean
+        boolean isLockBoolean;
         try {
             isLockBoolean = redLock.tryLock(1, 20, TimeUnit.SECONDS);
             if (updateById(report)) {
